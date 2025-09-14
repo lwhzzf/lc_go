@@ -63,8 +63,7 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
                 timeComplexity: "O(n)",
                 spaceComplexity: "O(n)"
             }
-        ],
-        
+        ]
     },
     {
         id: 3,
@@ -145,8 +144,7 @@ func find(nums1, nums2 []int, i, j, k int) int {
                 timeComplexity: "O(log(m + n))",
                 spaceComplexity: "O(1)"
             }
-        ],
-
+        ]
     },
     {
         id: 5,
@@ -223,8 +221,7 @@ func find(nums1, nums2 []int, i, j, k int) int {
                 timeComplexity: "O(n)",
                 spaceComplexity: "O(n)"
             }
-        ],
-
+        ]
     },
     {
         id: 6,
@@ -260,8 +257,7 @@ func find(nums1, nums2 []int, i, j, k int) int {
             timeComplexity: "O(n)",
             spaceComplexity: "O(1)"
             }
-        ],
-
+        ]
     },
     {
         id: 7,
@@ -270,9 +266,26 @@ func find(nums1, nums2 []int, i, j, k int) int {
         difficulty: "easy",
         description: "给你一个 32 位的有符号整数 x ，返回将 x 中的数字部分反转后的结果。\n如果反转后整数超过 32 位的有符号整数的范围 [−2³¹, 2³¹ − 1] ，就返回 0。\n假设环境不允许存储 64 位整数（有符号或无符号）。",
         example: "示例 1：\n输入：x = 123\n输出：321\n示例 2：\n输入：x = -123\n输出：-321\n示例 3：\n输入：x = 120\n输出：21",
-        solutions: [],
-        timeComplexity: "O(log(x))",
+        solutions: [
+            {
+                code: `func reverse(x int) int {
+    r := 0
+    for x != 0 {
+        if r > 0 && r > ((1 << 31 - 1) - x % 10) / 10 {
+            return 0
+        }
+        if r < 0 && r < (-(1 << 31) - x % 10) / 10 {
+            return 0
+        }
+        r = r * 10 + x % 10
+        x /= 10
+    }
+    return r
+}`,
+        timeComplexity: "O(log|x|)",
         spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 8,
@@ -281,9 +294,48 @@ func find(nums1, nums2 []int, i, j, k int) int {
         difficulty: "medium",
         description: "请你来实现一个 myAtoi(string s) 函数，使其能将字符串转换成一个 32 位有符号整数（类似 C/C++ 中的 atoi 函数）。\n函数 myAtoi(string s) 的算法如下：\n1. 读入字符串并丢弃无用的前导空格\n2. 检查下一个字符（假设还未到字符末尾）为正还是负号，读取该字符（如果有）。 确定最终结果是负数还是正数。 如果两者都不存在，则假定结果为正。\n3. 读入下一个字符，直到到达下一个非数字字符或到达输入的结尾。字符串的其余部分将被忽略。\n4. 将前面步骤读入的这些数字转换为整数（即 \"123\" -> 123， \"0032\" -> 32）。如果没有读入数字，则整数为 0。必要时更改符号（从步骤 2 开始）。\n5. 如果整数数超过 32 位有符号整数范围 [−2³¹, 2³¹ − 1] ，需要截断这个整数，使其保持在这个范围内。具体来说，小于 −2³¹ 的整数应该被固定为 −2³¹ ，大于 2³¹ − 1 的整数应该被固定为 2³¹ − 1。\n6. 返回整数作为最终结果。",
         example: "示例 1：\n输入：s = \"42\"\n输出：42\n示例 2：\n输入：s = \"   -42\"\n输出：-42\n示例 3：\n输入：s = \"4193 with words\"\n输出：4193",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func myAtoi(s string) int {
+k, n := 0, len(s)
+for k < n && s[k] == ' ' {
+    k++
+}
+if k == n {
+    return 0
+}
+
+minus := 1
+if s[k] == '-' {
+    minus = -1
+    k++
+} else if s[k] == '+' {
+    k++
+}
+
+res, max, min := 0, 1 << 31 - 1, -(1 << 31)
+for k < n && s[k] >= '0' && s[k] <= '9' {
+    x := int(s[k] - '0')
+    if minus > 0 && res > (max - x) / 10 {
+        return max
+    }
+    if minus < 0 && -res < (min + x) / 10 {
+        return min
+    }
+    if -res * 10 - x == min {
+        return min
+    }
+    res = res * 10 + x
+    k++
+}
+res *= minus
+
+return res
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 9,
@@ -292,9 +344,60 @@ func find(nums1, nums2 []int, i, j, k int) int {
         difficulty: "easy",
         description: "给你一个整数 x ，如果 x 是一个回文整数，返回 true ；否则，返回 false。\n回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数。\n例如，121 是回文，而 123 不是。",
         example: "示例 1：\n输入：x = 121\n输出：true\n示例 2：\n输入：x = -121\n输出：false\n解释：从左向右读, 为 -121。 从右向左读, 为 121-。因此它不是一个回文数\n示例 3：\n输入：x = 10\n输出：false\n解释：从右向左读, 为 01。因此它不是一个回文数",
-        solutions: [],
-        timeComplexity: "O(log(x))",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                name: "解法一",
+                code: `func isPalindrome(x int) bool {
+if (x < 0 || x > 0 && x % 10 == 0) {
+    return false
+}
+s := strconv.Itoa(x)
+for i, j := 0, len(s) - 1; i < j; i, j = i + 1, j - 1 {
+    if s[i] != s[j] {
+        return false
+    }
+}
+return true
+}`,
+                timeComplexity: "O(log(x))",
+                spaceComplexity: "O(1)"
+            },
+            {
+                name: "解法二",
+                code: `func isPalindrome(x int) bool {
+if (x < 0 || x > 0 && x % 10 == 0) {
+    return false
+}
+y, res := x, 0
+for x != 0 {
+    res = res * 10 + x % 10
+    x /= 10
+}
+return res == y
+}`,
+                timeComplexity: "O(log(x))",
+                spaceComplexity: "O(1)"
+            },
+                            {
+                name: "解法三",
+                code: `func isPalindrome(x int) bool {
+if (x < 0 || x > 0 && x % 10 == 0) {
+    return false
+}
+s := 0
+for s <= x {
+    s = s * 10 + x % 10
+    if s == x || s == x / 10 {
+        return true
+    }
+    x /= 10
+}
+return false
+}`,
+                timeComplexity: "O(log(x))",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 10,
@@ -303,9 +406,34 @@ func find(nums1, nums2 []int, i, j, k int) int {
         difficulty: "hard",
         description: "给你一个字符串 s 和一个字符规律 p，请你来实现一个支持 '.' 和 '*' 的正则表达式匹配。\n'.' 匹配任意单个字符\n'*' 匹配零个或多个前面的那一个元素\n所谓匹配，是要涵盖整个字符串 s 的，而不是部分字符串。",
         example: "示例 1：\n输入：s = \"aa\", p = \"a\"\n输出：false\n解释：\"a\" 无法匹配 \"aa\" 整个字符串\n示例 2：\n输入：s = \"aa\", p = \"a*\"\n输出：true\n解释：因为 '*' 代表可以匹配零个或多个前面的那一个元素, 在这里前面的元素就是 'a'。因此，字符串 \"aa\" 可被视为 'a' 重复了一次\n示例 3：\n输入：s = \"ab\", p = \".*\"\n输出：true\n解释：\".*\" 表示可匹配零个或多个（'*'）任意字符（'.'）",
-        solutions: [],
-        timeComplexity: "O(mn)",
-        spaceComplexity: "O(mn)"
+        solutions: [
+            {
+                code: `func isMatch(s string, p string) bool {
+    n, m := len(s), len(p)
+    s, p = " " + s, " " + p
+    f := make([][]bool, n + 1)
+    for i := range f {
+        f[i] = make([]bool, m + 1)
+    }
+    f[0][0] = true
+    for i := 0; i <= n; i++ {
+        for j := 1; j <= m; j++ {
+            if j + 1 <= m && p[j + 1] == '*' {
+                continue
+            }
+            if i != 0 && p[j] != '*' {
+                f[i][j] = f[i - 1][j - 1] && (s[i] == p[j] || p[j] == '.')
+            } else if p[j] == '*' {
+                f[i][j] = f[i][j - 2] || i != 0 && f[i - 1][j] && (s[i] == p[j - 1] || p[j - 1] == '.')
+            }
+        }
+    }
+    return f[n][m]
+}`,
+                timeComplexity: "O(mn)",
+                spaceComplexity: "O(mn)"
+            }
+        ]
     },
     {
         id: 11,
@@ -314,9 +442,24 @@ func find(nums1, nums2 []int, i, j, k int) int {
         difficulty: "medium",
         description: "给定一个长度为 n 的整数数组 height。有 n 条垂线，第 i 条线的两个端点是 (i, 0) 和 (i, height[i])。\n找出其中的两条线，使得它们与 x 轴构成的容器可以容纳最多的水。\n返回容器可以储存的最大水量。\n说明：你不能倾斜容器。",
         example: "示例 1：\n输入：[1,8,6,2,5,4,8,3,7]\n输出：49\n解释：图中垂直线代表输入数组 [1,8,6,2,5,4,8,3,7]。在此情况下，容器能够容纳水（表示为蓝色部分）的最大值为 49\n示例 2：\n输入：height = [1,1]\n输出：1",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func maxArea(height []int) int {
+    res := 0
+    for i, j := 0, len(height) - 1; i < j; {
+        res = max(res, min(height[i], height[j]) * (j - i))
+        if height[i] > height[j] {
+            j--
+        } else {
+            i++
+        }
+    }
+    return res
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 12,
@@ -325,9 +468,35 @@ func find(nums1, nums2 []int, i, j, k int) int {
         difficulty: "medium",
         description: "罗马数字包含以下七种字符： I， V， X， L，C，D 和 M。\n字符          数值\nI             1\nV             5\nX             10\nL             50\nC             100\nD             500\nM             1000\n例如， 罗马数字 2 写做 II ，即为两个并列的 1。12 写做 XII ，即为 X + II 。 27 写做  XXVII, 即为 XX + V + II 。\n通常情况下，罗马数字中小的数字在大的数字的右边。但也存在特例，例如 4 不写做 IIII，而是 IV。数字 1 在数字 5 的左边，所表示的数等于大数 5 减小数 1 得到的数值 4。同样地，数字 9 表示为 IX。这个特殊的规则只适用于以下六种情况：\nI 可以放在 V (5) 和 X (10) 的左边，来表示 4 和 9。\nX 可以放在 L (50) 和 C (100) 的左边，来表示 40 和 90。\nC 可以放在 D (500) 和 M (1000) 的左边，来表示 400 和 900。\n给你一个整数，将其转为罗马数字。",
         example: "示例 1：\n输入: num = 3\n输出: \"III\"\n示例 2：\n输入: num = 4\n输出: \"IV\"\n示例 3：\n输入: num = 9\n输出: \"IX\"\n示例 4：\n输入: num = 58\n输出: \"LVIII\"\n解释: L = 50, V= 5, III = 3\n示例 5：\n输入: num = 1994\n输出: \"MCMXCIV\"\n解释: M = 1000, CM = 900, XC = 90, IV = 4",
-        solutions: [],
-        timeComplexity: "O(1)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func intToRoman(num int) string {
+    values := []int{
+        1000,
+        900, 500, 400, 100,
+        90, 50, 40, 10,
+        9, 5, 4, 1
+    }
+    reps := []string{
+        "M",
+        "CM", "D", "CD", "C",
+        "XC", "L", "XL", "X",
+        "IX", "V", "IV", "I"
+    }
+
+    res := ""
+    for i := range values {
+        for num >= values[i] {
+            num -= values[i]
+            res += reps[i]
+        }
+    }
+    return res
+}`,
+                timeComplexity: "O(1)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 13,
@@ -336,9 +505,35 @@ func find(nums1, nums2 []int, i, j, k int) int {
         difficulty: "easy",
         description: "罗马数字包含以下七种字符: I， V， X， L，C，D 和 M。\n字符          数值\nI             1\nV             5\nX             10\nL             50\nC             100\nD             500\nM             1000\n例如， 罗马数字 2 写做 II ，即为两个并列的 1。12 写做 XII ，即为 X + II 。 27 写做  XXVII, 即为 XX + V + II 。\n通常情况下，罗马数字中小的数字在大的数字的右边。但也存在特例，例如 4 不写做 IIII，而是 IV。数字 1 在数字 5 的左边，所表示的数等于大数 5 减小数 1 得到的数值 4。同样地，数字 9 表示为 IX。这个特殊的规则只适用于以下六种情况：\nI 可以放在 V (5) 和 X (10) 的左边，来表示 4 和 9。\nX 可以放在 L (50) 和 C (100) 的左边，来表示 40 和 90。\nC 可以放在 D (500) 和 M (1000) 的左边，来表示 400 和 900。\n给定一个罗马数字，将其转换成整数。",
         example: "示例 1：\n输入: s = \"III\"\n输出: 3\n示例 2：\n输入: s = \"IV\"\n输出: 4\n示例 3：\n输入: s = \"IX\"\n输出: 9\n示例 4：\n输入: s = \"LVIII\"\n输出: 58\n解释: L = 50, V= 5, III = 3\n示例 5：\n输入: s = \"MCMXCIV\"\n输出: 1994\n解释: M = 1000, CM = 900, XC = 90, IV = 4",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func romanToInt(s string) int {
+    h := map[byte]int{
+        'I': 1,
+        'V': 5,
+        'X': 10,
+        'L': 50,
+        'C': 100,
+        'D': 500,
+        'M': 1000,
+    }
+
+    res := 0
+    for i := range s {
+        x := h[s[i]]
+        if i + 1 < len(s) && x < h[s[i + 1]] {
+            res -= x
+        } else {
+            res += x
+        }
+    }
+
+    return res
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 14,
@@ -347,9 +542,43 @@ func find(nums1, nums2 []int, i, j, k int) int {
         difficulty: "easy",
         description: "编写一个函数来查找字符串数组中的最长公共前缀。\n如果不存在公共前缀，返回空字符串 \"\"。",
         example: "示例 1：\n输入：strs = [\"flower\",\"flow\",\"flight\"]\n输出：\"fl\"\n示例 2：\n输入：strs = [\"dog\",\"racecar\",\"car\"]\n输出：\"\"\n解释：输入不存在公共前缀",
-        solutions: [],
-        timeComplexity: "O(mn)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                name: "解法一",
+                code: `func longestCommonPrefix(strs []string) string {
+    res := ""
+    for i := 0; i < len(strs[0]); i++ {
+        c := strs[0][i]
+        for _, str := range strs {
+            if len(str) <= i || str[i] != c {
+                return res
+            }
+        }
+        res += string(c)
+    }
+    return res
+}`,
+                timeComplexity: "O(mn)",
+                spaceComplexity: "O(1)"
+            },
+                        {
+                name: "解法一",
+                code: `func longestCommonPrefix(strs []string) string {
+    sort.Strings(strs)
+    res := ""
+    for i := 0; i < min(len(strs[0]), len(strs[len(strs) - 1])); i++ {
+        if (strs[0][i] == strs[len(strs) - 1][i]) {
+            res += string(strs[0][i])
+        } else {
+            break
+        }
+    }
+    return res
+}`,
+                timeComplexity: "O(mnlogn)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 15,
@@ -358,9 +587,36 @@ func find(nums1, nums2 []int, i, j, k int) int {
         difficulty: "medium",
         description: "给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有满足条件且不重复的三元组。\n注意：答案中不可以包含重复的三元组。",
         example: "示例 1：\n输入：nums = [-1,0,1,2,-1,-4]\n输出：[[-1,-1,2],[-1,0,1]]\n示例 2：\n输入：nums = [0,1,1]\n输出：[]\n示例 3：\n输入：nums = [0,0,0]\n输出：[[0,0,0]]",
-        solutions: [],
-        timeComplexity: "O(n²)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func threeSum(nums []int) [][]int {
+    var res [][]int
+    sort.Ints(nums)
+    for i, x := range nums {
+        if i > 0 && x == nums[i - 1] {
+            continue
+        }
+        for j, k := i + 1, len(nums) - 1; j < k; j++ {
+            y := nums[j]
+            if j > i + 1 && y == nums[j - 1] {
+                continue
+            }
+            for j < k - 1 && x + y + nums[k] > 0 {
+                k--
+            }
+            z := nums[k]
+            if x + y + z == 0 {
+                res = append(res, []int{x, y, z})
+            }
+        }
+    }
+
+    return res
+}`,
+                timeComplexity: "O(n²)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 16,
@@ -369,9 +625,73 @@ func find(nums1, nums2 []int, i, j, k int) int {
         difficulty: "medium",
         description: "给你一个长度为 n 的整数数组 nums 和 一个目标值 target。请你从 nums 中选出三个整数，使它们的和与 target 最接近。\n返回这三个数的和。\n假定每组输入只存在恰好一个解。",
         example: "示例 1：\n输入：nums = [-1,2,1,-4], target = 1\n输出：2\n解释：与 target 最接近的和是 2 (-1 + 2 + 1 = 2)\n示例 2：\n输入：nums = [0,0,0], target = 1\n输出：0",
-        solutions: [],
-        timeComplexity: "O(n²)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                name: "解法一",
+                code: `func threeSumClosest(nums []int, target int) int {
+    a, b := math.MaxInt, math.MaxInt
+    sort.Ints(nums)
+    for i, x := range nums {
+        for j, k := i + 1, len(nums) - 1; j < k; j++ {
+            y := nums[j]
+            for k - 1 > j && x + y + nums[k - 1] >= target {
+                k--
+            }
+            s := x + y + nums[k]
+            if a > abs(s - target) {
+                a, b = abs(s - target), s
+            }
+            if k - 1 > j {
+                s = x + y + nums[k - 1]
+                if a > target - s {
+                    a, b = target - s, s
+                }
+            }
+        }
+    }
+    return b
+}
+
+func abs(x int) int {
+    if x >= 0 {
+        return x
+    }
+    return -x
+}`,
+                timeComplexity: "O(n²)",
+                spaceComplexity: "O(1)"
+            },
+            {
+                name: "解法一",
+                code: `func threeSumClosest(nums []int, target int) int {
+    a, b := math.MaxInt, math.MaxInt
+    sort.Ints(nums)
+    for i, x := range nums {
+        for j, k := i + 1, len(nums) - 1; j < k; j++ {
+            y := nums[j]
+            for j < k - 1 && x + y + nums[k - 1] >= target {
+                k--
+            }
+            if x + y + nums[k] >= target {
+                a = min(a, x + y + nums[k] - target)
+            } else {
+                b = min(b, target - x - y - nums[k])
+            }
+            if j < k - 1 {
+                b = min(b, target - x - y - nums[k - 1])
+            }
+        }
+    }
+
+    if a < b {
+        return target + a
+    }
+    return target - b
+}`,
+                timeComplexity: "O(n²)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 17,
@@ -380,9 +700,102 @@ func find(nums1, nums2 []int, i, j, k int) int {
         difficulty: "medium",
         description: "给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。答案可以按 任意顺序 返回。\n给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。\n2: abc\n3: def\n4: ghi\n5: jkl\n6: mno\n7: pqrs\n8: tuv\n9: wxyz",
         example: "示例 1：\n输入：digits = \"23\"\n输出：[\"ad\",\"ae\",\"af\",\"bd\",\"be\",\"bf\",\"cd\",\"ce\",\"cf\"]\n示例 2：\n输入：digits = \"\"\n输出：[]\n示例 3：\n输入：digits = \"2\"\n输出：[\"a\",\"b\",\"c\"]",
-        solutions: [],
-        timeComplexity: "O(3^m × 4^n)",
-        spaceComplexity: "O(m+n)"
+        solutions: [
+            {
+                name: "解法一",
+                code: `func letterCombinations(digits string) []string {
+    res := []string{}
+    strs := [10]string{
+        "", "", "abc", "def",
+        "ghi", "jkl", "mno",
+        "pqrs", "tuv", "wxyz",
+    }
+    if len(digits) == 0 {
+        return res
+    }
+
+    var dfs func(digits string, u int, path string)
+    dfs = func(digits string, u int, path string) {
+        if u == len(digits) {
+            res = append(res, path)
+        } else {
+            for _, c := range strs[int(digits[u] - '0')] {
+                dfs(digits, u + 1, path + string(c))
+            }
+        }
+    }
+
+    dfs(digits, 0, "")
+
+    return res
+}`,
+                timeComplexity: "O(3^m × 4^n)",
+                spaceComplexity: "O(m+n)"
+            },
+            {
+                name: "解法二",
+                code: `func letterCombinations(digits string) []string {
+    res := []string{}
+    if len(digits) == 0 {
+        return res
+    }
+
+    strs := [10]string{
+        "", "", "abc", "def",
+        "ghi", "jkl", "mno",
+        "pqrs", "tuv", "wxyz",
+    }
+    for _, c := range strs[int(digits[0] - '0')] {
+        res = append(res, string(c))
+    }
+    for i := 1; i < len(digits); i++ {
+        n := len(res)
+        for j := 0; j < n; j++ {
+            for _, c := range strs[int(digits[i] - '0')] {
+                res = append(res, res[j] + string(c))
+            }
+        }
+        res = res[n:]
+    }
+    return res
+}`,
+                timeComplexity: "O(3^m × 4^n)",
+                spaceComplexity: "O(m+n)"
+            },
+            {
+                name: "解法三",
+                code: `func letterCombinations(digits string) []string {
+    res := []string{}
+    if len(digits) == 0 {
+        return []string{}
+    }
+
+    strs := map[byte][]string{
+        '2': []string{"a", "b", "c"},
+        '3': []string{"d", "e", "f"},
+        '4': []string{"g", "h", "i"},
+        '5': []string{"j", "k", "l"},
+        '6': []string{"m", "n", "o"},
+        '7': []string{"p", "q", "r", "s"},
+        '8': []string{"t", "u", "v"},
+        '9': []string{"w", "x", "y", "z"},
+    }
+    res = append(res, strs[digits[0]]...)
+    for i := 1; i < len(digits); i++ {
+        n := len(res)
+        for j := 0; j < n; j++ {
+            for _, c := range strs[digits[i]] {
+                res = append(res, res[j] + c)
+            }
+        }
+        res = res[n:]
+    }
+    return res
+}`,
+                timeComplexity: "O(3^m × 4^n)",
+                spaceComplexity: "O(m+n)"
+            }
+        ]
     },
     {
         id: 18,
@@ -391,9 +804,41 @@ func find(nums1, nums2 []int, i, j, k int) int {
         difficulty: "medium",
         description: "给你一个由 n 个整数组成的数组 nums ，和一个目标值 target 。请你找出并返回满足下述全部条件且不重复的四元组 [nums[a], nums[b], nums[c], nums[d]] （若两个四元组元素一一对应，则认为两个四元组重复）：\n0 <= a, b, c, d < n\na、b、c 和 d 互不相同\nnums[a] + nums[b] + nums[c] + nums[d] == target\n你可以按 任意顺序 返回答案。",
         example: "示例 1：\n输入：nums = [1,0,-1,0,-2,2], target = 0\n输出：[[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]]\n示例 2：\n输入：nums = [2,2,2,2,2], target = 8\n输出：[[2,2,2,2]]",
-        solutions: [],
-        timeComplexity: "O(n³)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func fourSum(nums []int, target int) [][]int {
+    res := [][]int{}
+    sort.Ints(nums)
+    for i, x := range nums {
+        if i > 0 && nums[i] == nums[i - 1] {
+            continue
+        }
+        for j := i + 1; j < len(nums); j++ {
+            if j > i + 1 && nums[j] == nums[j - 1] {
+                continue
+            }
+            y := nums[j]
+            for k, u := j + 1, len(nums) - 1; k < u; k++ {
+                if k > j + 1 && nums[k] == nums[k - 1] {
+                    continue
+                }
+                z := nums[k]
+                for u > k + 1 && x + y + z + nums[u] > target {
+                    u--
+                }
+                w := nums[u]
+                if x + y + z + w == target {
+                    res = append(res, []int{x, y, z, w})
+                }
+            }
+        }
+    }
+    return res
+}`,
+                timeComplexity: "O(n³)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 19,
@@ -402,9 +847,36 @@ func find(nums1, nums2 []int, i, j, k int) int {
         difficulty: "medium",
         description: "给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点。",
         example: "示例 1：\n输入：head = [1,2,3,4,5], n = 2\n输出：[1,2,3,5]\n示例 2：\n输入：head = [1], n = 1\n输出：[]\n示例 3：\n输入：head = [1,2], n = 1\n输出：[1]",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `/**
+ * Definition for singly-linked list.
+ * type ListNode struct {
+ *     Val int
+ *     Next *ListNode
+ * }
+ */
+func removeNthFromEnd(head *ListNode, k int) *ListNode {
+    dummy := &ListNode{}
+    dummy.Next = head
+
+    n := 0
+    for p := dummy; p != nil; p = p.Next {
+        n++
+    }
+
+    p := dummy
+    for i := 0; i < n - k - 1; i++ {
+        p = p.Next
+    }
+    p.Next = p.Next.Next
+
+    return dummy.Next
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 20,
@@ -413,9 +885,27 @@ func find(nums1, nums2 []int, i, j, k int) int {
         difficulty: "easy",
         description: "给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串 s ，判断字符串是否有效。\n有效字符串需满足：\n左括号必须用相同类型的右括号闭合。\n左括号必须以正确的顺序闭合。\n每个右括号都有一个对应的相同类型的左括号。",
         example: "示例 1：\n输入：s = \"()\"\n输出：true\n示例 2：\n输入：s = \"()[]{}\"\n输出：true\n示例 3：\n输入：s = \"(]\"\n输出：false\n示例 4：\n输入：s = \"([)]\"\n输出：false\n示例 5：\n输入：s = \"{[]}\"\n输出：true",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(n)"
+        solutions: [
+            {
+                code: `func isValid(s string) bool {
+    stk := []rune{}
+
+    for _, c := range s {
+        if c == '(' || c == '[' || c == '{' {
+            stk = append(stk, c)
+        } else if len(stk) > 0 && c > stk[len(stk) - 1] && c - stk[len(stk) - 1] <= 2 {
+            stk = stk[:len(stk) - 1]
+        } else {
+            return false
+        }
+    }
+
+    return len(stk) == 0
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(n)"
+            }
+        ]
     },
     {
         id: 21,
@@ -424,9 +914,41 @@ func find(nums1, nums2 []int, i, j, k int) int {
         difficulty: "easy",
         description: "将两个升序链表合并为一个新的升序链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。",
         example: "示例 1：\n输入：l1 = [1,2,4], l2 = [1,3,4]\n输出：[1,1,2,3,4,4]\n示例 2：\n输入：l1 = [], l2 = []\n输出：[]\n示例 3：\n输入：l1 = [], l2 = [0]\n输出：[0]",
-        solutions: [],
-        timeComplexity: "O(m+n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `/**
+ * Definition for singly-linked list.
+ * type ListNode struct {
+ *     Val int
+ *     Next *ListNode
+ * }
+ */
+func mergeTwoLists(list1 *ListNode, list2 *ListNode) *ListNode {
+    dummy := &ListNode{}
+    tail := dummy
+    for list1 != nil && list2 != nil {
+        if list1.Val < list2.Val {
+            tail.Next = list1
+            tail = list1
+            list1 = list1.Next
+        } else {
+            tail.Next = list2
+            tail = list2
+            list2 = list2.Next
+        }
+    }
+    if list1 != nil {
+        tail.Next = list1
+    }
+    if list2 != nil {
+        tail.Next = list2
+    } 
+    return dummy.Next
+}`,
+                timeComplexity: "O(m+n)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 22,
@@ -435,9 +957,33 @@ func find(nums1, nums2 []int, i, j, k int) int {
         difficulty: "medium",
         description: "数字 n 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且有效的括号组合。",
         example: "示例 1：\n输入：n = 3\n输出：[\"((()))\",\"(()())\",\"(())()\",\"()(())\",\"()()()\"]\n示例 2：\n输入：n = 1\n输出：[\"()\"]",
-        solutions: [],
-        timeComplexity: "O(4^n/√n)",
-        spaceComplexity: "O(n)"
+        solutions: [
+            {
+                code: `func generateParenthesis(n int) []string {
+    res := []string{}
+
+    var dfs func(n, lc, rc int, seq string)
+    dfs = func(n, lc, rc int, seq string) {
+        if lc == n && rc == n {
+            res = append(res, seq)
+        } else {
+            if lc < n {
+                dfs(n, lc + 1, rc, seq + "(")
+            }
+            if rc < n && lc > rc {
+                dfs(n, lc, rc + 1, seq + ")")
+            }
+        }
+    }
+
+    dfs(n, 0, 0, "")
+
+    return res
+}`,
+                timeComplexity: "O(4^n/√n)",
+                spaceComplexity: "O(n)"
+            }
+        ]
     },
     {
         id: 23,
@@ -446,9 +992,66 @@ func find(nums1, nums2 []int, i, j, k int) int {
         difficulty: "hard",
         description: "给你一个链表数组，每个链表都已经按升序排列。\n请你将所有链表合并到一个升序链表中，返回合并后的链表。",
         example: "示例 1：\n输入：lists = [[1,4,5],[1,3,4],[2,6]]\n输出：[1,1,2,3,4,4,5,6]\n解释：链表数组如下：\n[\n  1->4->5,\n  1->3->4,\n  2->6\n]\n将它们合并到一个有序链表中得到。\n1->1->2->3->4->4->5->6\n示例 2：\n输入：lists = []\n输出：[]\n示例 3：\n输入：lists = [[]]\n输出：[]",
-        solutions: [],
-        timeComplexity: "O(n log k)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `/**
+ * Definition for singly-linked list.
+ * type ListNode struct {
+ *     Val int
+ *     Next *ListNode
+ * }
+ */
+type minHeap []*ListNode
+
+func (h *minHeap) Len() int {
+    return len(*h)
+}
+
+func (h *minHeap) Less(i, j int) bool {
+    return (*h)[i].Val < (*h)[j].Val
+}
+
+func (h *minHeap) Swap(i, j int) {
+    (*h)[i], (*h)[j] = (*h)[j], (*h)[i]
+}
+
+func (h *minHeap) Push(x interface{}) {
+    *h = append(*h, x.(*ListNode))
+}
+
+func (h *minHeap) Pop() interface{} {
+    n := len(*h)
+    x := (*h)[n - 1]
+    *h = (*h)[:n - 1]
+    return x
+}
+
+func mergeKLists(lists []*ListNode) *ListNode {
+    h := &minHeap{}
+    heap.Init(h)
+    for _, l := range lists {
+        if l != nil {
+            heap.Push(h, l)
+        }
+    }
+
+    dummy := &ListNode{}
+    tail := dummy
+    for h.Len() != 0 {
+        t := heap.Pop(h).(*ListNode)
+        tail.Next = t
+        tail = t
+        if t.Next != nil {
+            heap.Push(h, t.Next)
+        }
+    }
+
+    return dummy.Next
+}`,
+                timeComplexity: "O(n log k)",
+                spaceComplexity: "O(k)"
+            }
+        ]
     },
     {
         id: 24,
@@ -457,9 +1060,34 @@ func find(nums1, nums2 []int, i, j, k int) int {
         difficulty: "medium",
         description: "给你一个链表，两两交换其中相邻的节点，并返回交换后链表的头节点。你必须在不修改节点内部的值的情况下完成本题（即，只能进行节点交换）。",
         example: "示例 1：\n输入：head = [1,2,3,4]\n输出：[2,1,4,3]\n示例 2：\n输入：head = []\n输出：[]\n示例 3：\n输入：head = [1]\n输出：[1]",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `/**
+ * Definition for singly-linked list.
+ * type ListNode struct {
+ *     Val int
+ *     Next *ListNode
+ * }
+ */
+func swapPairs(head *ListNode) *ListNode {
+    dummy := &ListNode{}
+    dummy.Next = head
+    p.Next := dummy
+    for p.Next != nil && p.Next.Next != nil {
+        a := p.Next
+        b := a.Next
+        p.Next = b
+        a.Next = b.Next
+        b.Next = a
+        p = a
+    }
+
+    return dummy.Next
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 25,
@@ -468,9 +1096,41 @@ func find(nums1, nums2 []int, i, j, k int) int {
         difficulty: "hard",
         description: "给你链表的头节点 head ，每 k 个节点一组进行翻转，请你返回修改后的链表。\nk 是一个正整数，它的值小于或等于链表的长度。如果节点总数不是 k 的整数倍，最后剩余的节点保持原有顺序。\n你不能只是单纯的改变节点内部的值，而是需要实际进行节点交换。",
         example: "示例 1：\n输入：head = [1,2,3,4,5], k = 2\n输出：[2,1,4,3,5]\n示例 2：\n输入：head = [1,2,3,4,5], k = 3\n输出：[3,2,1,4,5]",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `/**
+ * Definition for singly-linked list.
+ * type ListNode struct {
+ *     Val int
+ *     Next *ListNode
+ * }
+ */
+func reverseKGroup(head *ListNode, k int) *ListNode {
+    dummy := &ListNode{}
+    dummy.Next = head
+    p := dummy
+    for {
+        q := p
+        for i := 0; i < k && q != nil; i++ {
+            q = q.Next
+        }
+        if q == nil {
+            break
+        }
+        a := p.Next
+        b := a.Next
+        for i := 0; i < k - 1; i++ {
+            b.Next, a, b = a, b, b.Next
+        }
+
+        p.Next, p.Next.Next, p = a, b, p.Next
+    }
+    return dummy.Next
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 26,
@@ -479,9 +1139,22 @@ func find(nums1, nums2 []int, i, j, k int) int {
         difficulty: "easy",
         description: "给你一个升序排列的数组 nums ，请你原地删除重复出现的元素，使每个元素只出现一次，返回删除后数组的新长度。元素的相对顺序应该保持一致。然后返回 nums 中唯一元素的个数。\n考虑 nums 的唯一元素的数量为 k ，你需要做以下事情确保你的题解可以被通过：\n更改数组 nums ，使 nums 的前 k 个元素包含唯一元素，并按照它们最初在 nums 中出现的顺序排列。nums 的其余元素与 nums 的大小不重要。\n返回 k 。",
         example: "示例 1：\n输入：nums = [1,1,2]\n输出：2, nums = [1,2,_]\n解释：函数应该返回新的长度 2 ，并且原数组 nums 的前两个元素被修改为 1, 2 。不需要考虑数组中超出新长度后面的元素。\n示例 2：\n输入：nums = [0,0,1,1,1,2,2,3,3,4]\n输出：5, nums = [0,1,2,3,4]\n解释：函数应该返回新的长度 5 ， 并且原数组 nums 的前五个元素被修改为 0, 1, 2, 3, 4 。不需要考虑数组中超出新长度后面的元素。",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func removeDuplicates(nums []int) int {
+    k := 0
+    for i := range nums {
+        if i == 0 || nums[i] != nums[i - 1] {
+            nums[k] = nums[i]
+            k++
+        }
+    }
+    return k
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 27,
@@ -490,9 +1163,22 @@ func find(nums1, nums2 []int, i, j, k int) int {
         difficulty: "easy",
         description: "给你一个数组 nums 和一个值 val，你需要原地移除所有数值等于 val 的元素，并返回移除后数组的新长度。\n不要使用额外的数组空间，你必须仅使用 O(1) 额外空间并原地修改输入数组。\n元素的顺序可以改变。你不需要考虑数组中超出新长度后面的元素。",
         example: "示例 1：\n输入：nums = [3,2,2,3], val = 3\n输出：2, nums = [2,2]\n解释：函数应该返回新的长度 2, 并且 nums 中的前两个元素均为 2。你不需要考虑数组中超出新长度后面的元素。例如，函数返回的新长度为 2 ，而 nums = [2,2,3,3] 或 nums = [2,2,0,0]，也会被视作正确答案。\n示例 2：\n输入：nums = [0,1,2,2,3,0,4,2], val = 2\n输出：5, nums = [0,1,4,0,3]\n解释：函数应该返回新的长度 5, 并且 nums 中的前五个元素为 0, 1, 3, 0, 4。注意这五个元素可为任意顺序。你不需要考虑数组中超出新长度后面的元素。",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func removeElement(nums []int, val int) int {
+    k := 0
+    for i := range nums {
+        if nums[i] != val {
+            nums[k] = nums[i]
+            k++
+        }
+    }
+    return k
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 28,
@@ -501,9 +1187,41 @@ func find(nums1, nums2 []int, i, j, k int) int {
         difficulty: "easy",
         description: "给你两个字符串 haystack 和 needle ，请你在 haystack 字符串中找出 needle 字符串的第一个匹配项的下标（下标从 0 开始）。如果 needle 不是 haystack 的一部分，则返回 -1。",
         example: "示例 1：\n输入：haystack = \"sadbutsad\", needle = \"sad\"\n输出：0\n解释：\"sad\" 在下标 0 和 6 处匹配。\n第一个匹配项的下标是 0 ，所以返回 0\n示例 2：\n输入：haystack = \"leetcode\", needle = \"leeto\"\n输出：-1\n解释：\"leeto\" 没有在 \"leetcode\" 中出现，所以返回 -1",
-        solutions: [],
-        timeComplexity: "O(m+n)",
-        spaceComplexity: "O(m)"
+        solutions: [
+            {
+                code: `func strStr(s string, p string) int {
+    n, m := len(s), len(p)
+    s, p = " " + s, " " + p
+
+    ne := make([]int, m + 1)
+    for i, j := 2, 0; i <= m; i++ {
+        for j != 0 && p[i] != p[j + 1] {
+            j = ne[j]
+        }
+        if p[i] == p[j + 1] {
+            j++
+        }
+        ne[i] = j
+    }
+
+    for i, j := 1, 0; i <= n; i++ {
+        for j != 0 && s[i] != p[j + 1] {
+            j = ne[j]
+        }
+        if s[i] == p[j + 1] {
+            j++
+        }
+        if j == m {
+            return i - m
+        }
+    }
+
+    return -1
+}`,
+                timeComplexity: "O(m+n)",
+                spaceComplexity: "O(m)"
+            }
+        ]
     },
     {
         id: 29,
@@ -512,9 +1230,48 @@ func find(nums1, nums2 []int, i, j, k int) int {
         difficulty: "medium",
         description: "给你两个整数，被除数 dividend 和除数 divisor。将两数相除，要求不使用乘法、除法和 mod 运算符。\n整数除法应该向零截断，也就是截去（truncate）其小数部分。例如，8.345 将被截断为 8 ，-2.7335 将被截断至 -2。\n返回被除数 dividend 除以除数 divisor 得到的商。\n假设我们的环境只能存储 32 位有符号整数，其数值范围是 [−2³¹, 2³¹ − 1] 。本题中，如果除法结果溢出，则返回 2³¹ − 1。",
         example: "示例 1：\n输入：dividend = 10, divisor = 3\n输出：3\n解释：10/3 = 3.33333.. ，向零截断得到 3\n示例 2：\n输入：dividend = 7, divisor = -3\n输出：-2\n解释：7/-3 = -2.33333.. ，向零截断得到 -2",
-        solutions: [],
-        timeComplexity: "O(log n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func divide(x int, y int) int {
+    if x == math.MinInt32 && y == -1 {
+        return math.MaxInt32
+    }
+    a, b := []int{}, []int{}
+    is_minus := false
+    if x < 0 && y > 0 || x > 0 && y < 0 {
+        is_minus = true
+    }
+
+    x, y = abs(x), abs(y)
+    for i, j := y, 1; i <= x; i, j = i + i, j + j {
+        a, b = append(a, i), append(b, j)
+    }
+
+    res := 0
+    for i := len(a) - 1; i >= 0; i-- {
+        if x >= a[i] {
+            x -= a[i]
+            res += b[i]
+        }
+    }
+
+    if is_minus {
+        res = -res
+    }
+
+    return res
+}
+
+func abs(x int) int {
+    if x < 0 {
+        return -x
+    }
+    return x
+}`,
+                timeComplexity: "O(log n)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 30,
@@ -523,9 +1280,44 @@ func find(nums1, nums2 []int, i, j, k int) int {
         difficulty: "hard",
         description: "给定一个字符串 s 和一个字符串数组 words。 words 中所有字符串长度相同。\ns 中的串联子串是指一个包含 words 中所有字符串以任意顺序排列连接起来的子串。\n例如，如果 words = [\"ab\",\"cd\",\"ef\"]， 那么 \"abcdef\"， \"abefcd\"，\"cdabef\"， \"cdefab\"，\"efabcd\"， 和 \"efcdab\" 都是串联子串。 \"acdbef\" 不是串联子串，因为他不是任何 words 排列的连接。\n返回所有串联子串在 s 中的开始索引。你可以以任意顺序返回答案。",
         example: "示例 1：\n输入：s = \"barfoothefoobarman\", words = [\"foo\",\"bar\"]\n输出：[0,9]\n解释：因为 words.length == 2 且 words[i].length == 3，连接的子字符串的长度必须为 6。\n子串 \"barfoo\" 开始位置是 0。它是 words 中 [\"bar\",\"foo\"] 的连接。\n子串 \"foobar\" 开始位置是 9。它是 words 中 [\"foo\",\"bar\"] 的连接。\n输出顺序无关紧要。返回 [9,0] 也是正确的。\n示例 2：\n输入：s = \"wordgoodgoodgoodbestword\", words = [\"word\",\"good\",\"best\",\"word\"]\n输出：[]\n解释：因为 words.length == 4 且 words[i].length == 4，连接的子字符串的长度必须为 16。\n子串 \"wordgoodgoodgoodbestword\" 长度是 27，不是 16。\n示例 3：\n输入：s = \"barfoobarfoobar\", words = [\"bar\",\"foo\"]\n输出：[6]\n解释：子串 \"foobar\" 开始位置是 6。它是 words 中 [\"foo\",\"bar\"] 的连接。",
-        solutions: [],
-        timeComplexity: "O(n*m*k)",
-        spaceComplexity: "O(m*k)"
+        solutions: [
+            {
+                code: `func findSubstring(s string, words []string) []int {
+    n, m, w := len(s), len(words), len(words[0])
+    res := []int{}
+    tot := map[string]int{}
+    for _, word := range words {
+        tot[word]++
+    }
+
+    for i := 0; i < w; i++ {
+        wd := map[string]int{}
+        cnt := 0
+        for j := i; j + w <= n; j += w {
+            if j >= i + m * w {
+                word := s[j - m * w : j - m * w + w]
+                wd[word]--
+                if wd[word] < tot[word] {
+                    cnt--
+                }
+            }
+            word := s[j : j + w]
+            wd[word]++
+            if wd[word] <= tot[word] {
+                cnt++
+            }
+            if cnt == m {
+                res = append(res, j - (m - 1) * w)
+            }
+        }
+    }
+
+    return res
+}`,
+                timeComplexity: "O((n+m)w)",
+                spaceComplexity: "O(mw)"
+            }
+        ]
     },
     {
         id: 31,
