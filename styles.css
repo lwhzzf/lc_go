@@ -194,7 +194,7 @@ body.no-scroll {
 }
 
 .problem-header h1 {
-    font-size: clamp(22px, 5vw, 28px);
+    font-size: clamp(18px, 5vw, 28px);
     font-weight: 700;
     color: #2c3e50;
     margin-bottom: 0; /* 使标题与上下边距一致（上15px，下15px） */
@@ -530,7 +530,7 @@ body.home-mode {
 }
 
 /* 仅在极窄屏生效的等比缩放，防止影响桌面端 */
-@media (max-width: 420px) {
+@media (max-width: 540px) {
     .sidebar {
         max-height: calc(100vh - 56px);
         overflow-y: auto;
@@ -567,7 +567,7 @@ body.home-mode {
         font-size: 13px;
     }
     /* 极窄屏整体等比缩放，确保始终看全宽度 */
-    :root { --page-base-width: 1000px; }
+    :root { --page-base-width: 1200px; }
     .container { overflow-x: hidden; }
     .main-content {
         width: var(--page-base-width);
