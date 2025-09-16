@@ -2352,9 +2352,29 @@ func maxSubArray(nums []int) int {
         difficulty: "medium",
         description: "以数组 intervals 表示若干个区间的集合，其中单个区间为 intervals[i] = [starti, endi] 。请你合并所有重叠的区间，并返回 一个不重叠的区间数组，该数组需恰好覆盖输入中的所有区间。",
         example: "示例 1：\n输入：intervals = [[1,3],[2,6],[8,10],[15,18]]\n输出：[[1,6],[8,10],[15,18]]\n解释：区间 [1,3] 和 [2,6] 重叠, 将它们合并为 [1,6]\n示例 2：\n输入：intervals = [[1,4],[4,5]]\n输出：[[1,5]]\n解释：区间 [1,4] 和 [4,5] 可被视为重叠区间",
-        solutions: [],
-        timeComplexity: "O(n log n)",
-        spaceComplexity: "O(log n)"
+        solutions: [
+            {
+                code: `func merge(a [][]int) (res [][]int) {
+    sort.Slice(a, func(i, j int) bool {
+        return a[i][0] < a[j][0]
+    })
+    l, r := a[0][0], a[0][1]
+    for i := 1; i < len(a); i++ {
+        if a[i][0] > r {
+            res = append(res, []int{l, r})
+            l, r = a[i][0], a[i][1]
+        } else {
+            r = max(r, a[i][1])
+        }
+    }
+
+    res = append(res, []int{l, r})
+    return
+}`,
+                timeComplexity: "O(nlogn)",
+                spaceComplexity: "O(logn)"
+            }
+        ]
     },
     {
         id: 57,
@@ -2363,9 +2383,35 @@ func maxSubArray(nums []int) int {
         difficulty: "medium",
         description: "给你一个 无重叠的 ，按照区间起始端点排序的区间列表。\n在列表中插入一个新的区间，你需要确保列表中的区间仍然有序且不重叠（如果有必要的话，可以合并区间）。",
         example: "示例 1：\n输入：intervals = [[1,3],[6,9]], newInterval = [2,5]\n输出：[[1,5],[6,9]]\n示例 2：\n输入：intervals = [[1,2],[3,5],[6,7],[8,10],[12,16]], newInterval = [4,8]\n输出：[[1,2],[3,10],[12,16]]\n解释：这是因为新的区间 [4,8] 与 [3,5],[6,7],[8,10] 重叠。",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func insert(a [][]int, b []int) (res [][]int) {
+    k := 0
+    for k < len(a) && a[k][1] < b[0] {
+        res = append(res, a[k])
+        k++
+    }
+
+    if k < len(a) {
+        b[0] = min(b[0], a[k][0])
+        for k < len(a) && a[k][0] <= b[1] {
+            b[1] = max(b[1], a[k][1])
+            k++
+        }
+    }
+    
+    res = append(res, b)
+
+    for k < len(a) {
+        res = append(res, a[k])
+        k++
+    }
+    return res
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 58,
@@ -2374,9 +2420,26 @@ func maxSubArray(nums []int) int {
         difficulty: "easy",
         description: "给你一个字符串 s，由若干单词组成，单词前后用一些空格字符隔开。返回字符串中 最后一个 单词的长度。\n单词 是指仅由字母组成、不包含任何空格字符的最大子字符串。",
         example: "示例 1：\n输入：s = \"Hello World\"\n输出：5\n解释：最后一个单词是 \"World\"，长度为 5\n示例 2：\n输入：s = \"   fly me   to   the moon  \"\n输出：4\n解释：最后一个单词是 \"moon\"，长度为 4\n示例 3：\n输入：s = \"luffy is still joyboy\"\n输出：6\n解释：最后一个单词是 \"joyboy\"，长度为 6",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func lengthOfLastWord(s string) int {
+    for i := len(s) - 1; i >= 0; i-- {
+        if s[i] == ' ' {
+            continue
+        }
+        j := i - 1
+        for j >= 0 && s[j] != ' ' {
+            j--
+        }
+        return i - j
+    }
+
+    return -1
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 59,
@@ -2385,9 +2448,31 @@ func maxSubArray(nums []int) int {
         difficulty: "medium",
         description: "给你一个正整数 n ，生成一个包含 1 到 n² 所有元素，且元素按顺时针顺序螺旋排列的 n x n 正方形矩阵 matrix 。",
         example: "示例 1：\n输入：n = 3\n输出：[[1,2,3],[8,9,4],[7,6,5]]\n示例 2：\n输入：n = 1\n输出：[[1]]",
-        solutions: [],
-        timeComplexity: "O(n²)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func generateMatrix(n int) [][]int {
+    res := make([][]int, n)
+    for i := range res {
+        res[i] = make([]int, n)
+    }
+    
+    dx, dy := []int{0, 1, 0, -1}, []int{1, 0, -1, 0}
+    for i, x, y, d := 1, 0, 0, 0; i <= n * n; i++ {
+        res[x][y] = i
+        a, b := x + dx[d], y + dy[d]
+        if a < 0 || a >= n || b < 0 || b >= n || res[a][b] != 0 {
+            d = (d + 1) % 4
+            a, b = x + dx[d], y + dy[d]
+        }
+        x, y = a, b
+    }
+    
+    return res
+}`,
+                timeComplexity: "O(n²)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 60,
@@ -2396,9 +2481,35 @@ func maxSubArray(nums []int) int {
         difficulty: "hard",
         description: "给出集合 [1,2,3,...,n]，其所有元素共有 n! 种排列。\n按大小顺序列出所有排列情况，并一一标记，当 n = 3 时, 所有排列如下：\n\"123\"\n\"132\"\n\"213\"\n\"231\"\n\"312\"\n\"321\"\n给定 n 和 k，返回第 k 个排列。",
         example: "示例 1：\n输入：n = 3, k = 3\n输出：\"213\"\n示例 2：\n输入：n = 4, k = 9\n输出：\"2314\"\n示例 3：\n输入：n = 3, k = 1\n输出：\"123\"",
-        solutions: [],
-        timeComplexity: "O(n²)",
-        spaceComplexity: "O(n)"
+        solutions: [
+            {
+                code: `func getPermutation(n int, k int) (res string) {
+    st := [10]bool{}
+    for i := 0; i < n; i++ {
+        fact := 1
+        for j := 1; j <= n - i - 1; j++ {
+            fact *= j
+        }
+
+        for j := 1; j <= n; j++ {
+            if !st[j] {
+                if k > fact {
+                    k -= fact
+                } else {
+                    res += strconv.Itoa(j)
+                    st[j] = true
+                    break
+                }
+            }
+        }
+    }
+
+    return
+}`,
+                timeComplexity: "O(n²)",
+                spaceComplexity: "O(n)"
+            }
+        ]
     },
     {
         id: 61,
@@ -2407,9 +2518,44 @@ func maxSubArray(nums []int) int {
         difficulty: "medium",
         description: "给你一个链表的头节点 head ，旋转链表，将链表每个节点向右移动 k 个位置。",
         example: "示例 1：\n输入：head = [1,2,3,4,5], k = 2\n输出：[4,5,1,2,3]\n示例 2：\n输入：head = [0,1,2], k = 4\n输出：[2,0,1]",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `/**
+ * Definition for singly-linked list.
+ * type ListNode struct {
+ *     Val int
+ *     Next *ListNode
+ * }
+ */
+func rotateRight(head *ListNode, k int) *ListNode {
+    if head == nil {
+        return head
+    }
+    n := 0
+    tail := &ListNode{}
+    for p := head; p != nil; p = p.Next {
+        tail = p
+        n++
+    }
+    k %= n
+
+    if k == 0 {
+        return head
+    }
+
+    p := head
+    for i := 0; i < n - k - 1; i++ {
+        p = p.Next
+    }
+    tail.Next = head
+    head = p.Next
+    p.Next = nil
+    return head
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 62,
@@ -2418,9 +2564,70 @@ func maxSubArray(nums []int) int {
         difficulty: "medium",
         description: "一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为 \"Start\" ）。\n机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为 \"Finish\" ）。\n问总共有多少条不同的路径？",
         example: "示例 1：\n输入：m = 3, n = 7\n输出：28\n示例 2：\n输入：m = 3, n = 2\n输出：3\n解释：\n从左上角开始，总共有 3 条路径可以到达右下角。\n1. 向右 -> 向下 -> 向下\n2. 向下 -> 向下 -> 向右\n3. 向下 -> 向右 -> 向下\n示例 3：\n输入：m = 7, n = 3\n输出：28\n示例 4：\n输入：m = 3, n = 3\n输出：6",
-        solutions: [],
-        timeComplexity: "O(m*n)",
-        spaceComplexity: "O(m*n)"
+        solutions: [
+            {
+                name: "解法一",
+                code: `func uniquePaths(m int, n int) int {
+    f := make([][]int, n)
+    for i := range f {
+        f[i] = make([]int, m)
+    }
+    for i := range f {
+        for j := range f[i] {
+            if i == 0 && j == 0 {
+                f[i][j] = 1
+            } else {
+                if i != 0 {
+                    f[i][j] += f[i - 1][j]
+                }
+                if j != 0 {
+                    f[i][j] += f[i][j - 1]
+                }
+            }
+        }
+    }
+    return f[n - 1][m - 1]
+}`,
+                timeComplexity: "O(mn)",
+                spaceComplexity: "O(mn)"
+            },
+            {
+                name: "解法二",
+                code: `func uniquePaths(m int, n int) int {
+    f := make([][]int, n)
+    for i := range f {
+        f[i] = make([]int, m)
+    }
+    for i := range f {
+        for j := range f[i] {
+            if i == 0 || j == 0 {
+                f[i][j] = 1
+            } else {
+                f[i][j] = f[i - 1][j] + f[i][j - 1]
+            }
+        }
+    }
+    return f[n - 1][m - 1]
+}`,
+                timeComplexity: "O(mn)",
+                spaceComplexity: "O(mn)"
+            },
+            {
+                name: "解法三",
+                code: `func uniquePaths(m int, n int) int {
+    f := make([]int, m)
+    f[0] = 1
+    for i := 0; i < n; i++ {
+        for j := 1; j < m; j++ {
+            f[j] += f[j - 1]
+        }
+    }
+    return f[m - 1]
+}`,
+                timeComplexity: "O(mn)",
+                spaceComplexity: "O(m)"
+            }
+        ]
     },
     {
         id: 63,
@@ -2429,9 +2636,58 @@ func maxSubArray(nums []int) int {
         difficulty: "medium",
         description: "一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为 \"Start\" ）。\n机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为 \"Finish\"）。\n现在考虑网格中有障碍物。那么从左上角到右下角将会有多少条不同的路径？\n网格中的障碍物和空位置分别用 1 和 0 来表示。",
         example: "示例 1：\n输入：obstacleGrid = [[0,0,0],[0,1,0],[0,0,0]]\n输出：2\n解释：3x3 网格的正中间有一个障碍物。\n从左上角到右下角一共有 2 条不同的路径：\n1. 向右 -> 向右 -> 向下 -> 向下\n2. 向下 -> 向下 -> 向右 -> 向右\n示例 2：\n输入：obstacleGrid = [[0,1],[0,0]]\n输出：1",
-        solutions: [],
-        timeComplexity: "O(m*n)",
-        spaceComplexity: "O(m*n)"
+        solutions: [
+            {
+                name: "解法一",
+                code: `func uniquePathsWithObstacles(a [][]int) int {
+    n, m := len(a), len(a[0])
+    f := make([][]int, n)
+    for i := range f {
+        f[i] = make([]int, m)
+    }
+    for i := 0; i < n; i++ {
+        for j := 0; j < m; j++ {
+            if a[i][j] == 0 {
+                if i == 0 && j == 0 {
+                    f[i][j] = 1
+                } else {
+                    if i != 0 {
+                        f[i][j] += f[i - 1][j]
+                    }
+                    if j != 0 {
+                        f[i][j] += f[i][j - 1]
+                    }
+                }
+            }
+        }
+    }
+    return f[n - 1][m - 1]
+}`,
+                timeComplexity: "O(mn)",
+                spaceComplexity: "O(mn)"
+            },
+            {
+                name: "解法二",
+                code: `func uniquePathsWithObstacles(a [][]int) int {
+    n, m := len(a), len(a[0])
+    f := make([]int, m)
+    for i := 0; i < n; i++ {
+        for j := 0; j < m; j++ {
+            if a[i][j] == 1 {
+                f[j] = 0
+            } else if i == 0 && j == 0 {
+                f[j] = 1
+            } else if j != 0 {
+                f[j] += f[j - 1]
+            }
+        }
+    }
+    return f[m - 1]
+}`,
+                timeComplexity: "O(mn)",
+                spaceComplexity: "O(m)"
+            }
+        ]
     },
     {
         id: 64,
@@ -2440,9 +2696,58 @@ func maxSubArray(nums []int) int {
         difficulty: "medium",
         description: "给定一个包含非负整数的 m x n 网格 grid ，请找出一条从左上角到右下角的路径，使得路径上的数字总和为最小。\n说明：每次只能向下或者向右移动一步。",
         example: "示例 1：\n输入：grid = [[1,3,1],[1,5,1],[4,2,1]]\n输出：7\n解释：因为路径 1→3→1→1→1 的总和最小\n示例 2：\n输入：grid = [[1,2,3],[4,5,6]]\n输出：12",
-        solutions: [],
-        timeComplexity: "O(m*n)",
-        spaceComplexity: "O(m*n)"
+        solutions: [
+            {
+                name: "解法一",
+                code: `func minPathSum(g [][]int) int {
+    n, m := len(g), len(g[0])
+    f := make([][]int, n)
+    for i := range f {
+        f[i] = make([]int, m)
+    }
+    for i := 0; i < n; i++ {
+        for j := 0; j < m; j++ {
+            f[i][j] = math.MaxInt
+            if i == 0 && j == 0 {
+                f[i][j] = g[i][j]
+            } else {
+                if i != 0 {
+                    f[i][j] = f[i - 1][j] + g[i][j]
+                }
+                if j != 0 {
+                    f[i][j] = min(f[i][j], f[i][j - 1] + g[i][j])
+                }
+            }
+        }
+    }
+    return f[n - 1][m - 1]
+}`,
+                timeComplexity: "O(mn)",
+                spaceComplexity: "O(mn)"
+            },
+            {
+                name: "解法二",
+                code: `func minPathSum(g [][]int) int {
+    n, m := len(g), len(g[0])
+    f := make([]int, m)
+    for i := 0; i < n; i++ {
+        for j := 0; j < m; j++ {
+            f[j] += g[i][j]
+            if j != 0 {
+                if i == 0 {
+                    f[j] += f[j - 1]
+                } else {
+                    f[j] = min(f[j], f[j - 1] + g[i][j])
+                }
+            }
+        }
+    }
+    return f[m - 1]
+}`,
+                timeComplexity: "O(mn)",
+                spaceComplexity: "O(m)"
+            }
+        ]
     },
     {
         id: 65,
@@ -2451,9 +2756,70 @@ func maxSubArray(nums []int) int {
         difficulty: "hard",
         description: "有效数字（按顺序）可以分成以下几个部分：\n1. 一个 小数 或者 整数\n2. （可选）一个 'e' 或 'E' ，后面跟着一个 整数\n小数（按顺序）可以分成以下几个部分：\n1. （可选）一个符号字符（'+' 或 '-'）\n2. 下述格式之一：\n   至少一位数字，后面跟着一个点 '.'\n   至少一位数字，后面跟着一个点 '.' ，后面再跟着至少一位数字\n   一个点 '.' ，后面跟着至少一位数字\n整数（按顺序）可以分成以下几个部分：\n1. （可选）一个符号字符（'+' 或 '-'）\n2. 至少一位数字\n部分有效数字列举如下：[\"2\", \"0089\", \"-0.1\", \"+3.14\", \"4.\", \"-.9\", \"2e10\", \"-90E3\", \"3e+7\", \"+6e-1\", \"53.5e93\", \"-123.456e789\"]\n部分无效数字列举如下：[\"abc\", \"1a\", \"1e\", \"e3\", \"99e2.5\", \"--6\", \"-+3\", \"95a54e53\"]\n给你一个字符串 s ，如果 s 是一个 有效数字 ，请返回 true。",
         example: "示例 1：\n输入：s = \"0\"\n输出：true\n示例 2：\n输入：s = \"e\"\n输出：false\n示例 3：\n输入：s = \".\"\n输出：false",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func isNumber(s string) bool {
+    if s[0] == '+' || s[0] == '-' {
+        s = s[1:]
+    }
+    if len(s) == 0 {
+        return false
+    }
+
+    if s[0] == '.' && (len(s) == 1 || s[1] == 'e' || s[1] == 'E') {
+        return false
+    }
+
+    dot, e := 0, 0
+    for i := 0; i < len(s); i++ {
+        if s[i] == '.' {
+            if dot > 0 || e > 0 {
+                return false
+            }
+            dot++
+        } else if s[i] == 'e' || s[i] == 'E' {
+            if i == 0 || i == len(s) - 1 || e > 0 {
+                return false
+            }
+            if s[i + 1] == '+' || s[i + 1] == '-' {
+                if i == len(s) - 2 {
+                    return false
+                }
+                i++
+            }
+            e++
+        } else if s[i] < '0' || s[i] > '9' {
+            return false
+        }
+    }
+    return true
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(1)"
+            },
+            {
+                code: `func isNumber(s string) (n bool) {
+    d, e := false, false
+    for i, c := range s {
+        if (c == '+' || c == '-') && (i == 0 || s[i - 1] == 'e' || s[i - 1] == 'E') {
+            continue
+        } else if (c == 'e' || c == 'E') && !e && n {
+            e = true
+            n = false
+        } else if c == '.' && !d && !e {
+            d = true
+        } else if c >= '0' && c <= '9' {
+            n = true
+        } else {
+            return false
+        }
+    }
+    return
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 66,
@@ -2462,9 +2828,24 @@ func maxSubArray(nums []int) int {
         difficulty: "easy",
         description: "给定一个由 整数 组成的 非空 数组所表示的非负整数，在该数的基础上加一。\n最高位数字存放在数组的首位， 数组中每个元素只存储单个数字。\n你可以假设除了整数 0 之外，这个整数不会以零开头。",
         example: "示例 1：\n输入：digits = [1,2,3]\n输出：[1,2,4]\n解释：输入数组表示数字 123。\n示例 2：\n输入：digits = [4,3,2,1]\n输出：[4,3,2,2]\n解释：输入数组表示数字 4321。\n示例 3：\n输入：digits = [0]\n输出：[1]",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func plusOne(digits []int) []int {
+    for i := len(digits) - 1; i >= 0; i-- {
+        digits[i]++
+        if digits[i] != 10 {
+            return digits
+        }
+        digits[i] = 0
+    }
+    digits = make([]int, len(digits) + 1)
+    digits[0] = 1
+    return digits
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 67,
@@ -2473,9 +2854,25 @@ func maxSubArray(nums []int) int {
         difficulty: "easy",
         description: "给你两个二进制字符串，返回它们的和（用二进制表示）。\n输入为 非空 字符串且只包含数字 1 和 0。",
         example: "示例 1：\n输入: a = \"11\", b = \"1\"\n输出: \"100\"\n示例 2：\n输入: a = \"1010\", b = \"1011\"\n输出: \"10101\"",
-        solutions: [],
-        timeComplexity: "O(max(m,n))",
-        spaceComplexity: "O(max(m,n))"
+        solutions: [
+            {
+                code: `func addBinary(a string, b string) (c string) {
+    for i, j, t := len(a) - 1, len(b) - 1, 0; i >= 0 || j >= 0 || t != 0; i, j = i - 1, j - 1 {
+        if i >= 0 {
+            t += int(a[i] - '0')
+        }
+        if j >= 0 {
+            t += int(b[j] - '0')
+        }
+        c = strconv.Itoa(t % 2) + c
+        t /= 2
+    }
+    return
+}`,
+                timeComplexity: "O(max(m,n))",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 68,
@@ -2484,9 +2881,46 @@ func maxSubArray(nums []int) int {
         difficulty: "hard",
         description: "给定一个单词数组 words 和一个长度 maxWidth ，重新排版单词，使其成为每行恰好有 maxWidth 个字符，且左右两端对齐的文本。\n你应该使用 \"贪心算法\" 来放置单词；也就是说，尽可能多地往每行中放置单词。必要时可用空格 ' ' 填充，使得每行恰好有 maxWidth 个字符。\n要求尽可能均匀分配单词间的空格数量。如果某一行单词间的空格不能均匀分配，则左侧放置的空格数要多于右侧的空格数。\n文本的最后一行应为左对齐，且单词之间不插入额外的空格。\n注意:\n单词是指由非空格字符组成的字符序列。\n每个单词的长度大于 0，小于等于 maxWidth。\n输入单词数组 words 至少包含一个单词。",
         example: "示例 1：\n输入: words = [\"This\", \"is\", \"an\", \"example\", \"of\", \"text\", \"justification.\"], maxWidth = 16\n输出:\n[\n   \"This    is    an\",\n   \"example  of text\",\n   \"justification.  \"\n]\n示例 2：\n输入:words = [\"What\",\"must\",\"be\",\"acknowledgment\",\"shall\",\"be\"], maxWidth = 16\n输出:\n[\n  \"What   must   be\",\n  \"acknowledgment  \",\n  \"shall be        \"\n]\n示例 3：\n输入:words = [\"Science\",\"is\",\"what\",\"we\",\"understand\",\"well\",\"enough\",\"to\",\"explain\",\"to\",\"a\",\"computer.\",\"Art\",\"is\",\"everything\",\"else\",\"we\",\"do\"]，maxWidth = 20\n输出:\n[\n  \"Science  is  what we\",\n  \"understand      well\",\n  \"enough to explain to\",\n  \"a  computer.  Art is\",\n  \"everything  else  we\",\n  \"do                  \"\n]",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(n)"
+        solutions: [
+            {
+                code: `func fullJustify(words []string, maxWidth int) (res []string) {
+    for i := 0; i < len(words); i++ {
+        j, l := i + 1, len(words[i])
+        for j < len(words) && l + 1 + len(words[j]) <= maxWidth {
+            l += 1 + len(words[j])
+            j++
+        }
+        line := words[i]
+        if j == len(words) || j == i + 1 {
+            for k := i + 1; k < j; k++ {
+                line += " " + words[k]
+            }
+            // for len(line) < maxWidth {
+            //  line += " "
+            // }
+            line += strings.Repeat(" ", maxWidth - len(line))
+        } else {
+            cnt := j - i - 1
+            r, k := maxWidth - l + cnt, 0
+            for k < r % cnt {
+                line += strings.Repeat(" ", r / cnt + 1) + words[i + k + 1]
+                k++
+            }
+            for k < cnt {
+                line += strings.Repeat(" ", r / cnt) + words[i + k + 1]
+                k++
+            }
+        }
+
+        res = append(res, line)
+        i = j - 1
+    }
+    return
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(n)"
+            }
+        ]
     },
     {
         id: 69,
@@ -2495,9 +2929,43 @@ func maxSubArray(nums []int) int {
         difficulty: "easy",
         description: "给你一个非负整数 x ，计算并返回 x 的 算术平方根 。\n由于返回类型是整数，结果只保留 整数部分 ，小数部分将被 舍去 。\n注意：不允许使用任何内置指数函数和算符，例如 pow(x, 0.5) 或者 x ** 0.5 。",
         example: "示例 1：\n输入：x = 4\n输出：2\n示例 2：\n输入：x = 8\n输出：2\n解释：8 的算术平方根是 2.82842..., 由于返回类型是整数，小数部分将被舍去。",
-        solutions: [],
-        timeComplexity: "O(log x)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func fullJustify(words []string, maxWidth int) (res []string) {
+    for i := 0; i < len(words); i++ {
+        j, l := i + 1, len(words[i])
+        for j < len(words) && l + 1 + len(words[j]) <= maxWidth {
+            l += 1 + len(words[j])
+            j++
+        }
+        line := words[i]
+        if j == len(words) || j == i + 1 {
+            for k := i + 1; k < j; k++ {
+                line += " " + words[k]
+            }
+            line += strings.Repeat(" ", maxWidth - len(line))
+        } else {
+            cnt := j - i - 1
+            r, k := maxWidth - l + cnt, 0
+            for k < r % cnt {
+                line += strings.Repeat(" ", r / cnt + 1) + words[i + k + 1]
+                k++
+            }
+            for k < cnt {
+                line += strings.Repeat(" ", r / cnt) + words[i + k + 1]
+                k++
+            }
+        }
+
+        res = append(res, line)
+        i = j - 1
+    }
+    return
+}`,
+                timeComplexity: "O(logx)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 70,
@@ -2506,9 +2974,19 @@ func maxSubArray(nums []int) int {
         difficulty: "easy",
         description: "假设你正在爬楼梯。需要 n 阶你才能到达楼顶。\n每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？",
         example: "示例 1：\n输入：n = 2\n输出：2\n解释：有两种方法可以爬到楼顶。\n1. 1 阶 + 1 阶\n2. 2 阶\n示例 2：\n输入：n = 3\n输出：3\n解释：有三种方法可以爬到楼顶。\n1. 1 阶 + 1 阶 + 1 阶\n2. 1 阶 + 2 阶\n3. 2 阶 + 1 阶",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func climbStairs(n int) int {
+    a, b := 1, 1
+    for i := 0; i < n - 1; i++ {
+        a, b = b, a + b
+    }
+    return b
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 71,
