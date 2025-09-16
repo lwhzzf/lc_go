@@ -529,8 +529,8 @@ body.home-mode {
     text-align: center;
 }
 
-/* 仅在极窄屏生效的等比缩放，防止影响桌面端 */
-@media (max-width: 540px) {
+/* 移动端等比缩放兜底，保证任何屏宽都能看全内容 */
+@media (max-width: 768px) {
     .sidebar {
         max-height: calc(100vh - 56px);
         overflow-y: auto;
@@ -567,12 +567,13 @@ body.home-mode {
         font-size: 13px;
     }
     /* 极窄屏整体等比缩放，确保始终看全宽度 */
-    :root { --page-base-width: 1200px; }
+    :root { --page-base-width: 1280px; }
     .container { overflow-x: hidden; }
     .main-content {
         width: var(--page-base-width);
         transform-origin: top left;
         transform: scale(calc(100vw / var(--page-base-width)));
+        will-change: transform;
     }
 }
 
