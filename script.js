@@ -2249,7 +2249,7 @@ func abs(x int) int {
         example: "示例 1：\n输入：nums = [-2,1,-3,4,-1,2,1,-5,4]\n输出：6\n解释：连续子数组 [4,-1,2,1] 的和最大，为 6\n示例 2：\n输入：nums = [1]\n输出：1\n示例 3：\n输入：nums = [5,4,-1,7,8]\n输出：23",
         solutions: [
             {
-                name: "解法一"
+                name: "解法一",
                 code: `func maxSubArray(nums []int) int {
     res, last := math.MinInt, 0
     for _, x := range nums {
@@ -2262,7 +2262,7 @@ func abs(x int) int {
                 spaceComplexity: "O(1)"
             },
             {
-                name: "解法二：SegmentTree"
+                name: "解法二：SegmentTree",
                 code: `type Node struct {
     sum, s, ls, rs int
 }
