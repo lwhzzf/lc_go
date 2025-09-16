@@ -12,6 +12,7 @@ body {
     line-height: 1.6;
     height: 100vh; /* 设置高度为视口高度 */
     margin: 0;
+    overflow-x: hidden; /* 防止横向滚动 */
 }
 
 body.no-scroll {
@@ -411,7 +412,8 @@ body.no-scroll {
     .topbar { grid-template-columns: 56px 1fr 56px; }
     .topbar-left, .topbar-right { display: none; }
     .menu-btn { display: block; }
-    .main-content { margin-left: 0; }
+    .main-content { margin-left: 0; width: 100%; }
+    .container { width: 100%; overflow-x: hidden; }
     .sidebar {
         transform: translateX(-100%);
         left: 0;
