@@ -1,3 +1,44 @@
+// =====================
+// 移动端：侧栏开合逻辑
+// =====================
+document.addEventListener('DOMContentLoaded', function () {
+    var menuBtn = document.getElementById('menuBtn');
+    var sidebar = document.getElementById('sidebar');
+    var overlay = document.getElementById('overlay');
+    if (!menuBtn || !sidebar || !overlay) {
+        return;
+    }
+
+    function openSidebar() {
+        sidebar.classList.add('open');
+        overlay.classList.add('show');
+        document.body.classList.add('no-scroll');
+    }
+
+    function closeSidebar() {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('show');
+        document.body.classList.remove('no-scroll');
+    }
+
+    menuBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (sidebar.classList.contains('open')) {
+            closeSidebar();
+        } else {
+            openSidebar();
+        }
+    });
+
+    overlay.addEventListener('click', closeSidebar);
+
+    // 视口扩大到桌面端时，确保关闭抽屉
+    window.addEventListener('resize', function () {
+        if (window.innerWidth > 768) {
+            closeSidebar();
+        }
+    });
+});
 // 力扣题目数据
 const problems = [
     {
