@@ -10,9 +10,19 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="topbar">
+        <button class="menu-btn" id="menuBtn" aria-label="打开题目列表">☰</button>
+        <div class="topbar-left">
+            <a href="#" id="logoLink" class="logo-text">小衡的力扣题解</a>
+        </div>
+        <div class="topbar-center">
+            <a href="#" id="homeLink" class="home-link">首页</a>
+        </div>
+        <div class="topbar-right"></div>
+    </div>
     <div class="container">
         <!-- 侧边栏 -->
-        <div class="sidebar">
+        <div class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <h2>题目列表</h2>
             </div>
@@ -23,6 +33,7 @@
                 <!-- 题目列表将通过JavaScript动态生成 -->
             </div>
         </div>
+        <div class="overlay" id="overlay"></div>
 
         <!-- 主内容区 -->
         <div class="main-content">
