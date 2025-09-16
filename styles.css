@@ -216,7 +216,7 @@ body.no-scroll {
     align-self: center;
     justify-self: center;
     height: 100%; /* 占满网格行以实现真正的垂直居中 */
-    transform: translateY(-25px); /* 细微上移，抵消标题区边框/行高带来的视觉偏差 */
+    transform: translateY(-30px); /* 细微上移，抵消标题区边框/行高带来的视觉偏差 */
 }
 
 .welcome-message p {
@@ -415,15 +415,14 @@ body.no-scroll {
     .main-content { margin-left: 0; width: 100%; }
     .container { width: 100%; overflow-x: hidden; }
     .sidebar {
-        transform: translateX(-100%);
-        left: 0;
+        left: -280px; /* 彻底移出视口，避免产生横向滚动 */
         top: 56px;
         height: calc(100vh - 56px);
         border-right: 1px solid #e1e5e9;
         max-height: calc(100vh - 56px);
         overflow-y: auto;
     }
-    .sidebar.open { transform: translateX(0); }
+    .sidebar.open { left: 0; }
     .overlay.show { display: block; }
 
     .problem-content {
