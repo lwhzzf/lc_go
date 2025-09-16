@@ -170,7 +170,9 @@ body.no-scroll {
     background-color: #fff;
     transition: margin-left 0.3s ease;
     height: 100%; /* 使用100%高度填充父容器 */
-    position: relative; /* 为欢迎消息的绝对定位提供参考 */
+    position: relative;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr); /* 上方标题，下面内容区 */
     overflow-y: auto; /* 允许内容垂直滚动 */
 }
 
@@ -188,7 +190,7 @@ body.no-scroll {
     font-size: 28px;
     font-weight: 700;
     color: #2c3e50;
-    margin-bottom: 10px;
+    margin-bottom: 0; /* 使标题与上下边距一致（上15px，下15px） */
 }
 
 .problem-content {
@@ -206,14 +208,14 @@ body.no-scroll {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100%; /* 使用100%高度填充父容器 */
-    width: 100%; /* 使用100%宽度填充父容器 */
+    width: 100%;
     max-width: 1000px;
     margin: 0 auto;
-    position: absolute; /* 绝对定位 */
-    top: 50%; /* 垂直居中 */
-    left: 50%; /* 水平居中 */
-    transform: translate(-50%, -50%); /* 完全居中 */
+    grid-row: 2; /* 放在内容区这一行 */
+    align-self: center;
+    justify-self: center;
+    height: 100%; /* 占满网格行以实现真正的垂直居中 */
+    transform: translateY(-25px); /* 细微上移，抵消标题区边框/行高带来的视觉偏差 */
 }
 
 .welcome-message p {
@@ -407,6 +409,8 @@ body.no-scroll {
 @media (max-width: 768px) {
     .logo-text { display: none; }
     .topbar { grid-template-columns: 56px 1fr 56px; }
+    .topbar-left, .topbar-right { display: none; }
+    .menu-btn { display: block; }
     .main-content { margin-left: 0; }
     .sidebar {
         transform: translateX(-100%);
@@ -435,7 +439,6 @@ body.no-scroll {
     /* 移动端欢迎消息样式 */
     .welcome-message {
         padding: 40px 20px;
-        min-height: 50vh;
     }
 
     .welcome-message p:first-child {
@@ -492,7 +495,6 @@ body.home-mode {
 }
 
 .welcome-message {
-    min-height: calc(100vh - 56px);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -520,7 +522,6 @@ body.home-mode {
 
     .welcome-message {
         padding: 30px 15px;
-        min-height: 40vh;
     }
 
     .welcome-message p:first-child {
