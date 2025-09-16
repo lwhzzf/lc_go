@@ -1,3 +1,44 @@
+// =====================
+// 移动端：侧栏开合逻辑
+// =====================
+document.addEventListener('DOMContentLoaded', function () {
+    var menuBtn = document.getElementById('menuBtn');
+    var sidebar = document.getElementById('sidebar');
+    var overlay = document.getElementById('overlay');
+    if (!menuBtn || !sidebar || !overlay) {
+        return;
+    }
+
+    function openSidebar() {
+        sidebar.classList.add('open');
+        overlay.classList.add('show');
+        document.body.classList.add('no-scroll');
+    }
+
+    function closeSidebar() {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('show');
+        document.body.classList.remove('no-scroll');
+    }
+
+    menuBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (sidebar.classList.contains('open')) {
+            closeSidebar();
+        } else {
+            openSidebar();
+        }
+    });
+
+    overlay.addEventListener('click', closeSidebar);
+
+    // 视口扩大到桌面端时，确保关闭抽屉
+    window.addEventListener('resize', function () {
+        if (window.innerWidth > 768) {
+            closeSidebar();
+        }
+    });
+});
 // 力扣题目数据
 const problems = [
     {
@@ -394,7 +435,7 @@ func find(nums1, nums2 []int, i, j, k int) int {
     }
     return false
 }`,
-                timeComplexity: "O(log(x))",
+                timeComplexity: "O(logx)",
                 spaceComplexity: "O(1)"
             }
         ]
@@ -797,8 +838,7 @@ func abs(x int) int {
         example: "示例 1：\n输入：nums = [1,0,-1,0,-2,2], target = 0\n输出：[[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]]\n示例 2：\n输入：nums = [2,2,2,2,2], target = 8\n输出：[[2,2,2,2]]",
         solutions: [
             {
-                code: `func fourSum(nums []int, target int) [][]int {
-    res := [][]int{}
+                code: `func fourSum(nums []int, target int) (res [][]int) {
     sort.Ints(nums)
     for i, x := range nums {
         if i > 0 && nums[i] == nums[i - 1] {
@@ -824,7 +864,7 @@ func abs(x int) int {
             }
         }
     }
-    return res
+    return
 }`,
                 timeComplexity: "O(n³)",
                 spaceComplexity: "O(1)"
