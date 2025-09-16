@@ -75,8 +75,8 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
         solutions: [
             {
                 name: "解法一",
-                code: `func lengthOfLongestSubstring(s string) int {
-    res, a := 0, make(map[byte]int)
+                code: `func lengthOfLongestSubstring(s string) (res int) {
+    a := make(map[byte]int)
     for i, j := 0, 0; i < len(s); i++ {
         a[s[i]]++
         for a[s[i]] > 1 {
@@ -92,8 +92,8 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
             },
             {
                 name: "解法二",
-                code: `func lengthOfLongestSubstring(s string) int {
-    res, a, l := 0, make(map[byte]int), 0
+                code: `func lengthOfLongestSubstring(s string) (res int) {
+    a, l := make(map[byte]int), 0
     for i := 0; i < len(s); i++ {
         l = max(l, a[s[i]])
         res = max(res, i - l + 1)
@@ -156,8 +156,8 @@ func find(nums1, nums2 []int, i, j, k int) int {
         solutions: [
             {
                 name: "解法一",
-                code: `func longestPalindrome(s string) string {
-    a, n := "", len(s)
+                code: `func longestPalindrome(s string) (a string) {
+    n := len(s)
     for i := 0; i < n; i++ {
         l, r := i - 1, i + 1
         for l >= 0 && r < n && s[l] == s[r] {
@@ -176,7 +176,7 @@ func find(nums1, nums2 []int, i, j, k int) int {
             a = s[l + 1 : r]
         }
     }
-    return a
+    return
 }`,
                 timeComplexity: "O(n²)",
                 spaceComplexity: "O(1)"
@@ -296,41 +296,41 @@ func find(nums1, nums2 []int, i, j, k int) int {
         example: "示例 1：\n输入：s = \"42\"\n输出：42\n示例 2：\n输入：s = \"   -42\"\n输出：-42\n示例 3：\n输入：s = \"4193 with words\"\n输出：4193",
         solutions: [
             {
-                code: `func myAtoi(s string) int {
-k, n := 0, len(s)
-for k < n && s[k] == ' ' {
-    k++
-}
-if k == n {
-    return 0
-}
-
-minus := 1
-if s[k] == '-' {
-    minus = -1
-    k++
-} else if s[k] == '+' {
-    k++
-}
-
-res, max, min := 0, 1 << 31 - 1, -(1 << 31)
-for k < n && s[k] >= '0' && s[k] <= '9' {
-    x := int(s[k] - '0')
-    if minus > 0 && res > (max - x) / 10 {
-        return max
+                code: `func myAtoi(s string) (res int) {
+    k, n := 0, len(s)
+    for k < n && s[k] == ' ' {
+        k++
     }
-    if minus < 0 && -res < (min + x) / 10 {
-        return min
+    if k == n {
+        return 0
     }
-    if -res * 10 - x == min {
-        return min
-    }
-    res = res * 10 + x
-    k++
-}
-res *= minus
 
-return res
+    minus := 1
+    if s[k] == '-' {
+        minus = -1
+        k++
+    } else if s[k] == '+' {
+        k++
+    }
+
+    max, min := 1 << 31 - 1, -(1 << 31)
+    for k < n && s[k] >= '0' && s[k] <= '9' {
+        x := int(s[k] - '0')
+        if minus > 0 && res > (max - x) / 10 {
+            return max
+        }
+        if minus < 0 && -res < (min + x) / 10 {
+            return min
+        }
+        if -res * 10 - x == min {
+            return min
+        }
+        res = res * 10 + x
+        k++
+    }
+    res *= minus
+
+    return
 }`,
                 timeComplexity: "O(n)",
                 spaceComplexity: "O(1)"
@@ -348,16 +348,16 @@ return res
             {
                 name: "解法一",
                 code: `func isPalindrome(x int) bool {
-if (x < 0 || x > 0 && x % 10 == 0) {
-    return false
-}
-s := strconv.Itoa(x)
-for i, j := 0, len(s) - 1; i < j; i, j = i + 1, j - 1 {
-    if s[i] != s[j] {
+    if (x < 0 || x > 0 && x % 10 == 0) {
         return false
     }
-}
-return true
+    s := strconv.Itoa(x)
+    for i, j := 0, len(s) - 1; i < j; i, j = i + 1, j - 1 {
+        if s[i] != s[j] {
+            return false
+        }
+    }
+    return true
 }`,
                 timeComplexity: "O(logx)",
                 spaceComplexity: "O(1)"
@@ -365,15 +365,15 @@ return true
             {
                 name: "解法二",
                 code: `func isPalindrome(x int) bool {
-if (x < 0 || x > 0 && x % 10 == 0) {
-    return false
-}
-y, res := x, 0
-for x != 0 {
-    res = res * 10 + x % 10
-    x /= 10
-}
-return res == y
+    if (x < 0 || x > 0 && x % 10 == 0) {
+        return false
+    }
+    y, res := x, 0
+    for x != 0 {
+        res = res * 10 + x % 10
+        x /= 10
+    }
+    return res == y
 }`,
                 timeComplexity: "O(logx)",
                 spaceComplexity: "O(1)"
@@ -381,18 +381,18 @@ return res == y
                             {
                 name: "解法三",
                 code: `func isPalindrome(x int) bool {
-if (x < 0 || x > 0 && x % 10 == 0) {
-    return false
-}
-s := 0
-for s <= x {
-    s = s * 10 + x % 10
-    if s == x || s == x / 10 {
-        return true
+    if (x < 0 || x > 0 && x % 10 == 0) {
+        return false
     }
-    x /= 10
-}
-return false
+    s := 0
+    for s <= x {
+        s = s * 10 + x % 10
+        if s == x || s == x / 10 {
+            return true
+        }
+        x /= 10
+    }
+    return false
 }`,
                 timeComplexity: "O(log(x))",
                 spaceComplexity: "O(1)"
@@ -444,8 +444,7 @@ return false
         example: "示例 1：\n输入：[1,8,6,2,5,4,8,3,7]\n输出：49\n解释：图中垂直线代表输入数组 [1,8,6,2,5,4,8,3,7]。在此情况下，容器能够容纳水（表示为蓝色部分）的最大值为 49\n示例 2：\n输入：height = [1,1]\n输出：1",
         solutions: [
             {
-                code: `func maxArea(height []int) int {
-    res := 0
+                code: `func maxArea(height []int) (res int) {
     for i, j := 0, len(height) - 1; i < j; {
         res = max(res, min(height[i], height[j]) * (j - i))
         if height[i] > height[j] {
@@ -454,7 +453,7 @@ return false
             i++
         }
     }
-    return res
+    return
 }`,
                 timeComplexity: "O(n)",
                 spaceComplexity: "O(1)"
@@ -470,7 +469,7 @@ return false
         example: "示例 1：\n输入: num = 3\n输出: \"III\"\n示例 2：\n输入: num = 4\n输出: \"IV\"\n示例 3：\n输入: num = 9\n输出: \"IX\"\n示例 4：\n输入: num = 58\n输出: \"LVIII\"\n解释: L = 50, V= 5, III = 3\n示例 5：\n输入: num = 1994\n输出: \"MCMXCIV\"\n解释: M = 1000, CM = 900, XC = 90, IV = 4",
         solutions: [
             {
-                code: `func intToRoman(num int) string {
+                code: `func intToRoman(num int) (res string) {
     values := []int{
         1000,
         900, 500, 400, 100,
@@ -484,14 +483,13 @@ return false
         "IX", "V", "IV", "I"
     }
 
-    res := ""
     for i := range values {
         for num >= values[i] {
             num -= values[i]
             res += reps[i]
         }
     }
-    return res
+    return
 }`,
                 timeComplexity: "O(1)",
                 spaceComplexity: "O(1)"
@@ -507,7 +505,7 @@ return false
         example: "示例 1：\n输入: s = \"III\"\n输出: 3\n示例 2：\n输入: s = \"IV\"\n输出: 4\n示例 3：\n输入: s = \"IX\"\n输出: 9\n示例 4：\n输入: s = \"LVIII\"\n输出: 58\n解释: L = 50, V= 5, III = 3\n示例 5：\n输入: s = \"MCMXCIV\"\n输出: 1994\n解释: M = 1000, CM = 900, XC = 90, IV = 4",
         solutions: [
             {
-                code: `func romanToInt(s string) int {
+                code: `func romanToInt(s string) (res int) {
     h := map[byte]int{
         'I': 1,
         'V': 5,
@@ -518,7 +516,6 @@ return false
         'M': 1000,
     }
 
-    res := 0
     for i := range s {
         x := h[s[i]]
         if i + 1 < len(s) && x < h[s[i + 1]] {
@@ -528,7 +525,7 @@ return false
         }
     }
 
-    return res
+    return
 }`,
                 timeComplexity: "O(n)",
                 spaceComplexity: "O(1)"
@@ -545,8 +542,7 @@ return false
         solutions: [
             {
                 name: "解法一",
-                code: `func longestCommonPrefix(strs []string) string {
-    res := ""
+                code: `func longestCommonPrefix(strs []string) (res string) {
     for i := 0; i < len(strs[0]); i++ {
         c := strs[0][i]
         for _, str := range strs {
@@ -556,16 +552,15 @@ return false
         }
         res += string(c)
     }
-    return res
+    return
 }`,
                 timeComplexity: "O(mn)",
                 spaceComplexity: "O(1)"
             },
                         {
                 name: "解法一",
-                code: `func longestCommonPrefix(strs []string) string {
+                code: `func longestCommonPrefix(strs []string) (res string) {
     sort.Strings(strs)
-    res := ""
     for i := 0; i < min(len(strs[0]), len(strs[len(strs) - 1])); i++ {
         if (strs[0][i] == strs[len(strs) - 1][i]) {
             res += string(strs[0][i])
@@ -573,7 +568,7 @@ return false
             break
         }
     }
-    return res
+    return
 }`,
                 timeComplexity: "O(mnlogn)",
                 spaceComplexity: "O(1)"
@@ -589,8 +584,7 @@ return false
         example: "示例 1：\n输入：nums = [-1,0,1,2,-1,-4]\n输出：[[-1,-1,2],[-1,0,1]]\n示例 2：\n输入：nums = [0,1,1]\n输出：[]\n示例 3：\n输入：nums = [0,0,0]\n输出：[[0,0,0]]",
         solutions: [
             {
-                code: `func threeSum(nums []int) [][]int {
-    var res [][]int
+                code: `func threeSum(nums []int) (res [][]int) {
     sort.Ints(nums)
     for i, x := range nums {
         if i > 0 && x == nums[i - 1] {
@@ -611,7 +605,7 @@ return false
         }
     }
 
-    return res
+    return
 }`,
                 timeComplexity: "O(n²)",
                 spaceComplexity: "O(1)"
@@ -703,8 +697,7 @@ func abs(x int) int {
         solutions: [
             {
                 name: "解法一",
-                code: `func letterCombinations(digits string) []string {
-    res := []string{}
+                code: `func letterCombinations(digits string) (res []string) {
     strs := [10]string{
         "", "", "abc", "def",
         "ghi", "jkl", "mno",
@@ -727,15 +720,14 @@ func abs(x int) int {
 
     dfs(digits, 0, "")
 
-    return res
+    return
 }`,
                 timeComplexity: "O(3^m×4^n)",
                 spaceComplexity: "O(m+n)"
             },
             {
                 name: "解法二",
-                code: `func letterCombinations(digits string) []string {
-    res := []string{}
+                code: `func letterCombinations(digits string) (res []string) {
     if len(digits) == 0 {
         return res
     }
@@ -757,15 +749,14 @@ func abs(x int) int {
         }
         res = res[n:]
     }
-    return res
+    return
 }`,
                 timeComplexity: "O(3^m×4^n)",
                 spaceComplexity: "O(m+n)"
             },
             {
                 name: "解法三",
-                code: `func letterCombinations(digits string) []string {
-    res := []string{}
+                code: `func letterCombinations(digits string) (res []string) {
     if len(digits) == 0 {
         return []string{}
     }
@@ -790,7 +781,7 @@ func abs(x int) int {
         }
         res = res[n:]
     }
-    return res
+    return
 }`,
                 timeComplexity: "O(3^m×4^n)",
                 spaceComplexity: "O(m+n)"
@@ -1141,15 +1132,14 @@ func reverseKGroup(head *ListNode, k int) *ListNode {
         example: "示例 1：\n输入：nums = [1,1,2]\n输出：2, nums = [1,2,_]\n解释：函数应该返回新的长度 2 ，并且原数组 nums 的前两个元素被修改为 1, 2 。不需要考虑数组中超出新长度后面的元素。\n示例 2：\n输入：nums = [0,0,1,1,1,2,2,3,3,4]\n输出：5, nums = [0,1,2,3,4]\n解释：函数应该返回新的长度 5 ， 并且原数组 nums 的前五个元素被修改为 0, 1, 2, 3, 4 。不需要考虑数组中超出新长度后面的元素。",
         solutions: [
             {
-                code: `func removeDuplicates(nums []int) int {
-    k := 0
+                code: `func removeDuplicates(nums []int) (k int) {
     for i := range nums {
         if i == 0 || nums[i] != nums[i - 1] {
             nums[k] = nums[i]
             k++
         }
     }
-    return k
+    return
 }`,
                 timeComplexity: "O(n)",
                 spaceComplexity: "O(1)"
@@ -1165,15 +1155,14 @@ func reverseKGroup(head *ListNode, k int) *ListNode {
         example: "示例 1：\n输入：nums = [3,2,2,3], val = 3\n输出：2, nums = [2,2]\n解释：函数应该返回新的长度 2, 并且 nums 中的前两个元素均为 2。你不需要考虑数组中超出新长度后面的元素。例如，函数返回的新长度为 2 ，而 nums = [2,2,3,3] 或 nums = [2,2,0,0]，也会被视作正确答案。\n示例 2：\n输入：nums = [0,1,2,2,3,0,4,2], val = 2\n输出：5, nums = [0,1,4,0,3]\n解释：函数应该返回新的长度 5, 并且 nums 中的前五个元素为 0, 1, 3, 0, 4。注意这五个元素可为任意顺序。你不需要考虑数组中超出新长度后面的元素。",
         solutions: [
             {
-                code: `func removeElement(nums []int, val int) int {
-    k := 0
+                code: `func removeElement(nums []int, val int) (k int) {
     for i := range nums {
         if nums[i] != val {
             nums[k] = nums[i]
             k++
         }
     }
-    return k
+    return
 }`,
                 timeComplexity: "O(n)",
                 spaceComplexity: "O(1)"
@@ -1232,7 +1221,7 @@ func reverseKGroup(head *ListNode, k int) *ListNode {
         example: "示例 1：\n输入：dividend = 10, divisor = 3\n输出：3\n解释：10/3 = 3.33333.. ，向零截断得到 3\n示例 2：\n输入：dividend = 7, divisor = -3\n输出：-2\n解释：7/-3 = -2.33333.. ，向零截断得到 -2",
         solutions: [
             {
-                code: `func divide(x int, y int) int {
+                code: `func divide(x int, y int) (res int) {
     if x == math.MinInt32 && y == -1 {
         return math.MaxInt32
     }
@@ -1247,7 +1236,6 @@ func reverseKGroup(head *ListNode, k int) *ListNode {
         a, b = append(a, i), append(b, j)
     }
 
-    res := 0
     for i := len(a) - 1; i >= 0; i-- {
         if x >= a[i] {
             x -= a[i]
@@ -1259,7 +1247,7 @@ func reverseKGroup(head *ListNode, k int) *ListNode {
         res = -res
     }
 
-    return res
+    return
 }
 
 func abs(x int) int {
@@ -1282,9 +1270,8 @@ func abs(x int) int {
         example: "示例 1：\n输入：s = \"barfoothefoobarman\", words = [\"foo\",\"bar\"]\n输出：[0,9]\n解释：因为 words.length == 2 且 words[i].length == 3，连接的子字符串的长度必须为 6。\n子串 \"barfoo\" 开始位置是 0。它是 words 中 [\"bar\",\"foo\"] 的连接。\n子串 \"foobar\" 开始位置是 9。它是 words 中 [\"foo\",\"bar\"] 的连接。\n输出顺序无关紧要。返回 [9,0] 也是正确的。\n示例 2：\n输入：s = \"wordgoodgoodgoodbestword\", words = [\"word\",\"good\",\"best\",\"word\"]\n输出：[]\n解释：因为 words.length == 4 且 words[i].length == 4，连接的子字符串的长度必须为 16。\n子串 \"wordgoodgoodgoodbestword\" 长度是 27，不是 16。\n示例 3：\n输入：s = \"barfoobarfoobar\", words = [\"bar\",\"foo\"]\n输出：[6]\n解释：子串 \"foobar\" 开始位置是 6。它是 words 中 [\"foo\",\"bar\"] 的连接。",
         solutions: [
             {
-                code: `func findSubstring(s string, words []string) []int {
+                code: `func findSubstring(s string, words []string) (res []int) {
     n, m, w := len(s), len(words), len(words[0])
-    res := []int{}
     tot := map[string]int{}
     for _, word := range words {
         tot[word]++
@@ -1312,7 +1299,7 @@ func abs(x int) int {
         }
     }
 
-    return res
+    return
 }`,
                 timeComplexity: "O((n+m)w)",
                 spaceComplexity: "O(mw)"
@@ -1363,10 +1350,9 @@ func abs(x int) int {
         example: "示例 1：\n输入：s = \"(()\"\n输出：2\n解释：最长有效括号子串是 \"()\"\n示例 2：\n输入：s = \")()())\"\n输出：4\n解释：最长有效括号子串是 \"()()\"\n示例 3：\n输入：s = \"\"\n输出：0",
         solutions: [
             {
-                code: `func longestValidParentheses(s string) int {
+                code: `func longestValidParentheses(s string) (res int) {
     stk := []int{}
 
-    res := 0
     for i, start := 0, -1; i < len(s); i++ {
         if s[i] == '(' {
             stk = append(stk, i)
@@ -1384,7 +1370,7 @@ func abs(x int) int {
         }
     }
 
-    return res
+    return
 }`,
                 timeComplexity: "O(n)",
                 spaceComplexity: "O(n)"
@@ -1445,9 +1431,8 @@ func abs(x int) int {
         example: "示例 1：\n输入：nums = [5,7,7,8,8,10], target = 8\n输出：[3,4]\n示例 2：\n输入：nums = [5,7,7,8,8,10], target = 6\n输出：[-1,-1]\n示例 3：\n输入：nums = [], target = 0\n输出：[-1,-1]",
         solutions: [
             {
-                code: `func searchRange(nums []int, target int) []int {
+                code: `func searchRange(nums []int, target int) (res []int) {
     l, r := 0, len(nums) - 1
-    res := []int{}
     for l < r {
         m := l + (r - l) >> 1
         if nums[m] >= target {
@@ -1471,7 +1456,7 @@ func abs(x int) int {
         }
     }
     res = append(res, r)
-    return res
+    return
 }`,
                 timeComplexity: "O(logn)",
                 spaceComplexity: "O(1)"
