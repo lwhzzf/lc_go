@@ -1326,9 +1326,33 @@ func abs(x int) int {
         difficulty: "medium",
         description: "整数数组的一个排列就是将其所有成员以序列或线性顺序排列。\n例如，arr = [1,2,3] ，以下这些都可以视作 arr 的排列：[1,2,3]、[1,3,2]、[3,1,2]、[2,3,1] 和 [2,1,3] 。\n整数数组的 下一个排列 是指其整数的下一个字典序更大的排列。更正式地，如果数组的所有排列根据其字典顺序从小到大排列在一个容器中，那么数组的 下一个排列 就是在这个有序容器中排在它后面的那个。如果不存在下一个更大的排列，那么这个数组必须重排为字典序最小的排列（即，其元素按升序排列）。\n例如，arr = [1,2,3] 的下一个排列是 [1,3,2] 。\n类似地，arr = [2,3,1] 的下一个排列是 [3,1,2] 。\n而 arr = [3,2,1] 的下一个排列是 [1,2,3] ，因为 [3,2,1] 不存在一个字典序更大的排列。\n给你一个整数数组 nums ，找出 nums 的下一个排列。\n必须 原地 修改，只允许使用额外常数空间。",
         example: "示例 1：\n输入：nums = [1,2,3]\n输出：[1,3,2]\n示例 2：\n输入：nums = [3,2,1]\n输出：[1,2,3]\n示例 3：\n输入：nums = [1,1,5]\n输出：[1,5,1]",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func nextPermutation(nums []int)  {
+    n := len(nums)
+    k := n - 1
+    for k > 0 && nums[k - 1] >= nums[k] {
+        k--
+    }
+    if k <= 0 {
+        for i, j := 0, n - 1; i < j; i, j = i + 1, j - 1 {
+            nums[i], nums[j] = nums[j], nums[i]
+        }
+    } else {
+        t := k
+        for t < n && nums[t] > nums[k - 1] {
+            t++
+        }
+        nums[t - 1], nums[k - 1] = nums[k - 1], nums[t - 1]
+        for i, j := k, n - 1; i < j; i, j = i + 1, j - 1 {
+            nums[i], nums[j] = nums[j], nums[i]
+        }
+    }
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 32,
@@ -1337,9 +1361,35 @@ func abs(x int) int {
         difficulty: "hard",
         description: "给你一个只包含 '(' 和 ')' 的字符串，找出最长有效（格式正确且连续）括号子串的长度。",
         example: "示例 1：\n输入：s = \"(()\"\n输出：2\n解释：最长有效括号子串是 \"()\"\n示例 2：\n输入：s = \")()())\"\n输出：4\n解释：最长有效括号子串是 \"()()\"\n示例 3：\n输入：s = \"\"\n输出：0",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(n)"
+        solutions: [
+            {
+                code: `func longestValidParentheses(s string) int {
+    stk := []int{}
+
+    res := 0
+    for i, start := 0, -1; i < len(s); i++ {
+        if s[i] == '(' {
+            stk = append(stk, i)
+        } else {
+            if len(stk) != 0 {
+                stk = stk[:len(stk) - 1]
+                if len(stk) != 0 {
+                    res = max(res, i - stk[len(stk) - 1])
+                } else {
+                    res = max(res, i - start)
+                }
+            } else {
+                start = i
+            }
+        }
+    }
+
+    return res
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(n)"
+            }
+        ]
     },
     {
         id: 33,
@@ -1348,9 +1398,43 @@ func abs(x int) int {
         difficulty: "medium",
         description: "整数数组 nums 按升序排列，数组中的值 互不相同 。\n在传递给函数之前，nums 在预先未知的某个下标 k（0 <= k < nums.length）上进行了 旋转，使数组变为 [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]]（下标 从 0 开始 计数）。例如， [0,1,2,4,5,6,7] 在下标 3 处经旋转后可能变为 [4,5,6,7,0,1,2] 。\n给你 旋转后 的数组 nums 和一个整数 target ，如果 nums 中存在这个目标值 target ，则返回它的下标，否则返回 -1 。\n你必须设计一个时间复杂度为 O(log n) 的算法解决此问题。",
         example: "示例 1：\n输入：nums = [4,5,6,7,0,1,2], target = 0\n输出：4\n示例 2：\n输入：nums = [4,5,6,7,0,1,2], target = 3\n输出：-1\n示例 3：\n输入：nums = [1], target = 0\n输出：-1",
-        solutions: [],
-        timeComplexity: "O(log n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func search(nums []int, target int) int {
+    l, r := 0, len(nums) - 1
+    for l < r {
+        m := l + (r - l + 1) >> 1
+        if nums[m] >= nums[0] {
+            l = m
+        } else {
+            r = m - 1
+        }
+    }
+
+    if target >= nums[0] {
+        l = 0
+    } else {
+        l, r = r + 1, len(nums) - 1
+    }
+
+    for l < r {
+        m := l + (r - l) >> 1
+        if nums[m] >= target {
+            r = m
+        } else {
+            l = m + 1
+        }
+    }
+
+    if nums[r] == target {
+        return r
+    }
+    return -1
+}`,
+                timeComplexity: "O(log n)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 34,
@@ -1359,9 +1443,40 @@ func abs(x int) int {
         difficulty: "medium",
         description: "给你一个按照非递减顺序排列的整数数组 nums，和一个目标值 target。请你找出给定目标值在数组中的开始位置和结束位置。\n如果数组中不存在目标值 target，返回 [-1, -1]。\n你必须设计并实现时间复杂度为 O(log n) 的算法解决此问题。",
         example: "示例 1：\n输入：nums = [5,7,7,8,8,10], target = 8\n输出：[3,4]\n示例 2：\n输入：nums = [5,7,7,8,8,10], target = 6\n输出：[-1,-1]\n示例 3：\n输入：nums = [], target = 0\n输出：[-1,-1]",
-        solutions: [],
-        timeComplexity: "O(log n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func searchRange(nums []int, target int) []int {
+    l, r := 0, len(nums) - 1
+    res := []int{}
+    for l < r {
+        m := l + (r - l) >> 1
+        if nums[m] >= target {
+            r = m
+        } else {
+            l = m + 1
+        }
+    }
+    if len(nums) == 0 || nums[r] != target {
+        return []int{-1, -1}
+    }
+    res = append(res, r)
+
+    r = len(nums) - 1
+    for l < r {
+        m := l + (r - l + 1) >> 1
+        if nums[m] <= target {
+            l = m
+        } else {
+            r = m - 1
+        }
+    }
+    res = append(res, r)
+    return res
+}`,
+                timeComplexity: "O(log n)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 35,
@@ -1370,9 +1485,24 @@ func abs(x int) int {
         difficulty: "easy",
         description: "给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置。\n请必须使用时间复杂度为 O(log n) 的算法。",
         example: "示例 1：\n输入: nums = [1,3,5,6], target = 5\n输出: 2\n示例 2：\n输入: nums = [1,3,5,6], target = 2\n输出: 1\n示例 3：\n输入: nums = [1,3,5,6], target = 7\n输出: 4",
-        solutions: [],
-        timeComplexity: "O(log n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func searchInsert(nums []int, target int) int {
+    l, r := 0, len(nums)
+    for l < r {
+        m := l + (r - l) >> 1
+        if nums[m] >= target {
+            r = m
+        } else {
+            l = m + 1
+        }
+    }
+    return r
+}`,
+                timeComplexity: "O(log n)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 36,
@@ -1381,9 +1511,58 @@ func abs(x int) int {
         difficulty: "medium",
         description: "请你判断一个 9 x 9 的数独是否有效。只需要 根据以下规则 ，验证已经填入的数字是否有效即可。\n数字 1-9 在每一行只能出现一次。\n数字 1-9 在每一列只能出现一次。\n数字 1-9 在每一个以粗实线分隔的 3x3 宫内只能出现一次。（请参考示例图）\n注意：\n一个有效的数独（部分已被填充）不一定是可解的。\n只需要根据以上规则，验证已经填入的数字是否有效即可。\n空白格用 '.' 表示。",
         example: "示例 1：\n输入：board = \n[[\"5\",\"3\",\".\",\".\",\"7\",\".\",\".\",\".\",\".\"]\n,[\"6\",\".\",\".\",\"1\",\"9\",\"5\",\".\",\".\",\".\"]\n,[\".\",\"9\",\"8\",\".\",\".\",\".\",\".\",\"6\",\".\"]\n,[\"8\",\".\",\".\",\".\",\"6\",\".\",\".\",\".\",\"3\"]\n,[\"4\",\".\",\".\",\"8\",\".\",\"3\",\".\",\".\",\"1\"]\n,[\"7\",\".\",\".\",\".\",\"2\",\".\",\".\",\".\",\"6\"]\n,[\".\",\"6\",\".\",\".\",\".\",\".\",\"2\",\"8\",\".\"]\n,[\".\",\".\",\".\",\"4\",\"1\",\"9\",\".\",\".\",\"5\"]\n,[\".\",\".\",\".\",\".\",\"8\",\".\",\".\",\"7\",\"9\"]]\n输出：true\n示例 2：\n输入：board = \n[[\"8\",\"3\",\".\",\".\",\"7\",\".\",\".\",\".\",\".\"]\n,[\"6\",\".\",\".\",\"1\",\"9\",\"5\",\".\",\".\",\".\"]\n,[\".\",\"9\",\"8\",\".\",\".\",\".\",\".\",\"6\",\".\"]\n,[\"8\",\".\",\".\",\".\",\"6\",\".\",\".\",\".\",\"3\"]\n,[\"4\",\".\",\".\",\"8\",\".\",\"3\",\".\",\".\",\"1\"]\n,[\"7\",\".\",\".\",\".\",\"2\",\".\",\".\",\".\",\"6\"]\n,[\".\",\"6\",\".\",\".\",\".\",\".\",\"2\",\"8\",\".\"]\n,[\".\",\".\",\".\",\"4\",\"1\",\"9\",\".\",\".\",\"5\"]\n,[\".\",\".\",\".\",\".\",\"8\",\".\",\".\",\"7\",\"9\"]]\n输出：false",
-        solutions: [],
-        timeComplexity: "O(1)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func isValidSudoku(board [][]byte) bool {
+    for i := 0; i < 9; i++ {
+        st := [9]bool{}
+        for j := 0; j < 9; j++ {
+            if board[i][j] != '.' {
+                t := int(board[i][j] - '1')
+                if st[t] {
+                    return false
+                }
+                st[t] = true
+            }
+        }
+    }
+
+    for i := 0; i < 9; i++ {
+        st := [9]bool{}
+        for j := 0; j < 9; j++ {
+            if board[j][i] != '.' {
+                t := int(board[j][i] - '1')
+                if st[t] {
+                    return false
+                }
+                st[t] = true
+            }
+        }
+    }
+
+    for i := 0; i < 9; i += 3 {
+        for j := 0; j < 9; j += 3 {
+            st := [9]bool{}
+            for x := 0; x < 3; x++ {
+                for y := 0; y < 3; y++ {
+                    if board[i + x][j + y] != '.' {
+                        t := int(board[i + x][j + y] - '1')
+                        if st[t] {
+                            return false
+                        }
+                        st[t] = true
+                    }
+                }
+            }
+        }
+    }
+
+    return true
+}`,
+                timeComplexity: "O(1)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 37,
@@ -1392,9 +1571,61 @@ func abs(x int) int {
         difficulty: "hard",
         description: "编写一个程序，通过填充空格来解决数独问题。\n数独的解法需 遵循如下规则：\n数字 1-9 在每一行只能出现一次。\n数字 1-9 在每一列只能出现一次。\n数字 1-9 在每一个以粗实线分隔的 3x3 宫内只能出现一次。（请参考示例图）\n数独部分空格内已填入了数字，空白格用 '.' 表示。",
         example: "示例 1：\n输入：board = [[\"5\",\"3\",\".\",\".\",\"7\",\".\",\".\",\".\",\".\"],[\"6\",\".\",\".\",\"1\",\"9\",\"5\",\".\",\".\",\".\"],[\".\",\"9\",\"8\",\".\",\".\",\".\",\".\",\"6\",\".\"],[\"8\",\".\",\".\",\".\",\"6\",\".\",\".\",\".\",\"3\"],[\"4\",\".\",\".\",\"8\",\".\",\"3\",\".\",\".\",\"1\"],[\"7\",\".\",\".\",\".\",\"2\",\".\",\".\",\".\",\"6\"],[\".\",\"6\",\".\",\".\",\".\",\".\",\"2\",\"8\",\".\"],[\".\",\".\",\".\",\"4\",\"1\",\"9\",\".\",\".\",\"5\"],[\".\",\".\",\".\",\".\",\"8\",\".\",\".\",\"7\",\"9\"]]\n输出：[[\"5\",\"3\",\"4\",\"6\",\"7\",\"8\",\"9\",\"1\",\"2\"],[\"6\",\"7\",\"2\",\"1\",\"9\",\"5\",\"3\",\"4\",\"8\"],[\"1\",\"9\",\"8\",\"3\",\"4\",\"2\",\"5\",\"6\",\"7\"],[\"8\",\"5\",\"9\",\"7\",\"6\",\"1\",\"4\",\"2\",\"3\"],[\"4\",\"2\",\"6\",\"8\",\"5\",\"3\",\"7\",\"9\",\"1\"],[\"7\",\"1\",\"3\",\"9\",\"2\",\"4\",\"8\",\"5\",\"6\"],[\"9\",\"6\",\"1\",\"5\",\"3\",\"7\",\"2\",\"8\",\"4\"],[\"2\",\"8\",\"7\",\"4\",\"1\",\"9\",\"6\",\"3\",\"5\"],[\"3\",\"4\",\"5\",\"2\",\"8\",\"6\",\"1\",\"7\",\"9\"]]",
-        solutions: [],
-        timeComplexity: "O(9^(n*n))",
-        spaceComplexity: "O(n*n)"
+        solutions: [
+            {
+                name: "解法一",
+                code: `func solveSudoku(board [][]byte)  {
+    row, col, cell := [9][9]bool{}, [9][9]bool{}, [3][3][9]bool{}
+
+    for i := 0; i < 9; i++ {
+        for j := 0; j < 9; j++ {
+            if board[i][j] != '.' {
+                t := int(board[i][j] - '1')
+                row[i][t], col[j][t], cell[i / 3][j / 3][t] = true, true, true
+            }
+        }
+    }
+
+    var dfs func(board [][]byte, x, y int) bool
+    dfs = func(board [][]byte, x, y int) bool {
+        if y == 9 {
+            x++
+            y = 0
+        }
+        if x == 9 {
+            return true
+        }
+
+        if board[x][y] != '.' {
+            return dfs(board, x, y + 1)
+        }
+        for i := 0; i < 9; i++ {
+            if row[x][i] == false && col[y][i] == false && cell[x / 3][y / 3][i] == false {
+                board[x][y] = '1' + byte(i)
+                row[x][i], col[y][i], cell[x / 3][y / 3][i] = true, true, true
+                if dfs(board, x, y + 1) {
+                    return true
+                }
+                row[x][i], col[y][i], cell[x / 3][y / 3][i] = false, false, false
+                board[x][y] = '.'
+            }
+        }
+
+        return false
+    }
+
+    dfs(board, 0, 0)
+}`,
+                timeComplexity: "O(n*n)",
+                spaceComplexity: "O(n*n)"
+            },
+            {
+                name: "解法二",
+                code: ``,
+                timeComplexity: "O(n*n)",
+                spaceComplexity: "O(n*n)"
+            }
+        ]
     },
     {
         id: 38,
@@ -2209,7 +2440,46 @@ document.addEventListener('DOMContentLoaded', function() {
     renderProblemList();
     showWelcomeMessage();
     setupSearch();
+    setupHomeLinks();
 });
+
+
+
+// 设置首页和标题链接
+function setupHomeLinks() {
+    const homeLink = document.getElementById('homeLink');
+    const logoLink = document.getElementById('logoLink');
+    
+    // 点击首页链接返回主页
+    homeLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        showWelcomeMessage();
+        document.getElementById('problemTitle').textContent = 'Hello';
+        
+        // 清除题目列表的选中状态
+        document.querySelectorAll('.problem-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        
+        // 重置当前选中的题目
+        currentProblem = null;
+    });
+    
+    // 点击网站标题返回主页
+    logoLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        showWelcomeMessage();
+        document.getElementById('problemTitle').textContent = 'Hello';
+        
+        // 清除题目列表的选中状态
+        document.querySelectorAll('.problem-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        
+        // 重置当前选中的题目
+        currentProblem = null;
+    });
+}
 
 // 设置搜索功能
 function setupSearch() {
@@ -2228,14 +2498,24 @@ function setupSearch() {
 function renderProblemList() {
     const problemList = document.getElementById('problemList');
 
+    // 确保所有题目都有有效的ID
+    problems.forEach((problem, index) => {
+        if (problem.id === undefined || problem.id === null || problem.id === 0) {
+            problem.id = index + 1;
+        }
+    });
+
     // 按题目编号排序
-    const sortedProblems = problems.sort((a, b) => {
+    const sortedProblems = [...problems].sort((a, b) => {
         return parseInt(a.number) - parseInt(b.number);
     });
+    
+    console.log('题目总数:', sortedProblems.length);
+    console.log('最后一题:', sortedProblems[sortedProblems.length - 1]);
 
     let html = '';
 
-    // 按顺序渲染所有题目
+    // 按顺序渲染所有题目，确保所有题目都被显示
     sortedProblems.forEach(problem => {
         html += createProblemItem(problem);
     });
@@ -2245,8 +2525,10 @@ function renderProblemList() {
 
 // 创建题目项HTML
 function createProblemItem(problem) {
+    // 确保题目ID是有效的
+    const problemId = problem.id !== undefined ? problem.id : 0;
     return `
-        <div class="problem-item" onclick="selectProblem(${problem.id})">
+        <div class="problem-item" onclick="selectProblem(${problemId})" data-id="${problemId}">
             <div class="problem-number">${problem.number}</div>
             <div class="problem-title">${problem.title}</div>
             <div class="problem-difficulty difficulty-${problem.difficulty}">${problem.difficulty}</div>
@@ -2256,10 +2538,18 @@ function createProblemItem(problem) {
 
 // 选择题目
 function selectProblem(problemId) {
+    // 确保problemId是数字
+    problemId = Number(problemId);
+    
+    // 查找题目
     const problem = problems.find(p => p.id === problemId);
-    if (!problem) return;
+    if (!problem) {
+        console.error(`未找到ID为${problemId}的题目`);
+        return;
+    }
 
     currentProblem = problem;
+    console.log(`选中题目: ${problem.number}. ${problem.title} (ID: ${problem.id})`);
 
     // 更新题目列表选中状态
     document.querySelectorAll('.problem-item').forEach(item => {
@@ -2276,6 +2566,10 @@ function renderProblemContent(problem, solutionIndex = 0) {
     const problemTitle = document.getElementById('problemTitle');
     const problemContent = document.getElementById('problemContent');
 
+    // 显示题解时启用滚动
+    document.body.classList.remove('no-scroll');
+    document.querySelector('.main-content').classList.remove('no-scroll');
+    
     problemTitle.textContent = `${problem.number}. ${problem.title}`;
 
     // 检查是否有多个解法
@@ -2361,6 +2655,10 @@ function switchSolution(problemId, solutionIndex) {
 // 显示欢迎消息
 function showWelcomeMessage() {
     const problemContent = document.getElementById('problemContent');
+    // 设置为欢迎页面时禁用滚动
+    document.body.classList.add('no-scroll');
+    document.querySelector('.main-content').classList.add('no-scroll');
+    
     problemContent.innerHTML = `
         <div class="welcome-message">
             <p>👋 欢迎来到小衡的Golang力扣题解网站！</p>
@@ -2371,6 +2669,13 @@ function showWelcomeMessage() {
 
 // 搜索功能
 function searchProblems(query) {
+    // 确保所有题目都有有效的ID
+    problems.forEach((problem, index) => {
+        if (problem.id === undefined || problem.id === null || problem.id === 0) {
+            problem.id = index + 1;
+        }
+    });
+
     const filteredProblems = problems.filter(problem => 
         problem.title.toLowerCase().includes(query.toLowerCase()) ||
         problem.number.includes(query)
