@@ -1600,7 +1600,7 @@ func abs(x int) int {
             return dfs(board, x, y + 1)
         }
         for i := 0; i < 9; i++ {
-            if row[x][i] == false && col[y][i] == false && cell[x / 3][y / 3][i] == false {
+            if !row[x][i] && !col[y][i] && !cell[x / 3][y / 3][i] {
                 board[x][y] = '1' + byte(i)
                 row[x][i], col[y][i], cell[x / 3][y / 3][i] = true, true, true
                 if dfs(board, x, y + 1) {
@@ -1621,7 +1621,54 @@ func abs(x int) int {
             },
             {
                 name: "解法二",
-                code: ``,
+                code: `func solveSudoku(board [][]byte)  {
+    row, col, cell := [9][9]bool{}, [9][9]bool{}, [3][3][9]bool{}
+
+    for i := 0; i < 9; i++ {
+    	for j := 0; j < 9; j++ {
+    		if board[i][j] != '.' {
+    			t := int(board[i][j] - '1')
+    			row[i][t], col[j][t], cell[i / 3][j / 3][t] = true, true, true
+    		}
+    	}
+    }
+
+	res := [][]byte{}
+    var dfs func(int, int)
+    dfs = func(x, y int) {
+		if y == 9 {
+			x++
+			y = 0
+		}
+		if x == 9 {
+			res = make([][]byte, 9)
+			for i := range res {
+				res[i] = make([]byte, 9)
+				copy(res[i], board[i])
+			}
+			return
+		}
+		
+		if board[x][y] != '.' {
+			dfs(x, y + 1)
+		} else {
+	        for i := 0; i < 9; i++ {
+				if !row[x][i] && !col[y][i] && !cell[x / 3][y / 3][i] {
+					board[x][y] = '1' + byte(i)
+					row[x][i], col[y][i], cell[x / 3][y / 3][i] = true, true, true
+					dfs(x, y + 1)
+					row[x][i], col[y][i], cell[x / 3][y / 3][i] = false, false, false
+					board[x][y] = '.'
+				}
+			}
+	    }
+    }
+    dfs(0, 0)
+    
+    for i := range board {
+    	copy(board[i], res[i])
+    }
+}`,
                 timeComplexity: "O(n*n)",
                 spaceComplexity: "O(n*n)"
             }
@@ -2708,3 +2755,4 @@ document.addEventListener('keydown', function(e) {
         }
     }
 });
+
