@@ -141,7 +141,7 @@ func find(nums1, nums2 []int, i, j, k int) int {
     }
     return find(nums1, nums2, si, j, k - (si - i))
 }`,
-                timeComplexity: "O(log(m + n))",
+                timeComplexity: "O(log(m+n))",
                 spaceComplexity: "O(1)"
             }
         ]
@@ -359,7 +359,7 @@ for i, j := 0, len(s) - 1; i < j; i, j = i + 1, j - 1 {
 }
 return true
 }`,
-                timeComplexity: "O(log(x))",
+                timeComplexity: "O(logx)",
                 spaceComplexity: "O(1)"
             },
             {
@@ -375,7 +375,7 @@ for x != 0 {
 }
 return res == y
 }`,
-                timeComplexity: "O(log(x))",
+                timeComplexity: "O(logx)",
                 spaceComplexity: "O(1)"
             },
                             {
@@ -729,7 +729,7 @@ func abs(x int) int {
 
     return res
 }`,
-                timeComplexity: "O(3^m × 4^n)",
+                timeComplexity: "O(3^m×4^n)",
                 spaceComplexity: "O(m+n)"
             },
             {
@@ -759,7 +759,7 @@ func abs(x int) int {
     }
     return res
 }`,
-                timeComplexity: "O(3^m × 4^n)",
+                timeComplexity: "O(3^m×4^n)",
                 spaceComplexity: "O(m+n)"
             },
             {
@@ -792,7 +792,7 @@ func abs(x int) int {
     }
     return res
 }`,
-                timeComplexity: "O(3^m × 4^n)",
+                timeComplexity: "O(3^m×4^n)",
                 spaceComplexity: "O(m+n)"
             }
         ]
@@ -1048,7 +1048,7 @@ func mergeKLists(lists []*ListNode) *ListNode {
 
     return dummy.Next
 }`,
-                timeComplexity: "O(n log k)",
+                timeComplexity: "O(nlogk)",
                 spaceComplexity: "O(k)"
             }
         ]
@@ -1268,7 +1268,7 @@ func abs(x int) int {
     }
     return x
 }`,
-                timeComplexity: "O(log n)",
+                timeComplexity: "O(logn)",
                 spaceComplexity: "O(1)"
             }
         ]
@@ -1431,7 +1431,7 @@ func abs(x int) int {
     }
     return -1
 }`,
-                timeComplexity: "O(log n)",
+                timeComplexity: "O(logn)",
                 spaceComplexity: "O(1)"
             }
         ]
@@ -1473,7 +1473,7 @@ func abs(x int) int {
     res = append(res, r)
     return res
 }`,
-                timeComplexity: "O(log n)",
+                timeComplexity: "O(logn)",
                 spaceComplexity: "O(1)"
             }
         ]
@@ -1499,7 +1499,7 @@ func abs(x int) int {
     }
     return r
 }`,
-                timeComplexity: "O(log n)",
+                timeComplexity: "O(logn)",
                 spaceComplexity: "O(1)"
             }
         ]
@@ -1616,8 +1616,8 @@ func abs(x int) int {
 
     dfs(board, 0, 0)
 }`,
-                timeComplexity: "O(n*n)",
-                spaceComplexity: "O(n*n)"
+                timeComplexity: "O(n²)",
+                spaceComplexity: "O(n²)"
             },
             {
                 name: "解法二",
@@ -1669,8 +1669,8 @@ func abs(x int) int {
     	copy(board[i], res[i])
     }
 }`,
-                timeComplexity: "O(n*n)",
-                spaceComplexity: "O(n*n)"
+                timeComplexity: "O(n²)",
+                spaceComplexity: "O(n²)"
             }
         ]
     },
@@ -1903,7 +1903,7 @@ func abs(x int) int {
 
     return "0"
 }`,
-                timeComplexity: "O(m*n)",
+                timeComplexity: "O(mn)",
                 spaceComplexity: "O(m+n)"
             }
         ]
@@ -1938,8 +1938,8 @@ func abs(x int) int {
 
     return f[n][m]
 }`,
-                timeComplexity: "O(m*n)",
-                spaceComplexity: "O(m*n)"
+                timeComplexity: "O(mn)",
+                spaceComplexity: "O(mn)"
             }
         ]
     },
@@ -2006,7 +2006,7 @@ func abs(x int) int {
 
     return
 }`,
-                timeComplexity: "O(n!*n)",
+                timeComplexity: "O(n!n)",
                 spaceComplexity: "O(n)"
             }
         ]
@@ -2051,7 +2051,7 @@ func abs(x int) int {
 
     return
 }`,
-                timeComplexity: "O(n!*n)",
+                timeComplexity: "O(n!n)",
                 spaceComplexity: "O(n)"
             }
         ]
@@ -2110,8 +2110,8 @@ func abs(x int) int {
 
     return
 }`,
-                timeComplexity: "O(n*k*log(k))",
-                spaceComplexity: "O(n*k)"
+                timeComplexity: "O(nklog(k))",
+                spaceComplexity: "O(nk)"
             }
         ]
     },
@@ -2145,8 +2145,8 @@ func abs(x int) int {
     }
     return x
 }`,
-                timeComplexity: "O(log n)",
-                spaceComplexity: "O(log n)"
+                timeComplexity: "O(logn)",
+                spaceComplexity: "O(logn)"
             }
         ]
     },
@@ -2157,9 +2157,50 @@ func abs(x int) int {
         difficulty: "hard",
         description: "按照国际象棋的规则，皇后可以攻击与之处在同一行或同一列或同一斜线上的棋子。\nn 皇后问题 研究的是如何将 n 个皇后放置在 n×n 的棋盘上，并且使皇后彼此之间不能相互攻击。\n给你一个整数 n ，返回所有不同的 n 皇后问题 的解决方案。\n每一种解法包含一个不同的 n 皇后问题的棋子放置方案，该方案中 'Q' 和 '.' 分别代表了皇后和空位。",
         example: "示例 1：\n输入：n = 4\n输出：[[\".Q..\",\"...Q\",\"Q...\",\"..Q.\"],[\"..Q.\",\"Q...\",\"...Q\",\".Q..\"]]\n解释：如上图所示，4 皇后问题存在两个不同的解法。\n示例 2：\n输入：n = 1\n输出：[[\"Q\"]]",
-        solutions: [],
-        timeComplexity: "O(n!)",
-        spaceComplexity: "O(n)"
+        solutions: [
+            {
+                code: `func solveNQueens(n int) (res [][]string) {
+    col := make([]bool, n)
+    dg, udg := make([]bool, n * 2 - 1), make([]bool, n * 2 - 1)
+
+    path := make([][]byte, n)
+    for i := range path {
+        path[i] = make([]byte, n)
+        for j := range path[i] {
+            path[i][j] = '.'
+        }
+    }
+
+    var dfs func(int)
+    dfs = func(u int) {
+        if u == n {
+            t := make([]string, n)
+            for i := range t {
+                t[i] = string(path[i])
+            }
+            res = append(res, t)
+            return
+        }
+
+        for i := 0; i < n; i++ {
+            if !col[i] && !dg[u - i + n - 1] && !udg[u + i] {
+                col[i], dg[u - i + n - 1], udg[u + i] = true, true, true
+                path[u][i] = 'Q'
+                dfs(u + 1)
+                path[u][i] = '.'
+                col[i], dg[u - i + n - 1], udg[u + i] = false, false, false
+            }
+        }
+    }
+
+    dfs(0)
+
+    return
+}`,
+                timeComplexity: "O(n!)",
+                spaceComplexity: "O(n)"
+            }
+        ]
     },
     {
         id: 52,
@@ -2168,9 +2209,36 @@ func abs(x int) int {
         difficulty: "hard",
         description: "n 皇后问题 研究的是如何将 n 个皇后放置在 n×n 的棋盘上，并且使皇后彼此之间不能相互攻击。\n给你一个整数 n ，返回 n 皇后问题 不同的解决方案的数量。",
         example: "示例 1：\n输入：n = 4\n输出：2\n解释：如上图所示，4 皇后问题存在两个不同的解法。\n示例 2：\n输入：n = 1\n输出：1",
-        solutions: [],
-        timeComplexity: "O(n!)",
-        spaceComplexity: "O(n)"
+        solutions: [
+            {
+                code: `func totalNQueens(n int) int {
+    col := make([]bool, n)
+    dg, udg := make([]bool, n * 2 - 1), make([]bool, n * 2 - 1)
+
+    var dfs func(int) int
+    dfs = func(u int) int {
+        if u == n {
+            return 1
+        }
+
+        res := 0
+        for i := 0; i < n; i++ {
+            if !col[i] && !dg[u - i + n - 1] && !udg[u + i] {
+                col[i], dg[u - i + n - 1], udg[u + i] = true, true, true
+                res += dfs(u + 1)
+                col[i], dg[u - i + n - 1], udg[u + i] = false, false, false
+            }
+        }
+
+        return res
+    }
+
+    return dfs(0)
+}`,
+                timeComplexity: "O(n!)",
+                spaceComplexity: "O(n)"
+            }
+        ]
     },
     {
         id: 53,
@@ -2179,9 +2247,57 @@ func abs(x int) int {
         difficulty: "medium",
         description: "给你一个整数数组 nums ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。\n子数组 是数组中的一个连续部分。",
         example: "示例 1：\n输入：nums = [-2,1,-3,4,-1,2,1,-5,4]\n输出：6\n解释：连续子数组 [4,-1,2,1] 的和最大，为 6\n示例 2：\n输入：nums = [1]\n输出：1\n示例 3：\n输入：nums = [5,4,-1,7,8]\n输出：23",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                name: "解法一"
+                code: `func maxSubArray(nums []int) int {
+    res, last := math.MinInt, 0
+    for _, x := range nums {
+        last = x + max(last, 0)
+        res = max(res, last)
+    }
+    return res
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(1)"
+            },
+            {
+                name: "解法二：SegmentTree"
+                code: `type Node struct {
+    sum, s, ls, rs int
+}
+
+func maxSubArray(nums []int) int {
+    res := math.MinInt
+    for _, x := range nums {
+        res = max(res, x)
+    }
+    if res < 0 {
+        return res
+    }
+    var build func(int, int) Node
+    build = func(l, r int) Node {
+        if l == r {
+            v := max(nums[l], 0)
+            return Node{nums[l], v, v, v}
+        }
+
+        m := l + (r - l) >> 1
+        L, R := build(l, m), build(m + 1, r)
+        var res Node
+        res.sum = L.sum + R.sum
+        res.s = max(max(L.s, R.s), L.rs + R.ls)
+        res.ls = max(L.ls, L.sum + R.ls)
+        res.rs = max(R.rs, R.sum + L.rs)
+        return res
+    }
+    res = build(0, len(nums) - 1).s
+    return res
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(logn)"
+            }
+        ]
     },
     {
         id: 54,
@@ -2190,9 +2306,36 @@ func abs(x int) int {
         difficulty: "medium",
         description: "给你一个 m 行 n 列的矩阵 matrix ，请按照 顺时针螺旋顺序 ，返回矩阵中的所有元素。",
         example: "示例 1：\n输入：matrix = [[1,2,3],[4,5,6],[7,8,9]]\n输出：[1,2,3,6,9,8,7,4,5]\n示例 2：\n输入：matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12]]\n输出：[1,2,3,4,8,12,11,10,9,5,6,7]",
-        solutions: [],
-        timeComplexity: "O(m*n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func spiralOrder(matrix [][]int) (res []int) {
+    n, m := len(matrix), len(matrix[0])
+
+    dx, dy := []int{0, 1, 0, -1}, []int{1, 0, -1, 0}
+    st := make([][]bool, n)
+    for i := range st {
+        st[i] = make([]bool, m)
+    }
+    
+    for i, x, y, d := 0, 0, 0, 0; i < n * m; i++ {
+        res = append(res, matrix[x][y])
+        st[x][y] = true
+
+        a, b := x + dx[d], y + dy[d]
+        if a < 0 || a >= n || b < 0 || b >= m || st[a][b] {
+            d = (d + 1) % 4
+            a, b = x + dx[d], y + dy[d]
+        }
+
+        x, y = a, b
+    }
+
+    return
+}`,
+                timeComplexity: "O(mn)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 55,
@@ -2201,9 +2344,21 @@ func abs(x int) int {
         difficulty: "medium",
         description: "给你一个非负整数数组 nums ，你最初位于数组的 第一个下标 。数组中的每个元素代表你在该位置可以跳跃的最大长度。\n判断你是否能够到达最后一个下标。",
         example: "示例 1：\n输入：nums = [2,3,1,1,4]\n输出：true\n解释：可以先跳 1 步，从下标 0 到达下标 1, 然后再从下标 1 跳 3 步到达最后一个下标。\n示例 2：\n输入：nums = [3,2,1,0,4]\n输出：false\n解释：无论怎样，总会到达下标为 3 的位置。但该下标的最大跳跃长度是 0 ， 所以永远不可能到达最后一个下标。",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func canJump(nums []int) bool {
+    for i, j := 0, 0; i < len(nums); i++ {
+        if j < i {
+            return false
+        }
+        j = max(j, i + nums[i])
+    }
+    return true
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 56,
