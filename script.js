@@ -722,7 +722,7 @@ func abs(x int) int {
 
     return
 }`,
-                timeComplexity: "O(3^m×4^n)",
+                timeComplexity: "O(3ᵐ4ⁿ)",
                 spaceComplexity: "O(m+n)"
             },
             {
@@ -751,7 +751,7 @@ func abs(x int) int {
     }
     return
 }`,
-                timeComplexity: "O(3^m×4^n)",
+                timeComplexity: "O(3ᵐ4ⁿ)",
                 spaceComplexity: "O(m+n)"
             },
             {
@@ -783,7 +783,7 @@ func abs(x int) int {
     }
     return
 }`,
-                timeComplexity: "O(3^m×4^n)",
+                timeComplexity: "O(3ᵐ4ⁿ)",
                 spaceComplexity: "O(m+n)"
             }
         ]
@@ -971,7 +971,7 @@ func mergeTwoLists(list1 *ListNode, list2 *ListNode) *ListNode {
 
     return res
 }`,
-                timeComplexity: "O(4^n/√n)",
+                timeComplexity: "O(4ⁿ/√n)",
                 spaceComplexity: "O(n)"
             }
         ]
@@ -1684,8 +1684,8 @@ func abs(x int) int {
     }
     return s
 }`,
-                timeComplexity: "O(2^n)",
-                spaceComplexity: "O(2^n)"
+                timeComplexity: "O(2ⁿ)",
+                spaceComplexity: "O(2ⁿ)"
             }
         ]
     },
@@ -1775,7 +1775,7 @@ func abs(x int) int {
 
     return
 }`,
-                timeComplexity: "O(2^n)",
+                timeComplexity: "O(2ⁿ)",
                 spaceComplexity: "O(target)"
             }
         ]
@@ -2895,9 +2895,6 @@ func rotateRight(head *ListNode, k int) *ListNode {
             for k := i + 1; k < j; k++ {
                 line += " " + words[k]
             }
-            // for len(line) < maxWidth {
-            //  line += " "
-            // }
             line += strings.Repeat(" ", maxWidth - len(line))
         } else {
             cnt := j - i - 1
@@ -2995,9 +2992,40 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "medium",
         description: "给你一个字符串 path ，表示指向某一文件或目录的 Unix 风格 绝对路径 （以 '/' 开头），请你将其转化为更加简洁的规范路径。\n在 Unix 风格的文件系统中，一个点（.）表示当前目录本身；此外，两个点 （..） 表示将目录切换到上一级（指向父目录）；两者都可以是复杂相对路径的组成部分。任意多个连续的斜杠（即，'//'）都被视为单个斜杠 '/' 。 对于此问题，任何其他格式的点（例如，'...'）均被视为文件/目录名称。\n请注意，返回的 规范路径 必须遵循下述格式：\n始终以斜杠 '/' 开头。\n两个目录名之间必须只有一个斜杠 '/' 。\n最后一个目录名（如果存在）不能 以 '/' 结尾。\n此外，路径仅包含从根目录到目标文件或目录的路径上的目录（即，不含 '.' 或 '..'）。\n返回简化后得到的 规范路径。",
         example: "示例 1：\n输入：path = \"/home/\"\n输出：\"/home\"\n解释：注意，最后一个目录名后面没有斜杠。\n示例 2：\n输入：path = \"/../\"\n输出：\"/\"\n解释：从根目录向上一级是不可行的，因为根目录是你可以到达的最高级。\n示例 3：\n输入：path = \"/home//foo/\"\n输出：\"/home/foo\"\n解释：在规范路径中，多个连续斜杠需要用一个斜杠替换。\n示例 4：\n输入：path = \"/a/./b/../../c/\"\n输出：\"/c\"",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(n)"
+        solutions: [
+            {
+                code: `func simplifyPath(path string) (res string) {
+    name := ""
+    if path[len(path) - 1] != '/' {
+        path += "/"
+    }
+    for _, c := range path {
+        if c != '/' {
+            name += string(c)
+        } else {
+            if name == ".." {
+                for len(res) != 0 && res[len(res) - 1] != '/' {
+                    res = res[:len(res) - 1]
+                }
+                if len(res) != 0 {
+                    res = res[:len(res) - 1]
+                }
+            } else if name != "." && name != "" {
+                res += "/" + name
+            }
+            name = ""
+        }
+    }
+
+    if len(res) == 0 {
+        res = "/"
+    }
+    return
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(n)"
+            }
+        ]
     },
     {
         id: 72,
@@ -3006,9 +3034,40 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "hard",
         description: "给你两个单词 word1 和 word2， 请返回将 word1 转换成 word2 所使用的最少操作数 。\n你可以对一个单词进行如下三种操作：\n插入一个字符\n删除一个字符\n替换一个字符",
         example: "示例 1：\n输入：word1 = \"horse\", word2 = \"ros\"\n输出：3\n解释：\nhorse -> rorse (将 'h' 替换为 'r')\nrorse -> rose (删除 'r')\nrose -> ros (删除 'e')\n示例 2：\n输入：word1 = \"intention\", word2 = \"execution\"\n输出：5\n解释：\nintention -> inention (删除 't')\ninention -> enention (将 'i' 替换为 'e')\nenention -> exention (将 'n' 替换为 'x')\nexention -> exection (将 'n' 替换为 'c')\nexection -> execution (插入 'u')",
-        solutions: [],
-        timeComplexity: "O(m*n)",
-        spaceComplexity: "O(m*n)"
+        solutions: [
+            {
+                code: `func minDistance(a string, b string) int {
+    n, m := len(a), len(b)
+    a, b = " " + a, " " + b
+    f := make([][]int, n + 1)
+    for i := range f {
+        f[i] = make([]int, m + 1)
+    }
+
+    for i := 0; i <= n; i++ {
+        f[i][0] = i
+    }
+    for i := 0; i <= m; i++ {
+        f[0][i] = i
+    }
+
+    for i := 1; i <= n; i++ {
+        for j := 1; j <= m; j++ {
+            f[i][j] = min(f[i - 1][j], f[i][j - 1]) + 1
+            t := 0
+            if a[i] != b[j] {
+                t = 1
+            }
+            f[i][j] = min(f[i][j], f[i - 1][j - 1] + t)
+        }
+    }
+
+    return f[n][m]
+}`,
+                timeComplexity: "O(mn)",
+                spaceComplexity: "O(mn)"
+            }
+        ]
     },
     {
         id: 73,
@@ -3017,9 +3076,70 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "medium",
         description: "给定一个 m x n 的矩阵，如果一个元素为 0 ，则将其所在行和列的所有元素都设为 0 。请使用 原地 算法。",
         example: "示例 1：\n输入：matrix = [[1,1,1],[1,0,1],[1,1,1]]\n输出：[[1,0,1],[0,0,0],[1,0,1]]\n示例 2：\n输入：matrix = [[0,1,2,0],[3,4,5,2],[1,3,1,5]]\n输出：[[0,0,0,0],[0,4,5,0],[0,3,1,0]]",
-        solutions: [],
-        timeComplexity: "O(m*n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func setZeroes(matrix [][]int)  {
+    n, m := len(matrix), len(matrix[0])
+
+    r0, c0 := 1, 1
+    for i := 0; i < m; i++ {
+        if matrix[0][i] == 0 {
+            r0 = 0
+        }
+    }
+    for i := 0; i < n; i++ {
+        if matrix[i][0] == 0 {
+            c0 = 0
+        }
+    }
+
+    for i := 1; i < m; i++ {
+        for j := 0; j < n; j++ {
+            if matrix[j][i] == 0 {
+                matrix[0][i] = 0
+            }
+        }
+    }
+
+    for i := 1; i < n; i++ {
+        for j := 0; j < m; j++ {
+            if matrix[i][j] == 0 {
+                matrix[i][0] = 0
+            }
+        }
+    }
+
+    for i := 1; i < m; i++ {
+        if matrix[0][i] == 0 {
+            for j := 1; j < n; j++ {
+                matrix[j][i] = 0
+            }
+        }
+    }
+
+    for i := 1; i < n; i++ {
+        if matrix[i][0] == 0 {
+            for j := 1; j < m; j++ {
+                matrix[i][j] = 0
+            }
+        }
+    }
+
+    if r0 == 0 {
+        for i := 0; i < m; i++ {
+            matrix[0][i] = 0
+        }
+    }
+    if c0 == 0 {
+        for i := 0; i < n; i++ {
+            matrix[i][0] = 0
+        }
+    }
+}`,
+                timeComplexity: "O(mn)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 74,
@@ -3028,9 +3148,26 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "medium",
         description: "编写一个高效的算法来判断 m x n 矩阵中，是否存在一个目标值。该矩阵具有如下特性：\n每行中的整数从左到右按升序排列。\n每行的第一个整数大于前一行的最后一个整数。",
         example: "示例 1：\n输入：matrix = [[1,4,7,11],[2,5,8,12],[3,6,9,16],[10,13,14,17]], target = 5\n输出：true\n示例 2：\n输入：matrix = [[1,4,7,11],[2,5,8,12],[3,6,9,16],[10,13,14,17]], target = 3\n输出：false",
-        solutions: [],
-        timeComplexity: "O(log(m*n))",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func searchMatrix(matrix [][]int, target int) bool {
+    n, m := len(matrix), len(matrix[0])
+    l, r := 0, n * m - 1
+    for l < r {
+        mid := l + (r - l) >> 1
+        if matrix[mid / m][mid % m] >= target {
+            r = mid
+        } else {
+            l = mid + 1
+        }
+    }
+
+    return matrix[r / m][r % m] == target
+}`,
+                timeComplexity: "O(log(mn))",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 75,
@@ -3039,9 +3176,27 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "medium",
         description: "给定一个包含红色、白色和蓝色、共 n 个元素的数组 nums ，原地对它们进行排序，使得相同颜色的元素相邻，并按照红色、白色、蓝色顺序排列。\n我们使用整数 0、 1 和 2 分别表示红色、白色和蓝色。\n必须在不使用库的sort函数的情况下解决这个问题。",
         example: "示例 1：\n输入：nums = [2,0,2,1,1,0]\n输出：[0,0,1,1,2,2]\n示例 2：\n输入：nums = [2,0,1]\n输出：[0,1,2]",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func sortColors(nums []int)  {
+    i, j, k := 0, 0, len(nums) - 1
+    for i <= k {
+        if nums[i] == 0 {
+            nums[i], nums[j] = nums[j], nums[i]
+            i++
+            j++
+        } else if nums[i] == 2 {
+            nums[i], nums[k] = nums[k], nums[i]
+            k--
+        } else {
+            i++
+        }
+    }
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 76,
@@ -3050,9 +3205,38 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "hard",
         description: "给你一个字符串 s 、一个字符串 t 。返回 s 中涵盖 t 所有字符的最小子串。如果 s 中不存在涵盖 t 所有字符的子串，则返回空字符串 \"\"。\n注意：\n对于 t 中重复字符，我们寻找的子字符串中该字符数量必须不少于 t 中该字符数量。\n如果 s 中存在这样的子串，我们保证它是唯一的答案。",
         example: "示例 1：\n输入：s = \"ADOBECODEBANC\", t = \"ABC\"\n输出：\"BANC\"\n解释：最小覆盖子串 \"BANC\" 包含来自字符串 t 的 'A'、'B' 和 'C'。\n示例 2：\n输入：s = \"a\", t = \"a\"\n输出：\"a\"\n示例 3：\n输入: s = \"a\", t = \"aa\"\n输出: \"\"\n解释: t 中两个字符 'a' 均应包含在 s 的子串中，\n因此没有符合条件的子字符串，返回空字符串。",
-        solutions: [],
-        timeComplexity: "O(m+n)",
-        spaceComplexity: "O(m+n)"
+        solutions: [
+            {
+                code: `func minWindow(s string, t string) (res string) {
+    ms, mt := make(map[byte]int), make(map[byte]int)
+    for i := 0; i < len(t); i++ {
+        mt[t[i]]++
+    }
+
+    cnt := 0
+    for i, j := 0, 0; i < len(s); i++ {
+        ms[s[i]]++
+        if ms[s[i]] <= mt[s[i]] {
+            cnt++
+        }
+
+        for j <= i && ms[s[j]] > mt[s[j]] {
+            ms[s[j]]--
+            j++
+        }
+        if cnt == len(t) {
+            if res == "" || i - j + 1 < len(res) {
+                res = s[j : i + 1]
+            }
+        }
+    }
+
+    return
+}`,
+                timeComplexity: "O(m+n)",
+                spaceComplexity: "O(m+n)"
+            }
+        ]
     },
     {
         id: 77,
@@ -3061,9 +3245,89 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "medium",
         description: "给定两个整数 n 和 k，返回范围 [1, n] 中所有可能的 k 个数的组合。\n你可以按 任何顺序 返回答案。",
         example: "示例 1：\n输入：n = 4, k = 2\n输出：\n[\n  [2,4],\n  [3,4],\n  [2,3],\n  [1,2],\n  [1,3],\n  [1,4],\n]\n示例 2：\n输入：n = 1, k = 1\n输出：[[1]]",
-        solutions: [],
-        timeComplexity: "O(C(n,k))",
-        spaceComplexity: "O(k)"
+        solutions: [
+            {
+                name: "解法一",
+                code: `func combine(n int, k int) (res [][]int) {
+    path := []int{}
+
+    var dfs func(int, int)
+    dfs = func(u, start int) {
+        if u == 0 {
+            t := make([]int, k)
+            copy(t, path)
+            res = append(res, t)
+            return
+        }
+
+        for i := start; i + u - 1 <= n; i++ {
+            path = append(path, i)
+            dfs(u - 1, i + 1)
+            path = path[:len(path) - 1]
+        }
+    }
+    dfs(k, 1)
+    return
+}`,
+                timeComplexity: "O(C(n,k))",
+                spaceComplexity: "O(k)"
+            },
+            {
+                name: "解法二",
+                code: `func combine(n int, k int) (res [][]int) {
+    path := make([]int, k)
+    var dfs func(int)
+    dfs = func(u int) {
+        if u == k {
+            t := make([]int, len(path))
+            copy(t, path)
+            res = append(res, t)
+            return
+        }
+        for i := path[u - 1] + 1; i + u - 1 < n - k; i++ {
+            path[u] = i
+            dfs(u + 1)
+        }
+    }
+    for i := 1; i <= n - k + 1; i++ {
+        path[0] = i
+        dfs(1)
+    }
+    return
+}`,
+                timeComplexity: "O(C(n,k))",
+                spaceComplexity: "O(k)"
+            },
+            {
+                name: "解法三",
+                code: `func combine(n int, k int) (res [][]int) {
+    path := []int{}
+    var dfs func(int)
+    dfs = func(u int) {
+        if len(path) + n - u + 1 < k {
+            return
+        }
+
+        if len(path) == k {
+            t := make([]int, k)
+            copy(t, path)
+            res = append(res, t)
+            return
+        }
+
+        dfs(u + 1)
+        path = append(path, u)
+        dfs(u + 1)
+        path = path[:len(path) - 1]
+    }
+    dfs(1)
+
+    return
+}`,
+                timeComplexity: "O(C(n,k))",
+                spaceComplexity: "O(k)"
+            }
+        ]
     },
     {
         id: 78,
@@ -3072,9 +3336,53 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "medium",
         description: "给你一个整数数组 nums ，数组中的元素 互不相同 。返回该数组所有可能的子集（幂集）。\n解集 不能 包含重复的子集。你可以按 任意顺序 返回解集。",
         example: "示例 1：\n输入：nums = [1,2,3]\n输出：[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]\n示例 2：\n输入：nums = [0]\n输出：[[],[0]]",
-        solutions: [],
-        timeComplexity: "O(2^n)",
-        spaceComplexity: "O(2^n)"
+        solutions: [
+            {
+                name: "解法一",
+                code: `func subsets(nums []int) (res [][]int) {
+    n := len(nums)
+    for i := 0; i < 1 << n; i++ {
+        path := []int{}
+        for j := 0; j < n; j++ {
+            if i >> j & 1 == 1 {
+                path = append(path, nums[j])
+            }
+        }
+        res = append(res, path)
+    }
+
+    return
+}`,
+                timeComplexity: "O(2ⁿ)",
+                spaceComplexity: "O(2ⁿ)"
+            },
+            {
+                name: "解法二",
+                code: `func subsets(nums []int) (res [][]int) {
+    res := [][]int{}
+    path := []int{}
+    var dfs func(int)
+    dfs = func(u int) {
+        if u == len(nums) {
+            t := make([]int, len(path))
+            copy(t, path)
+            res = append(res, t)
+            return
+        }
+
+        dfs(u + 1)
+        path = append(path, nums[u])
+        dfs(u + 1)
+        path = path[:len(path) - 1]
+    }
+    dfs(0)
+
+    return
+}`,
+                timeComplexity: "O(2ⁿ)",
+                spaceComplexity: "O(2ⁿ)"
+            }
+        ]
     },
     {
         id: 79,
@@ -3083,9 +3391,47 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "medium",
         description: "给定一个 m x n 二维字符网格 board 和一个字符串单词 word 。如果 word 存在于网格中，返回 true ；否则，返回 false 。\n单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中\"相邻\"单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。",
         example: "示例 1：\n输入：board = [[\"A\",\"B\",\"C\",\"E\"],[\"S\",\"F\",\"C\",\"S\"],[\"A\",\"D\",\"E\",\"E\"]], word = \"ABCCED\"\n输出：true\n示例 2：\n输入：board = [[\"A\",\"B\",\"C\",\"E\"],[\"S\",\"F\",\"C\",\"S\"],[\"A\",\"D\",\"E\",\"E\"]], word = \"SEE\"\n输出：true\n示例 3：\n输入：board = [[\"A\",\"B\",\"C\",\"E\"],[\"S\",\"F\",\"C\",\"S\"],[\"A\",\"D\",\"E\",\"E\"]], word = \"ABCB\"\n输出：false",
-        solutions: [],
-        timeComplexity: "O(m*n*4^k)",
-        spaceComplexity: "O(k)"
+        solutions: [
+            {
+                code: `func exist(board [][]byte, word string) bool {
+    n, m := len(board), len(board[0])
+    dx, dy := []int{0, 1, 0, -1}, []int{-1, 0, 1, 0}
+    var dfs func(int, int, int) bool
+    dfs = func(u, x, y int) bool {
+        if board[x][y] != word[u] {
+            return false
+        }
+        if u == len(word) - 1 {
+            return true
+        }
+
+        t := board[x][y]
+        for i := 0; i < 4; i++ {
+            a, b := x + dx[i], y + dy[i]
+            if a < 0 || a >= n || b < 0 || b >= m || board[a][b] == '.' {
+                continue
+            }
+            board[x][y] = '.'
+            if dfs(u + 1, a, b) {
+                return true
+            }
+            board[x][y] = t
+        }
+        return false
+    }
+    for i := range board {
+        for j := range board[0] {
+            if dfs(0, i, j) {
+                return true
+            }
+        }
+    }
+    return false
+}`,
+                timeComplexity: "O(m*n*4^k)",
+                spaceComplexity: "O(k)"
+            }
+        ]
     },
     {
         id: 80,
@@ -3094,9 +3440,21 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "medium",
         description: "给你一个有序数组 nums ，请你 原地 删除重复出现的元素，使得出现次数超过两次的元素只出现两次 ，返回删除后数组的新长度。\n不要使用额外的数组空间，你必须在 原地 修改输入数组 并在使用 O(1) 额外空间的条件下完成。",
         example: "示例 1：\n输入：nums = [1,1,1,2,2,3]\n输出：5, nums = [1,1,2,2,3]\n解释：函数应返回新长度 length = 5, 并且原数组的前五个元素被修改为 1, 1, 2, 2, 3。 不需要考虑数组中超出新长度后面的元素。\n示例 2：\n输入：nums = [0,0,1,1,1,1,2,3,3]\n输出：7, nums = [0,0,1,1,2,3,3]\n解释：函数应返回新长度 length = 7, 并且原数组的前五个元素被修改为 0, 0, 1, 1, 2, 3, 3。 不需要考虑数组中超出新长度后面的元素。",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func removeDuplicates(nums []int) (k int) {
+    for _, x := range nums {
+        if k < 2 || nums[k - 2] != x {
+            nums[k] = x
+            k++
+        }
+    }
+    return
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 81,
@@ -3105,9 +3463,48 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "medium",
         description: "已知存在一个按非降序排列的整数数组 nums ，数组中的值不必互不相同。\n在传递给函数之前，nums 在预先未知的某个下标 k（0 <= k < nums.length）上进行了 旋转 ，使数组变为 [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]]（下标 从 0 开始 计数）。例如， [0,1,2,4,4,4,5,6,6,7] 在下标 5 处经旋转后可能变为 [4,5,6,6,7,0,1,2,4,4] 。\n给你 旋转后 的数组 nums 和一个整数 target ，请你编写一个函数来判断给定的目标值是否存在于数组中。如果 nums 中存在这个目标值 target ，则返回 true ，否则返回 false 。\n你必须尽可能减少整个操作步骤。",
         example: "示例 1：\n输入：nums = [2,5,6,0,0,1,2], target = 0\n输出：true\n示例 2：\n输入：nums = [2,5,6,0,0,1,2], target = 3\n输出：false",
-        solutions: [],
-        timeComplexity: "O(log n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func search(nums []int, target int) bool {
+    R := len(nums) - 1
+    for R >= 0 && nums[R] == nums[0] {
+        R--
+    }
+    if R < 0 {
+        return nums[0] == target
+    }
+
+    l, r := 0, R
+    for l < r {
+        m := l + (r - l + 1) >> 1
+        if nums[m] >= nums[0] {
+            l = m
+        } else {
+            r = m - 1
+        }
+    }
+
+    if target >= nums[0] {
+        l = 0
+    } else {
+        l, r = l + 1, R
+    }
+
+    for l < r {
+        m := l + (r - l) >> 1
+        if nums[m] >= target {
+            r = m
+        } else {
+            l = m + 1
+        }
+    }
+
+    return nums[r] == target
+}`,
+                timeComplexity: "O(logn)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 82,
@@ -3116,9 +3513,36 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "medium",
         description: "给定一个已排序的链表的头 head ， 删除原始链表中所有重复数字的节点，只留下不同的数字 。返回 已排序的链表 。",
         example: "示例 1：\n输入：head = [1,2,3,3,4,4,5]\n输出：[1,2,5]\n示例 2：\n输入：head = [1,1,1,2,3]\n输出：[2,3]",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `/**
+ * Definition for singly-linked list.
+ * type ListNode struct {
+ *     Val int
+ *     Next *ListNode
+ * }
+ */
+func deleteDuplicates(head *ListNode) *ListNode {
+    dummy := &ListNode{}
+    dummy.Next = head
+    p := dummy
+    for p.Next != nil {
+        q := p.Next.Next
+        for q != nil && q.Val == p.Next.Val {
+            q = q.Next
+        }
+        if p.Next.Next == q {
+            p = p.Next
+        } else {
+            p.Next = q
+        }
+    }
+    return dummy.Next
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 83,
@@ -3127,9 +3551,33 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "easy",
         description: "给定一个已排序的链表的头 head ， 删除所有重复的元素，使每个元素只出现一次 。返回 已排序的链表 。",
         example: "示例 1：\n输入：head = [1,1,2]\n输出：[1,2]\n示例 2：\n输入：head = [1,1,2,3,3]\n输出：[1,2,3]",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `/**
+ * Definition for singly-linked list.
+ * type ListNode struct {
+ *     Val int
+ *     Next *ListNode
+ * }
+ */
+func deleteDuplicates(head *ListNode) *ListNode {
+    if head == nil {
+        return nil
+    }
+    cur := head
+    for p := head.Next; p != nil; p = p.Next {
+        if p.Val != cur.Val {
+            cur, cur.Next = p, p
+        }
+    }
+
+    cur.Next = nil
+    return head
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 84,
@@ -3138,9 +3586,75 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "hard",
         description: "给定 n 个非负整数，用来表示柱状图中各个柱子的高度。每个柱子彼此相邻，且宽度为 1 。\n求在该柱状图中，能够勾勒出来的矩形的最大面积。",
         example: "示例 1：\n输入：heights = [2,1,5,6,2,3]\n输出：10\n解释：最大的矩形为图中红色区域，面积为 10\n示例 2：\n输入： heights = [2,4]\n输出： 4",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(n)"
+        solutions: [
+            {
+                name: "解法一",
+                code: `func largestRectangleArea(h []int) int {
+    n := len(h)
+    l, r := make([]int, n), make([]int, n)
+    stk := []int{}
+
+    for i := 0; i < n; i++ {
+        for len(stk) != 0 && h[stk[len(stk) - 1]] >= h[i] {
+            stk = stk[:len(stk) - 1]
+        }
+        if len(stk) == 0 {
+            l[i] = -1
+        } else {
+            l[i] = stk[len(stk) - 1]
+        }
+        stk = append(stk, i)
+    }
+
+    stk = []int{}
+    for i := n - 1; i >= 0; i-- {
+        for len(stk) != 0 && h[stk[len(stk) - 1]] >= h[i] {
+            stk = stk[:len(stk) - 1]
+        }
+        if len(stk) == 0 {
+            r[i] = n
+        } else {
+            r[i] = stk[len(stk) - 1]
+        }
+        stk = append(stk, i)
+    }
+
+    res := 0
+    for i := 0; i < n; i++ {
+        res = max(res, h[i] * (r[i] - l[i] - 1))
+    }
+
+    return res
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(n)"
+            },
+            {
+                name: "解法二",
+                code: `func largestRectangleArea(h []int) (res int) {
+    n := len(h)
+    stk := []int{}
+
+    h = append(h, 0)
+    for r := 0; r <= n; r++ {
+        for len(stk) > 0 && h[stk[len(stk) - 1]] >= h[r] {
+            x := h[stk[len(stk) - 1]]
+            stk = stk[:len(stk) - 1]
+            l := -1
+            if len(stk) > 0 {
+                l = stk[len(stk) - 1]
+            }
+            res = max(res, x * (r - l - 1))
+        }
+        stk = append(stk, r)
+    }
+
+    return
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(n)"
+            }
+        ]
     },
     {
         id: 85,
@@ -3149,9 +3663,73 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "hard",
         description: "给定一个仅包含 0 和 1 、大小为 rows x cols 的二维二进制矩阵，找出只包含 1 的最大矩形，并返回其面积。",
         example: "示例 1：\n输入：matrix = [[\"1\",\"0\",\"1\",\"0\",\"0\"],[\"1\",\"0\",\"1\",\"1\",\"1\"],[\"1\",\"1\",\"1\",\"1\",\"1\"],[\"1\",\"0\",\"0\",\"1\",\"0\"]]\n输出：6\n解释：最大矩形如上图所示。\n示例 2：\n输入：matrix = []\n输出：0\n示例 3：\n输入：matrix = [[\"0\"]]\n输出：0\n示例 4：\n输入：matrix = [[\"1\"]]\n输出：1\n示例 5：\n输入：matrix = [[\"0\",\"0\"]]\n输出：0",
-        solutions: [],
-        timeComplexity: "O(m*n)",
-        spaceComplexity: "O(n)"
+        solutions: [
+            {
+                code: `func maximalRectangle(matrix [][]byte) int {
+    n, m := len(matrix), len(matrix[0])
+
+    h := make([][]int, n)
+    for i := range h {
+        h[i] = make([]int, m)
+    }
+    for i := 0; i < n; i++ {
+        for j := 0; j < m; j++ {
+            if matrix[i][j] == '1' {
+                h[i][j] = 1
+                if i > 0 {
+                    h[i][j] += h[i - 1][j]
+                }
+            }
+        }
+    }
+
+    res := 0
+    for i := 0; i < n; i++ {
+        res = max(res, largestRectangleArea(h[i]))
+    }
+}
+
+func largestRectangleArea(h []int) int {
+    n := len(h)
+    l, r := make([]int, n), make([]int, n)
+    stk := []int{}
+
+    for i := 0; i < n; i++ {
+        for len(stk) != 0 && h[stk[len(stk) - 1]] >= h[i] {
+            stk = stk[:len(stk) - 1]
+        }
+        if len(stk) == 0 {
+            l[i] = -1
+        } else {
+            l[i] = stk[len(stk) - 1]
+        }
+        stk = append(stk, i)
+    }
+
+    stk = []int{}
+    for i := n - 1; i >= 0; i-- {
+        for len(stk) != 0 && h[stk[len(stk) - 1]] >= h[i] {
+            stk = stk[:len(stk) - 1]
+        }
+        if len(stk) == 0 {
+            r[i] = n
+        } else {
+            r[i] = stk[len(stk) - 1]
+        }
+        stk = append(stk, i)
+    }
+
+    res := 0
+    for i := 0; i < n; i++ {
+        res = max(res, h[i] * (r[i] - l[i] - 1))
+    }
+
+    return res
+}`,
+                timeComplexity: "O(mn)",
+                spaceComplexity: "O(n)"
+            }
+        ]
     },
     {
         id: 86,
@@ -3160,9 +3738,36 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "medium",
         description: "给你一个链表的头节点 head 和一个特定值 x ，请你对链表进行分隔，使得所有 小于 x 的节点都出现在 大于或等于 x 的节点之前。\n你应当 保留 两个分区中每个节点的初始相对位置。",
         example: "示例 1：\n输入：head = [1,4,3,2,5,2], x = 3\n输出：[1,2,2,4,3,5]\n示例 2：\n输入：head = [2,1], x = 2\n输出：[1,2]",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `/**
+ * Definition for singly-linked list.
+ * type ListNode struct {
+ *     Val int
+ *     Next *ListNode
+ * }
+ */
+func partition(head *ListNode, x int) *ListNode {
+    lh, rh := &ListNode{}, &ListNode{}
+    lt, rt := lh, rh
+
+    for p := head; p != nil; p = p.Next {
+        if p.Val < x {
+            lt, lt.Next = p, p
+        } else {
+            rt, rt.Next = p, p
+        }
+    }
+
+    lt.Next = rh.Next
+    rt.Next = nil
+
+    return lh.Next
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 87,
@@ -3171,9 +3776,73 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "hard",
         description: "使用下面描述的算法可以扰乱字符串 s 得到字符串 t ：\n如果字符串的长度为 1 ，算法停止\n如果字符串的长度 > 1 ，执行下述步骤：\n在一个随机下标处将字符串分割成两个非空的子字符串。即，如果已知字符串 s ，则可以将其分成两个子字符串 x 和 y ，且满足 s = x + y 。\n随机 决定是要「交换两个子字符串」还是要「保持这两个子字符串的顺序不变」。即，在这一步之后，s 可能是 s = x + y 或者 s = y + x 。\n在 x 和 y 这两个子字符串上继续从步骤 1 开始递归执行此算法。\n给你两个 长度相等 的字符串 s1 和 s2，判断 s2 是否是 s1 的扰乱字符串。如果是，返回 true ；否则，返回 false 。",
         example: "示例 1：\n输入：s1 = \"great\", s2 = \"rgeat\"\n输出：true\n解释：s1 上可能发生的一种情形是：\n\"great\" --> \"gr/eat\" // 在一个随机下标处分割得到两个子字符串\n\"gr/eat\" --> \"gr/eat\" // 随机决定：「保持这两个子字符串的顺序不变」\n\"gr/eat\" --> \"g/r + e/at\" // 在子字符串上递归执行此算法。两个子字符串分别在随机下标处进行一轮分割\n\"g/r + e/at\" --> \"r/g + e/at\" // 随机决定：第一组「交换两个子字符串」，第二组「保持这两个子字符串的顺序不变」\n\"r/g + e/at\" --> \"r/g + e/a/t\" // 继续递归执行此算法，将 \"at\" 分割得到 \"a/t\"\n\"r/g + e/a/t\" --> \"r/g + a/e/t\" // 随机决定：「保持这两个子字符串的顺序不变」\n算法终止，结果字符串和 s2 相同，都是 \"rgeat\"\n这是一种能够扰乱 s1 得到 s2 的情形，可以认为 s2 是 s1 的扰乱字符串，返回 true\n示例 2：\n输入：s1 = \"abcde\", s2 = \"caebd\"\n输出：false\n示例 3：\n输入：s1 = \"a\", s2 = \"a\"\n输出：true",
-        solutions: [],
-        timeComplexity: "O(n^4)",
-        spaceComplexity: "O(n^3)"
+        solutions: [
+            {
+                name: "解法一",
+                code: `func isScramble(s1 string, s2 string) bool {
+    if s1 == s2 {
+        return true
+    }
+    bs1, bs2 := []rune(s1), []rune(s2)
+    sort.Slice(bs1, func(i, j int) bool {
+        return bs1[i] < bs1[j]
+    })
+    sort.Slice(bs2, func(i, j int) bool {
+        return bs2[i] < bs2[j]
+    })
+
+    if string(bs1) != string(bs2) {
+        return false
+    }
+
+    n := len(s1)
+    for i := 1; i < n; i++ {
+        if isScramble(s1[0 : i], s2[0 : i]) && isScramble(s1[i:], s2[i:]) {
+            return true
+        }
+        if isScramble(s1[0 : i], s2[n - i:]) && isScramble(s1[i:], s2[0 : n - i]) {
+            return true
+        }
+    }
+
+    return false
+}`,
+                timeComplexity: "O(5ⁿ)",
+                spaceComplexity: "O(n)"
+            },
+            {
+                name: "解法二",
+                code: `func isScramble(s1 string, s2 string) bool {
+    n := len(s1)
+    f := make([][][]bool, n)
+    for i := range f {
+        f[i] = make([][]bool, n)
+        for j := range f[i] {
+            f[i][j] = make([]bool, n + 1)
+        }
+    }
+    for k := 1; k <= n; k++ {
+        for i := 0; i + k - 1 < n; i++ {
+            for j := 0; j + k - 1 < n; j++ {
+                if k == 1 {
+                    f[i][j][k] = s1[i] == s2[j]
+                } else {
+                    for u := 1; u < k; u++ {
+                        if f[i][j][u] && f[i + u][j + u][k - u] || f[i][j + k - u][u] && f[i + u][j][k - u] {
+                            f[i][j][k] = true
+                            break
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return f[0][0][n]
+}`,
+                timeComplexity: "O(n⁴)",
+                spaceComplexity: "O(n³)"
+            }
+        ]
     },
     {
         id: 88,
@@ -3182,9 +3851,31 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "easy",
         description: "给你两个按 非递减顺序 排列的整数数组 nums1 和 nums2，另有两个整数 m 和 n ，分别表示 nums1 和 nums2 中的元素数目。\n请你 合并 nums2 到 nums1 中，使合并后的数组同样按 非递减顺序 排列。\n注意：最终，合并后数组不应由函数返回，而是存储在数组 nums1 中。为了应对这种情况，nums1 的初始长度为 m + n，其中前 m 个元素表示应合并的元素，后 n 个元素为 0 ，应忽略。nums2 的长度为 n 。",
         example: "示例 1：\n输入：nums1 = [1,2,3,0,0,0], m = 3, nums2 = [2,5,6], n = 3\n输出：[1,2,2,3,5,6]\n解释：需要合并 [1,2,3] 和 [2,5,6] 。\n合并结果是 [1,2,2,3,5,6] ，其中斜体加粗标注的为 nums1 中的元素。\n示例 2：\n输入：nums1 = [1], m = 1, nums2 = [], n = 0\n输出：[1]\n解释：需要合并 [1] 和 [] 。\n合并结果是 [1] 。\n示例 3：\n输入：nums1 = [0], m = 0, nums2 = [1], n = 1\n输出：[1]\n解释：需要合并的数组是 [] 和 [1] 。\n合并结果是 [1] 。\n注意，因为 m = 0 ，所以 nums1 中没有元素。nums1 中仅存的 0 仅仅是为了确保合并结果可以顺利存放到 nums1 中。",
-        solutions: [],
-        timeComplexity: "O(m+n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func merge(nums1 []int, m int, nums2 []int, n int)  {
+    k, i, j := n + m - 1, n - 1, m - 1
+    for i >= 0 && j >= 0 {
+        if nums1[i] >= nums2[j] {
+            nums1[k] = nums1[i]
+            i--
+        } else {
+            nums1[k] = nums2[j]
+            j--
+        }
+        k--
+    }
+
+    for j >= 0 {
+        nums1[k] = nums2[j]
+        j--
+        k--
+    }
+}`,
+                timeComplexity: "O(m+n)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 89,
@@ -3193,9 +3884,22 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "medium",
         description: "n 位格雷码序列 是一个由 2n 个整数组成的序列，其中：\n每个整数都在范围 [0, 2n - 1] 内（含 0 和 2n - 1）\n第一个整数是 0\n一个整数在序列中出现 不超过一次\n每对 相邻 整数的二进制表示 恰好一位不同 ，且\n第一个 和 最后一个 整数的二进制表示 恰好一位不同\n给你一个整数 n ，返回任一有效的 n 位格雷码序列。",
         example: "示例 1：\n输入：n = 2\n输出：[0,1,3,2]\n解释：\n[0,1,3,2] 的二进制表示是 [00,01,11,10] 。\n- 00 和 01 有一位不同\n- 01 和 11 有一位不同\n- 11 和 10 有一位不同\n- 10 和 00 有一位不同\n[0,2,3,1] 也是一个有效的格雷码序列，其二进制表示是 [00,10,11,01] 。\n- 00 和 10 有一位不同\n- 10 和 11 有一位不同\n- 11 和 01 有一位不同\n- 01 和 00 有一位不同\n示例 2：\n输入：n = 1\n输出：[0,1]",
-        solutions: [],
-        timeComplexity: "O(2^n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func grayCode(n int) []int {
+    res := []int{0, 1}
+    for i := 0; i < n - 1; i++ {
+        for j := len(res) - 1; j >= 0; j-- {
+            res[j] *= 2
+            res = append(res, res[j] + 1)
+        }
+    }
+    return res
+}`,
+                timeComplexity: "O(2ⁿ)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 90,
@@ -3204,9 +3908,39 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "medium",
         description: "给你一个整数数组 nums ，其中可能包含重复元素，请你返回该数组所有可能的子集（幂集）。\n解集 不能 包含重复的子集。返回的解集中，子集可以按 任意顺序 排列。",
         example: "示例 1：\n输入：nums = [1,2,2]\n输出：[[],[1],[1,2],[1,2,2],[2],[2,2]]\n示例 2：\n输入：nums = [0]\n输出：[[],[0]]",
-        solutions: [],
-        timeComplexity: "O(2^n)",
-        spaceComplexity: "O(2^n)"
+        solutions: [
+            {
+                code: `func subsetsWithDup(nums []int) (res [][]int) {
+    sort.Ints(nums)
+    path := []int{}
+    var dfs func(int)
+    dfs = func(u int) {
+        if u == len(nums) {
+            t := make([]int, len(path))
+            copy(t, path)
+            res = append(res, t)
+            return
+        }
+
+        k := u + 1
+        for k < len(nums) && nums[k] == nums[u] {
+            k++
+        }
+
+        for i := 0; i <= k - u; i++ {
+            dfs(k)
+            path = append(path, nums[u])
+        }
+
+        path = path[:len(path) - (k - u + 1)]
+    }
+    dfs(0)
+    return
+}`,
+                timeComplexity: "O(2ⁿ)",
+                spaceComplexity: "O(2ⁿ)"
+            }
+        ]
     },
     {
         id: 91,
@@ -3215,9 +3949,30 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "medium",
         description: "一条包含字母 A-Z 的消息通过以下映射进行了 编码 ：\n'A' -> \"1\"\n'B' -> \"2\"\n...\n'Z' -> \"26\"\n要 解码 已编码的消息，所有数字必须基于上述映射的方法，反向映射回字母（可能有多种方法）。例如 \"11106\" 可以映射为：\n\"AAJF\" ，将消息分组为 (1 1 10 6)\n\"KJF\" ，将消息分组为 (11 10 6)\n注意，消息不能分组为  (1 11 06) ，因为 \"06\" 不能映射为 \"F\" ，这是由于 \"6\" 和 \"06\" 在映射中并不等价。\n给你一个只含数字的 非空 字符串 s ，请计算并返回 解码 方法的 总数 。\n题目数据保证答案肯定是一个 32 位 的整数。",
         example: "示例 1：\n输入：s = \"12\"\n输出：2\n解释：它可以解码为 \"AB\"（1 2）或者 \"L\"（12）。\n示例 2：\n输入：s = \"226\"\n输出：3\n解释：它可以解码为 \"BZ\" (2 26), \"VF\" (22 6), 或者 \"BBF\" (2 2 6) 。\n示例 3：\n输入：s = \"0\"\n输出：0\n解释：没有字符映射到以 0 开头的数字。\n含有 0 的有效映射是 'J' -> \"10\" 和 'T'-> \"20\" 。\n由于没有字符，因此没有有效的方法对此进行解码，因为所有数字都需要映射。",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(n)"
+        solutions: [
+            {
+                code: `func numDecodings(s string) int {
+    n := len(s)
+    s = " " + s
+    f := make([]int, n + 1)
+    f[0] = 1
+    for i := 1; i <= n; i++ {
+        if s[i] != '0' {
+            f[i] = f[i - 1]
+        }
+        if i > 1 {
+            t := (s[i - 1] - '0') * 10 + (s[i] - '0')
+            if t >= 10 && t <= 26 {
+                f[i] += f[i - 2]
+            }
+        }
+    }
+    return f[n]
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(n)"
+            }
+        ]
     },
     {
         id: 92,
@@ -3226,9 +3981,34 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "medium",
         description: "给你单链表的头指针 head 和两个整数 left 和 right ，其中 left <= right 。请你反转从位置 left 到位置 right 的链表节点，返回 反转后的链表。",
         example: "示例 1：\n输入：head = [1,2,3,4,5], left = 2, right = 4\n输出：[1,4,3,2,5]\n示例 2：\n输入：head = [5], left = 1, right = 1\n输出：[5]",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `/**
+ * Definition for singly-linked list.
+ * type ListNode struct {
+ *     Val int
+ *     Next *ListNode
+ * }
+ */
+func reverseBetween(head *ListNode, left int, right int) *ListNode {
+    dummy := &ListNode{}
+    dummy.Next = head
+    a := dummy
+    for i := 0; i < left - 1; i++ {
+        a = a.Next
+    }
+    b := a.Next
+    c := b.Next
+    for i := 0; i < right - left; i++ {
+        c.Next, b, c = b, c, c.Next
+    }
+    a.Next.Next, a.Next = c, b
+    return dummy.Next
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 93,
@@ -3237,9 +4017,39 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "medium",
         description: "有效 IP 地址 正好由四个整数（每个整数位于 0 到 255 之间组成，且不能含有前导 0），整数之间用 '.' 分隔。\n例如：\"0.1.2.201\" 和 \"192.168.1.1\" 是 有效 IP 地址，但是 \"0.011.255.245\"、\"192.168.1.312\" 和 \"192.168@1.1\" 是 无效 IP 地址。\n给定一个只包含数字的字符串 s ，用以表示一个 IP 地址，返回所有可能的有效 IP 地址，这些地址可以通过在 s 中插入 '.' 来形成。你 不能 重新排序或删除 s 中的任何数字。你可以按 任何 顺序返回答案。",
         example: "示例 1：\n输入：s = \"25525511135\"\n输出：[\"255.255.11.135\",\"255.255.111.35\"]\n示例 2：\n输入：s = \"0000\"\n输出：[\"0.0.0.0\"]\n示例 3：\n输入：s = \"101023\"\n输出：[\"1.0.10.23\",\"1.0.102.3\",\"10.1.0.23\",\"10.10.2.3\",\"101.0.2.3\"]",
-        solutions: [],
-        timeComplexity: "O(3^4)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func restoreIpAddresses(s string) (res []string) {
+    var dfs func(int, int, string)
+    dfs = func(u, k int, path string) {
+        if u == len(s) {
+            if k == 4 {
+                res = append(res, path[:len(path) - 1])
+            }
+            return
+        }
+        if k == 4 {
+            return
+        }
+        for i, t := u, 0; i < len(s); i++ {
+            if i > u && s[u] == '0' {
+                break
+            }
+            t = t * 10 + int(s[i] - '0')
+            if t <= 255 {
+                dfs(i + 1, k + 1, path + strconv.Itoa(t) + ".")
+            } else {
+                break
+            }
+        }
+    }
+    dfs(0, 0, "")
+    return
+}`,
+                timeComplexity: "O(1)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 94,
@@ -3248,9 +4058,170 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "easy",
         description: "给定一个二叉树的根节点 root ，返回 它的 中序 遍历。",
         example: "示例 1：\n输入：root = [1,null,2,3]\n输出：[1,3,2]\n示例 2：\n输入：root = []\n输出：[]\n示例 3：\n输入：root = [1]\n输出：[1]",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(n)"
+        solutions: [
+            {
+                name: "解法一",
+                code: `/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func inorderTraversal(root *TreeNode) (res []int) {
+    var dfs func(*TreeNode)
+    dfs = func(root *TreeNode) {
+        if root == nil {
+            return
+        }
+        dfs(root.Left)
+        res = append(res, root.Val)
+        dfs(root.Right)
+    }
+    dfs(root)
+    return
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(n)"
+            },
+            {
+                name: "解法二",
+                code: `/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+type pair struct {
+    state bool
+    Node *TreeNode
+}
+
+func inorderTraversal(root *TreeNode) (res []int) {
+    stk := []pair{pair{false, root}}
+    for len(stk) != 0 {
+        p := stk[len(stk) - 1]
+        stk = stk[:len(stk) - 1]
+        if p.Node == nil {
+            continue
+        }
+        if p.state {
+            res = append(res, p.Node.Val)
+        } else {
+            stk = append(stk, pair{false, p.Node.Right})
+            stk = append(stk, pair{true, p.Node})
+            stk = append(stk, pair{false, p.Node.Left})
+        }
+    }
+    return
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(n)"
+            },
+            {
+                name: "解法三",
+                code: `/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+type pair struct {
+    Node *TreeNode
+    State int
+}
+
+func inorderTraversal(root *TreeNode) (res []int) {
+    stk := []pair{}
+    stk = append(stk, pair{root, 0})
+    for len(stk) != 0 {
+        if stk[len(stk) - 1].Node == nil {
+            stk = stk[:len(stk) - 1]
+            continue
+        }
+        t := stk[len(stk) - 1].State
+        if t == 0 {
+            stk[len(stk) - 1].State = 1
+            stk = append(stk, pair{stk[len(stk) - 1].Node.Left, 0})
+        } else if t == 1 {
+            res = append(res, stk[len(stk) - 1].Node.Val)
+            stk[len(stk) - 1].State = 2
+            stk = append(stk, pair{stk[len(stk) - 1].Node.Right, 0})
+        } else {
+            stk = stk[:len(stk) - 1]
+        }
+    }
+    return res
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(n)"
+            },
+            {
+                name: "解法四",
+                code: `/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func inorderTraversal(root *TreeNode) (res []int) {
+    stk := []*TreeNode{}
+
+    for root != nil || len(stk) != 0 {
+        for root != nil {
+            stk = append(stk, root)
+            root = root.Left
+        }
+        
+        root = stk[len(stk) - 1]
+        stk = stk[:len(stk) - 1]
+        res = append(res, root.Val)
+        root = root.Right
+    }
+
+    return
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(n)"
+            },
+            {
+                name: "解法五：Morris",
+                code: `/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func inorderTraversal(root *TreeNode) (res []int) {
+    stk := []*TreeNode{}
+
+    for root != nil || len(stk) != 0 {
+        for root != nil {
+            stk = append(stk, root)
+            root = root.Left
+        }
+        
+        root = stk[len(stk) - 1]
+        stk = stk[:len(stk) - 1]
+        res = append(res, root.Val)
+        root = root.Right
+    }
+
+    return
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 95,
@@ -3259,9 +4230,42 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "medium",
         description: "给你一个整数 n ，请你生成并返回所有由 n 个节点组成且节点值从 1 到 n 互不相同的不同 二叉搜索树 。可以按 任意顺序 返回答案。",
         example: "示例 1：\n输入：n = 3\n输出：[[1,null,2,null,3],[1,null,3,2],[2,1,3],[3,1,null,null,2],[3,2,null,1]]\n示例 2：\n输入：n = 1\n输出：[[1]]",
-        solutions: [],
-        timeComplexity: "O(4^n/√n)",
-        spaceComplexity: "O(4^n/√n)"
+        solutions: [
+            {
+                code: `/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func generateTrees(n int) []*TreeNode {
+    var dfs func(int, int) []*TreeNode
+    dfs = func(l, r int) (res []*TreeNode) {
+        if l > r {
+            return []*TreeNode{nil}
+        }
+
+        for i := l; i <= r; i++ {
+            left, right := dfs(l, i - 1), dfs(i + 1, r)
+            for j := range left {
+                for k := range right {
+                    root := &TreeNode{Val: i, Left: left[j], Right: right[k]}
+                    res = append(res, root)
+                }
+            }
+        }
+
+        return
+    }
+
+    return dfs(1, n)
+}`,
+                timeComplexity: "O(4ⁿ/√n)",
+                spaceComplexity: "O(4ⁿ/√n)"
+            }
+        ]
     },
     {
         id: 96,
@@ -3270,9 +4274,22 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "medium",
         description: "给你一个整数 n ，求恰由 n 个节点组成且节点值从 1 到 n 互不相同的 二叉搜索树 有多少种？返回满足题意的二叉搜索树的种数。",
         example: "示例 1：\n输入：n = 3\n输出：5\n示例 2：\n输入：n = 1\n输出：1",
-        solutions: [],
-        timeComplexity: "O(n²)",
-        spaceComplexity: "O(n)"
+        solutions: [
+            {
+                code: `func numTrees(n int) int {
+    f := make([]int, n + 1)
+    f[0] = 1
+    for i := 1; i <= n; i++ {
+        for j := 1; j <= i; j++ {
+            f[i] += f[j - 1] * f[i - j]
+        }
+    }
+    return f[n]
+}`,
+                timeComplexity: "O(n²)",
+                spaceComplexity: "O(n)"
+            }
+        ]
     },
     {
         id: 97,
@@ -3281,9 +4298,40 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "medium",
         description: "给定三个字符串 s1、s2、s3，请你帮忙验证 s3 是否是由 s1 和 s2 交错 组成的。\n两个字符串 s 和 t 交错 的定义与过程如下，其中每个字符串都会被分割成若干 非空 子字符串：\ns = s1 + s2 + ... + sn\nt = t1 + t2 + ... + tm\n|n - m| <= 1\n交错 是 s1 + t1 + s2 + t2 + ... 或 t1 + s1 + t2 + s2 + ...\n注意：a + b 意味着字符串 a 和 b 连接。",
         example: "示例 1：\n输入：s1 = \"aabcc\", s2 = \"dbbca\", s3 = \"aadbbcbcac\"\n输出：true\n示例 2：\n输入：s1 = \"aabcc\", s2 = \"dbbca\", s3 = \"aadbbbaccc\"\n输出：false\n示例 3：\n输入：s1 = \"\", s2 = \"\", s3 = \"\"\n输出：true",
-        solutions: [],
-        timeComplexity: "O(m*n)",
-        spaceComplexity: "O(m*n)"
+        solutions: [
+            {
+                code: `func isInterleave(s1 string, s2 string, s3 string) bool {
+    n, m := len(s1), len(s2)
+    if len(s3) != n + m {
+        return false
+    }
+
+    f := make([][]bool, n + 1)
+    for i := range f {
+        f[i] = make([]bool, m + 1)
+    }
+    s1, s2, s3 = " " + s1, " " + s2, " " + s3
+    for i := 0; i <= n; i++ {
+        for j := 0; j <= m; j++ {
+            if i == 0 && j == 0 {
+                f[i][j] = true
+            } else {
+                if i != 0 && s1[i] == s3[i + j] {
+                    f[i][j] = f[i - 1][j];
+                }
+                if j != 0 && s2[j] == s3[i + j] {
+                    f[i][j] = f[i][j] || f[i][j - 1]
+                }
+            }
+        }
+    }
+
+    return f[n][m]
+}`,
+                timeComplexity: "O(mn)",
+                spaceComplexity: "O(mn)"
+            }
+        ]
     },
     {
         id: 98,
@@ -3292,9 +4340,43 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "medium",
         description: "给你一个二叉树的根节点 root ，判断其是否是一个有效的二叉搜索树。\n有效 二叉搜索树定义如下：\n节点的左子树只包含 小于 当前节点的数。\n节点的右子树只包含 大于 当前节点的数。\n所有左子树和右子树自身必须也是二叉搜索树。",
         example: "示例 1：\n输入：root = [2,1,3]\n输出：true\n示例 2：\n输入：root = [5,1,4,null,null,3,6]\n输出：false\n解释：根节点的值是 5 ，但是右子节点的值是 4。",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(n)"
+        solutions: [
+            {
+                code: `/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func isValidBST(root *TreeNode) bool {
+    var dfs func(*TreeNode) []int
+    dfs = func(root *TreeNode) []int {
+        res := []int{1, root.Val, root.Val}
+        if root.Left != nil {
+            t := dfs(root.Left)
+            if t[0] == 0 || t[2] >= root.Val {
+                res[0] = 0
+            }
+            res[1] = min(res[1], t[1])
+        }
+        if root.Right != nil {
+            t := dfs(root.Right)
+            if t[0] == 0 || t[1] <= root.Val {
+                res[0] = 0
+            }
+            res[2] = max(res[2], t[2])
+        }
+        return res
+    }
+
+    return dfs(root)[0] == 1
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(n)"
+            }
+        ]
     },
     {
         id: 99,
@@ -3303,9 +4385,55 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "hard",
         description: "给你二叉搜索树的根节点 root ，该树中的 恰好 两个节点的值被错误地交换。请在不改变其结构的情况下，恢复这棵树。",
         example: "示例 1：\n输入：root = [1,3,null,null,2]\n输出：[3,1,null,null,2]\n解释：3 不能是 1 的左子节点，因为 3 > 1 。交换 1 和 3 使二叉搜索树有效。\n示例 2：\n输入：root = [3,1,4,null,null,2]\n输出：[2,1,4,null,null,3]\n解释：2 不能在 3 的右子树中，因为 2 < 3 。交换 2 和 3 使二叉搜索树有效。",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(n)"
+        solutions: [
+            {
+                code: `/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func recoverTree(root *TreeNode)  {
+    var first, second, last *TreeNode
+    for root != nil {
+        if root.Left == nil {
+            if last != nil && last.Val > root.Val {
+                if first == nil {
+                    first, second = last, root
+                } else {
+                    second = root
+                }
+            }
+            last, root = root, root.Right
+        } else {
+            p := root.Left
+            for p.Right != nil && p.Right != root {
+                p = p.Right
+            }
+            if p.Right == nil {
+                p.Right, root = root, root.Left
+            } else {
+                p.Right = nil
+                if last != nil && last.Val > root.Val {
+                    if first == nil {
+                        first, second = last, root
+                    } else {
+                        second = root
+                    }
+                }
+                last, root = root, root.Right
+            }
+        }
+    }
+
+    first.Val, second.Val = second.Val, first.Val
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 100,
@@ -3314,9 +4442,29 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "easy",
         description: "给你两棵二叉树的根节点 p 和 q ，编写一个函数来检验这两棵树是否相同。\n如果两个树在结构上相同，并且节点具有相同的值，则认为它们是相同的。",
         example: "示例 1：\n输入：p = [1,2,3], q = [1,2,3]\n输出：true\n示例 2：\n输入：p = [1,2], q = [1,null,2]\n输出：false\n示例 3：\n输入：p = [1,2,1], q = [1,1,2]\n输出：false",
-        solutions: [],
-        timeComplexity: "O(min(m,n))",
-        spaceComplexity: "O(min(m,n))"
+        solutions: [
+            {
+                code: `/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func isSameTree(p *TreeNode, q *TreeNode) bool {
+    if p == nil && q == nil {
+        return true
+    }
+    if p == nil || q == nil || p.Val != q.Val {
+        return false
+    }
+    return isSameTree(p.Left, q.Left) && isSameTree(p.Right, q.Right)
+}`,
+                timeComplexity: "O(min(m,n))",
+                spaceComplexity: "O(min(m,n))"
+            }
+        ]
     },
     {
         id: 101,
@@ -3325,9 +4473,33 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "easy",
         description: "给你一个二叉树的根节点 root ， 检查它是否轴对称。",
         example: "示例 1：\n输入：root = [1,2,2,3,4,4,3]\n输出：true\n示例 2：\n输入：root = [1,2,2,null,3,null,3]\n输出：false",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(n)"
+        solutions: [
+            {
+                code: `/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func isSymmetric(root *TreeNode) bool {
+    var dfs func(p, q *TreeNode) bool
+    dfs = func(p, q *TreeNode) bool {
+        if p == nil && q == nil {
+            return true
+        }
+        if p == nil || q == nil || p.Val != q.Val {
+            return false
+        }
+        return dfs(p.Left, q.Right) && dfs(p.Right, q.Left)
+    }
+    return dfs(root.Left, root.Right)
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(n)"
+            }
+        ]
     },
     {
         id: 102,
@@ -3336,9 +4508,47 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "medium",
         description: "给你二叉树的根节点 root ，返回其节点值的 层序遍历 。 （即逐层地，从左到右访问所有节点）。",
         example: "示例 1：\n输入：root = [3,9,20,null,null,15,7]\n输出：[[3],[9,20],[15,7]]\n示例 2：\n输入：root = [1]\n输出：[[1]]\n示例 3：\n输入：root = []\n输出：[]",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(n)"
+        solutions: [
+            {
+                code: `/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func levelOrder(root *TreeNode) (res [][]int) {
+    q := []*TreeNode{}
+    if root != nil {
+        q = append(q, root)
+    }
+
+    for len(q) != 0 {
+        level := []int{}
+        l := len(q)
+
+        for i := 0; i < l; i++ {
+            t := q[0]
+            q = q[1:]
+            level = append(level, t.Val)
+            if t.Left != nil {
+                q = append(q, t.Left)
+            }
+            if t.Right != nil {
+                q = append(q, t.Right)
+            }
+        }
+
+        res = append(res, level)
+    }
+
+    return
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(n)"
+            }
+        ]
     },
     {
         id: 103,
@@ -3347,9 +4557,54 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "medium",
         description: "给你二叉树的根节点 root ，返回其节点值的 锯齿形层序遍历 。（即先从左往右，再从右往左进行下一层遍历，以此类推，层与层之间交替进行）。",
         example: "示例 1：\n输入：root = [3,9,20,null,null,15,7]\n输出：[[3],[20,9],[15,7]]\n示例 2：\n输入：root = [1]\n输出：[[1]]\n示例 3：\n输入：root = []\n输出：[]",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(n)"
+        solutions: [
+            {
+                code: `/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func zigzagLevelOrder(root *TreeNode) (res [][]int) {
+    q := []*TreeNode{}
+    if root != nil {
+        q = append(q, root)
+    }
+
+    cnt := 0
+    for len(q) != 0 {
+        level := []int{}
+        l := len(q)
+
+        for i := 0; i < l; i++ {
+            t := q[0]
+            q = q[1:]
+            level = append(level, t.Val)
+            if t.Left != nil {
+                q = append(q, t.Left)
+            }
+            if t.Right != nil {
+                q = append(q, t.Right)
+            }
+        }
+
+        cnt++
+        if cnt % 2 == 0 {
+            for j, k := 0, len(level) - 1; j < k; j, k = j + 1, k - 1 {
+                level[j], level[k] = level[k], level[j]
+            }
+        }
+        res = append(res, level)
+    }
+
+    return
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(n)"
+            }
+        ]
     },
     {
         id: 104,
@@ -3358,9 +4613,26 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "easy",
         description: "给定一个二叉树，找出其最大深度。\n二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。\n说明: 叶子节点是指没有子节点的节点。",
         example: "示例：\n给定二叉树 [3,9,20,null,null,15,7]，\n    3\n   / \\\n  9  20\n    /  \\\n   15   7\n返回它的最大深度 3。",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(n)"
+        solutions: [
+            {
+                code: `/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func maxDepth(root *TreeNode) int {
+    if root == nil {
+        return 0
+    }
+    return max(maxDepth(root.Left), maxDepth(root.Right)) + 1
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(n)"
+            }
+        ]
     },
     {
         id: 105,
@@ -3369,9 +4641,38 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "medium",
         description: "给定两个整数数组 preorder 和 inorder ，其中 preorder 是二叉树的先序遍历，inorder 是同一棵树的中序遍历，请构造二叉树并返回其根节点。",
         example: "示例 1：\n输入: preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]\n输出: [3,9,20,null,null,15,7]\n示例 2：\n输入: preorder = [-1], inorder = [-1]\n输出: [-1]",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(n)"
+        solutions: [
+            {
+                code: `/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func buildTree(preorder []int, inorder []int) *TreeNode {
+    pos := map[int]int{}
+    for i, x := range inorder {
+        pos[x] = i
+    }
+    var build func(int, int, int, int) *TreeNode
+    build = func(pl, pr, il, ir int) *TreeNode {
+        if pl > pr {
+            return nil
+        }
+        root := &TreeNode{Val: preorder[pl]}
+        k := pos[root.Val]
+        root.Left = build(pl + 1, pl + k - il, il, k - 1)
+        root.Right = build(pl + k - il + 1, pr, k + 1, ir)
+        return root
+    }
+    return build(0, len(preorder) - 1, 0, len(inorder) - 1)
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(n)"
+            }
+        ]
     },
     {
         id: 106,
@@ -3380,9 +4681,38 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "medium",
         description: "给定两个整数数组 inorder 和 postorder ，其中 inorder 是二叉树的中序遍历， postorder 是同一棵树的后序遍历，请你构造并返回这颗 二叉树。",
         example: "示例 1：\n输入：inorder = [9,3,15,20,7], postorder = [9,15,7,20,3]\n输出：[3,9,20,null,null,15,7]\n示例 2：\n输入：inorder = [-1], postorder = [-1]\n输出：[-1]",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(n)"
+        solutions: [
+            {
+                code: `/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func buildTree(inorder []int, postorder []int) *TreeNode {
+    pos := map[int]int{}
+    for i, x := range inorder {
+        pos[x] = i
+    }
+    var build func(int, int, int, int) *TreeNode
+    build = func(il, ir, pl, pr int) *TreeNode {
+        if il > ir {
+            return nil
+        }
+        root := &TreeNode{Val: postorder[pr]}
+        k := pos[root.Val]
+        root.Left = build(il, k - 1, pl, pl + k - 1 - il)
+        root.Right = build(k + 1, ir, pl + k - il, pr - 1)
+        return root
+    }
+    return build(0, len(inorder) - 1, 0, len(postorder) - 1)
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(n)"
+            }
+        ]
     },
     {
         id: 107,
@@ -3391,9 +4721,43 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "medium",
         description: "给你二叉树的根节点 root ，返回其节点值 自底向上的层序遍历 。 （即按从叶子节点所在层到根节点所在的层，逐层从左向右遍历）",
         example: "示例 1：\n输入：root = [3,9,20,null,null,15,7]\n输出：[[15,7],[9,20],[3]]\n示例 2：\n输入：root = [1]\n输出：[[1]]\n示例 3：\n输入：root = []\n输出：[]",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(n)"
+        solutions: [
+            {
+                code: `/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func levelOrderBottom(root *TreeNode) (res [][]int) {
+    q := []*TreeNode{}
+    if root != nil {
+        q = append(q, root)
+    }
+    for len(q) != 0 {
+        level := []int{}
+        l := len(q)
+        for i := 0; i < l; i++ {
+            t := q[0]
+            q = q[1:]
+            level = append(level, t.Val)
+            if t.Left != nil {
+                q = append(q, t.Left)
+            }
+            if t.Right != nil {
+                q = append(q, t.Right)
+            }
+        }
+        res = append([][]int{level}, res...)
+    }
+    return
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(n)"
+            }
+        ]
     },
     {
         id: 108,
@@ -3402,9 +4766,34 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "easy",
         description: "给你一个整数数组 nums ，其中元素已经按 升序 排列，请你将其转换为一棵 高度平衡 二叉搜索树。\n高度平衡 二叉树是一棵满足「每个节点的左右两个子树的高度差的绝对值不超过 1 」的二叉树。",
         example: "示例 1：\n输入：nums = [-10,-3,0,5,9]\n输出：[0,-3,9,-10,null,5]\n解释：[0,-10,5,null,-3,null,9] 也将被视为正确答案：\n示例 2：\n输入：nums = [1,3]\n输出：[3,1]\n解释：[1,null,3] 和 [3,1] 都是高度平衡二叉搜索树。",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(log n)"
+        solutions: [
+            {
+                code: `/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func sortedArrayToBST(nums []int) *TreeNode {
+    var build func(int, int) *TreeNode
+    build = func(l, r int) *TreeNode {
+        if l > r {
+            return nil
+        }
+        m := (l + r) >> 1
+        root := &TreeNode{Val: nums[m]}
+        root.Left = build(l, m - 1)
+        root.Right = build(m + 1, r)
+        return root
+    }
+    return build(0, len(nums) - 1)
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(logn)"
+            }
+        ]
     },
     {
         id: 109,
@@ -3413,9 +4802,47 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "medium",
         description: "给定一个单链表的头节点 head ，其中的元素 按升序排序 ，将其转换为高度平衡的二叉搜索树。\n高度平衡 二叉树是一棵满足「每个节点的左右两个子树的高度差的绝对值不超过 1 」的二叉树。",
         example: "示例 1：\n输入: head = [-10,-3,0,5,9]\n输出: [0,-3,9,-10,null,5]\n解释: 一个可能的答案是 [0，-3,9，-10,null,5]，它表示所示的高度平衡的二叉搜索树。\n示例 2：\n输入: head = []\n输出: []",
-        solutions: [],
-        timeComplexity: "O(n log n)",
-        spaceComplexity: "O(log n)"
+        solutions: [
+            {
+                code: `/**
+ * Definition for singly-linked list.
+ * type ListNode struct {
+ *     Val int
+ *     Next *ListNode
+ * }
+ */
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func sortedListToBST(head *ListNode) *TreeNode {
+    if head == nil {
+        return nil
+    }
+    n := 0
+    for p := head; p != nil; p = p.Next {
+        n++
+    }
+    if n == 1 {
+        return &TreeNode{Val: head.Val}
+    }
+    cur := head
+    for i := 0; i < n / 2 - 1; i++ {
+        cur = cur.Next
+    }
+    root := &TreeNode{Val: cur.Next.Val}
+    root.Right = sortedListToBST(cur.Next.Next)
+    cur.Next = nil
+    root.Left = sortedListToBST(head)
+}`,
+                timeComplexity: "O(nlogn)",
+                spaceComplexity: "O(logn)"
+            }
+        ]
     },
     {
         id: 110,
@@ -3424,9 +4851,43 @@ func rotateRight(head *ListNode, k int) *ListNode {
         difficulty: "easy",
         description: "给定一个二叉树，判断它是否是高度平衡的二叉树。\n本题中，一棵高度平衡二叉树定义为：\n一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1。",
         example: "示例 1：\n输入：root = [3,9,20,null,null,15,7]\n输出：true\n示例 2：\n输入：root = [1,2,2,3,3,null,null,4,4]\n输出：false\n示例 3：\n输入：root = []\n输出：true",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(n)"
+        solutions: [
+            {
+                code: `/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func isBalanced(root *TreeNode) bool {
+    res := true
+    var dfs func(*TreeNode) int
+    dfs = func(root *TreeNode) int {
+        if root == nil {
+            return 0
+        }
+        lh, rh := dfs(root.Left), dfs(root.Right)
+        if abs(lh - rh) > 1 {
+            res = false
+        }
+        return max(lh, rh) + 1
+    }
+    dfs(root)
+    return res
+}
+
+func abs(x int) int {
+    if x < 0 {
+        return -x
+    }
+    return x
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(n)"
+            }
+        ]
     }
 ]
 
