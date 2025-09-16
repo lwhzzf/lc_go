@@ -1,44 +1,3 @@
-// =====================
-// 移动端：侧栏开合逻辑
-// =====================
-document.addEventListener('DOMContentLoaded', function () {
-    var menuBtn = document.getElementById('menuBtn');
-    var sidebar = document.getElementById('sidebar');
-    var overlay = document.getElementById('overlay');
-    if (!menuBtn || !sidebar || !overlay) {
-        return;
-    }
-
-    function openSidebar() {
-        sidebar.classList.add('open');
-        overlay.classList.add('show');
-        document.body.classList.add('no-scroll');
-    }
-
-    function closeSidebar() {
-        sidebar.classList.remove('open');
-        overlay.classList.remove('show');
-        document.body.classList.remove('no-scroll');
-    }
-
-    menuBtn.addEventListener('click', function (e) {
-        e.preventDefault();
-        if (sidebar.classList.contains('open')) {
-            closeSidebar();
-        } else {
-            openSidebar();
-        }
-    });
-
-    overlay.addEventListener('click', closeSidebar);
-
-    // 视口扩大到桌面端时，确保关闭抽屉
-    window.addEventListener('resize', function () {
-        if (window.innerWidth > 768) {
-            closeSidebar();
-        }
-    });
-});
 // 力扣题目数据
 const problems = [
     {
@@ -599,7 +558,7 @@ func find(nums1, nums2 []int, i, j, k int) int {
                 spaceComplexity: "O(1)"
             },
                         {
-                name: "解法一",
+                name: "解法二",
                 code: `func longestCommonPrefix(strs []string) (res string) {
     sort.Strings(strs)
     for i := 0; i < min(len(strs[0]), len(strs[len(strs) - 1])); i++ {
@@ -697,7 +656,7 @@ func abs(x int) int {
                 spaceComplexity: "O(1)"
             },
             {
-                name: "解法一",
+                name: "解法二",
                 code: `func threeSumClosest(nums []int, target int) int {
     a, b := math.MaxInt, math.MaxInt
     sort.Ints(nums)
@@ -2136,7 +2095,7 @@ func abs(x int) int {
 
     return
 }`,
-                timeComplexity: "O(nklog(k))",
+                timeComplexity: "O(nklogk)",
                 spaceComplexity: "O(nk)"
             }
         ]
@@ -3400,7 +3359,6 @@ func rotateRight(head *ListNode, k int) *ListNode {
             {
                 name: "解法二",
                 code: `func subsets(nums []int) (res [][]int) {
-    res := [][]int{}
     path := []int{}
     var dfs func(int)
     dfs = func(u int) {
@@ -3469,7 +3427,7 @@ func rotateRight(head *ListNode, k int) *ListNode {
     }
     return false
 }`,
-                timeComplexity: "O(m*n*4^k)",
+                timeComplexity: "O(mn4ᵏ)",
                 spaceComplexity: "O(k)"
             }
         ]
