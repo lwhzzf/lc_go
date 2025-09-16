@@ -1681,9 +1681,28 @@ func abs(x int) int {
         difficulty: "medium",
         description: "给定一个正整数 n ，输出外观数列的第 n 项。\n「外观数列」是一个整数序列，从数字 1 开始，序列中的每一项都是对前一项的描述。\n你可以将其视作是由递归公式定义的数字字符串序列：\ncountAndSay(1) = \"1\"\ncountAndSay(n) 是对 countAndSay(n-1) 的描述，然后转换成另一个数字字符串。\n前五项如下：\n1.     1\n2.     11\n3.     21\n4.     1211\n5.     111221\n第一项是数字 1\n描述前一项，这个数是 1 即 \" 一 个 1 \"，记作 \"11\"\n描述前一项，这个数是 11 即 \" 二 个 1 \" ，记作 \"21\"\n描述前一项，这个数是 21 即 \" 一 个 2 + 一 个 1 \" ，记作 \"1211\"\n描述前一项，这个数是 1211 即 \" 一 个 1 + 一 个 2 + 二 个 1 \" ，记作 \"111221\"",
         example: "示例 1：\n输入：n = 1\n输出：\"1\"\n解释：这是一个基本样例。\n示例 2：\n输入：n = 4\n输出：\"1211\"\n解释：\ncountAndSay(1) = \"1\"\ncountAndSay(2) = 读 \"1\" = 一 个 1 = \"11\"\ncountAndSay(3) = 读 \"11\" = 二 个 1 = \"21\"\ncountAndSay(4) = 读 \"21\" = 一 个 2 + 一 个 1 = \"12\" + \"11\" = \"1211\"",
-        solutions: [],
-        timeComplexity: "O(2^n)",
-        spaceComplexity: "O(2^n)"
+        solutions: [
+            {
+                code: `func countAndSay(n int) string {
+    s := "1"
+    for i := 0; i < n - 1; i++ {
+        t := ""
+        for j := 0; j < len(s); j++ {
+            k := j
+            for k < len(s) && s[k] == s[j] {
+                k++
+            }
+            t += strconv.Itoa(k - j) + string(s[j])
+            j = k - 1
+        }
+        s = t
+    }
+    return s
+}`,
+                timeComplexity: "O(2^n)",
+                spaceComplexity: "O(2^n)"
+            }
+        ]
     },
     {
         id: 39,
@@ -1692,9 +1711,39 @@ func abs(x int) int {
         difficulty: "medium",
         description: "给你一个 无重复元素 的整数数组 candidates 和一个目标整数 target ，找出 candidates 中可以使数字和为目标数 target 的 所有 不同组合 ，并以列表形式返回。你可以按 任意顺序 返回这些组合。\ncandidates 中的 同一个 数字可以 无限制重复被选取 。如果至少一个数字的被选数量不同，则两种组合是不同的。\n对于给定的输入，保证和为 target 的不同组合数少于 150 个。",
         example: "示例 1：\n输入：candidates = [2,3,6,7], target = 7\n输出：[[2,2,3],[7]]\n解释：\n2 和 3 可以形成一组候选，2 + 2 + 3 = 7 。注意 2 可以使用多次。\n7 也是一个候选， 7 = 7 。\n仅有这两种组合。\n示例 2：\n输入: candidates = [2,3,5], target = 8\n输出: [[2,2,2,2],[2,3,3],[3,5]]\n示例 3：\n输入: candidates = [2], target = 1\n输出: []",
-        solutions: [],
-        timeComplexity: "O(2^target)",
-        spaceComplexity: "O(target)"
+        solutions: [
+            {
+                code: `func combinationSum(c []int, target int) (res [][]int) {
+    path := []int{}
+
+    var dfs func(int, int)
+    dfs = func(u, target int) {
+    if target == 0 {
+            t := make([]int, len(path))
+            copy(t, path)
+            res = append(res, t)
+            return
+        }
+        if u == len(c) {
+            return
+        }
+
+        for i := 0; c[u] * i <= target; i++ {
+            dfs(u + 1, target - c[u] * i)
+            path = append(path, c[u])
+        }
+
+        path = path[:len(path) - target / c[u] - 1]
+    }
+
+    dfs(0, target)
+    
+    return res
+}`,
+                timeComplexity: "O(2^target)",
+                spaceComplexity: "O(target)"
+            }
+        ]
     },
     {
         id: 40,
@@ -1703,9 +1752,48 @@ func abs(x int) int {
         difficulty: "medium",
         description: "给定一个候选人编号的集合 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。\ncandidates 中的每个数字在每个组合中只能使用 一次 。\n注意：解集不能包含重复的组合。",
         example: "示例 1：\n输入: candidates = [10,1,2,7,6,1,5], target = 8,\n输出:\n[\n[1,1,6],\n[1,2,5],\n[1,7],\n[2,6]\n]\n示例 2：\n输入: candidates = [2,5,2,1,2], target = 5,\n输出:\n[\n[1,2,2],\n[5]\n]",
-        solutions: [],
-        timeComplexity: "O(2^n)",
-        spaceComplexity: "O(target)"
+        solutions: [
+            {
+                code: `func combinationSum2(c []int, target int) (res [][]int) {
+    path := []int{}
+    sort.Ints(c)
+    
+    var dfs func(int, int)
+    dfs = func(u, target int) {
+        if target == 0 {
+            t := make([]int, len(path))
+            copy(t, path)
+            res = append(res, t)
+            return
+        }
+        if u == len(c) {
+            return
+        }
+
+        k := u + 1
+        for k < len(c) && c[k] == c[u] {
+            k++
+        }
+        cnt := k - u
+
+        for i := 0; c[u] * i <= target && i <= cnt; i++ {
+            dfs(k, target - c[u] * i)
+            path = append(path, c[u])
+        }
+
+        for i := 0; c[u] * i <= target && i <= cnt; i++ {
+            path = path[:len(path) - 1]
+        }
+    }
+
+    dfs(0, target)
+
+    return
+}`,
+                timeComplexity: "O(2^n)",
+                spaceComplexity: "O(target)"
+            }
+        ]
     },
     {
         id: 41,
@@ -1714,9 +1802,31 @@ func abs(x int) int {
         difficulty: "hard",
         description: "给你一个未排序的整数数组 nums ，请你找出其中没有出现的最小的正整数。\n请你实现时间复杂度为 O(n) 并且只使用常数级别额外空间的解决方案。",
         example: "示例 1：\n输入：nums = [1,2,0]\n输出：3\n示例 2：\n输入：nums = [3,4,-1,1]\n输出：2\n示例 3：\n输入：nums = [7,8,9,11,12]\n输出：1",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func firstMissingPositive(nums []int) int {
+    n := len(nums)
+    for i := range nums {
+        nums[i]--
+    }
+    for i := range nums {
+        for nums[i] >= 0 && nums[i] < n && nums[i] != i && nums[i] != nums[nums[i]] {
+            nums[i], nums[nums[i]] = nums[nums[i]], nums[i]
+        }
+    }
+
+    for i := 0; i < n; i++ {
+        if nums[i] != i {
+            return i + 1
+        }
+    }
+
+    return n + 1
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 42,
@@ -1725,9 +1835,30 @@ func abs(x int) int {
         difficulty: "hard",
         description: "给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。",
         example: "示例 1：\n输入：height = [0,1,0,2,1,0,1,3,2,1,2,1]\n输出：6\n解释：上面是由数组 [0,1,0,2,1,0,1,3,2,1,2,1] 表示的高度图，在这种情况下，可以接 6 个单位的雨水（蓝色部分表示雨水）。\n示例 2：\n输入：height = [4,2,0,3,2,5]\n输出：9",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func trap(height []int) (res int) {
+    stk := []int{}
+    for i := range height {
+        last := 0
+        for len(stk) != 0 && height[stk[len(stk) - 1]] <= height[i] {
+            res += (height[stk[len(stk) - 1]] - last) * (i - stk[len(stk) - 1] - 1)
+            last = height[stk[len(stk) - 1]]
+            stk = stk[:len(stk) - 1]
+        }
+
+        if len(stk) != 0 {
+            res += (i - stk[len(stk) - 1] - 1) * (height[i] - last)
+        }
+        stk = append(stk, i)
+    }
+
+    return res
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 43,
@@ -1736,9 +1867,46 @@ func abs(x int) int {
         difficulty: "medium",
         description: "给定两个以字符串形式表示的非负整数 num1 和 num2，返回 num1 和 num2 的乘积，它们的乘积也表示为字符串形式。\n注意：不能使用任何内置的 BigInteger 库或直接将输入转换为整数。",
         example: "示例 1：\n输入: num1 = \"2\", num2 = \"3\"\n输出: \"6\"\n示例 2：\n输入: num1 = \"123\", num2 = \"456\"\n输出: \"56088\"",
-        solutions: [],
-        timeComplexity: "O(m*n)",
-        spaceComplexity: "O(m+n)"
+        solutions: [
+            {
+                code: `func multiply(num1 string, num2 string) (res string) {
+    A, B := []int{}, []int{}
+    n, m := len(num1), len(num2)
+    for i := n - 1; i >= 0; i-- {
+        A = append(A, int(num1[i] - '0'))
+    }
+    for i := m - 1; i >= 0; i-- {
+        B = append(B, int(num2[i] - '0'))
+    }
+
+    C := make([]int, n + m)
+    for i := range num1 {
+        for j := range num2 {
+            C[i + j] += A[i] * B[j]
+        }
+    }
+
+    for i, t := 0, 0; i < len(C); i++ {
+        t += C[i]
+        C[i] = t % 10
+        t /= 10
+    }
+
+    for i := len(C) - 1; i >= 0; i-- {
+        if C[i] != 0 {
+            for j := i; j >= 0; j-- {
+                res += strconv.Itoa(C[j])
+            }
+            return
+        }
+    }
+
+    return "0"
+}`,
+                timeComplexity: "O(m*n)",
+                spaceComplexity: "O(m+n)"
+            }
+        ]
     },
     {
         id: 44,
@@ -1747,9 +1915,33 @@ func abs(x int) int {
         difficulty: "hard",
         description: "给你一个字符串 s 和一个字符模式 p ，请你来实现一个支持 '?' 和 '*' 的通配符匹配。\n'?' 可以匹配任何单个字符。\n'*' 可以匹配任意字符串（包括空字符串）。\n两个字符串完全匹配才算匹配成功。",
         example: "示例 1：\n输入：s = \"aa\", p = \"a\"\n输出：false\n解释：\"a\" 无法匹配 \"aa\" 整个字符串。\n示例 2：\n输入：s = \"aa\", p = \"*\"\n输出：true\n解释：'*' 可以匹配任意字符串。\n示例 3：\n输入：s = \"cb\", p = \"?a\"\n输出：false\n解释：'?' 可以匹配 'c', 但第二个 'a' 无法匹配 'b'。",
-        solutions: [],
-        timeComplexity: "O(m*n)",
-        spaceComplexity: "O(m*n)"
+        solutions: [
+            {
+                code: `func isMatch(s string, p string) bool {
+    n, m := len(s), len(p)
+    s, p = " " + s, " " + p
+    f := make([][]bool, n + 1)
+    for i := range f {
+        f[i] = make([]bool, m + 1)
+    }
+    f[0][0] = true
+
+    for i := 0; i <= n; i++ {
+        for j := 1; j <= m; j++ {
+            if p[j] == '*' {
+                f[i][j] = f[i][j - 1] || i != 0 && f[i - 1][j]
+            } else {
+                f[i][j] = (s[i] == p[j] || p[j] == '?') && i != 0 && f[i - 1][j - 1]
+            }
+        }
+    }
+
+    return f[n][m]
+}`,
+                timeComplexity: "O(m*n)",
+                spaceComplexity: "O(m*n)"
+            }
+        ]
     },
     {
         id: 45,
@@ -1758,9 +1950,25 @@ func abs(x int) int {
         difficulty: "medium",
         description: "给你一个非负整数数组 nums ，你最初位于数组的第一个位置。\n数组中的每个元素代表你在该位置可以跳跃的最大长度。\n你的目标是使用最少的跳跃次数到达数组的最后一个位置。\n假设你总是可以到达数组的最后一个位置。",
         example: "示例 1：\n输入: nums = [2,3,1,1,4]\n输出: 2\n解释: 跳到最后一个位置的最小跳跃数是 2。\n     从下标为 0 跳到下标为 1 的位置，跳 1 步，然后跳 3 步到达数组的最后一个位置。\n示例 2：\n输入: nums = [2,3,0,1,4]\n输出: 2",
-        solutions: [],
-        timeComplexity: "O(n)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func jump(nums []int) int {
+    n := len(nums)
+    f := make([]int, n)
+
+    for i, j := 1, 0; i < n; i++ {
+        for j + nums[j] < i {
+            j++
+        }
+        f[i] = f[j] + 1
+    }
+
+    return f[n - 1]
+}`,
+                timeComplexity: "O(n)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 46,
@@ -1769,9 +1977,39 @@ func abs(x int) int {
         difficulty: "medium",
         description: "给定一个不含重复数字的数组 nums ，返回其 所有可能的全排列 。你可以 按任意顺序 返回答案。",
         example: "示例 1：\n输入：nums = [1,2,3]\n输出：[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]\n示例 2：\n输入：nums = [0,1]\n输出：[[0,1],[1,0]]\n示例 3：\n输入：nums = [1]\n输出：[[1]]",
-        solutions: [],
-        timeComplexity: "O(n!*n)",
-        spaceComplexity: "O(n)"
+        solutions: [
+            {
+                code: `func permute(nums []int) (res [][]int) {
+    path := make([]int, len(nums))
+    st := make([]bool, len(nums))
+
+    var dfs func(int)
+    dfs = func(u int) {
+        if u == len(nums) {
+            t := make([]int, len(path))
+            copy(t, path)
+            res = append(res, t)
+            return
+        }
+
+        for i := range nums {
+            if st[i] == false {
+                path[u] = nums[i]
+                st[i] = true
+                dfs(nums, u + 1)
+                st[i] = false
+            }
+        }
+    }
+
+    dfs(nums, 0)
+
+    return
+}`,
+                timeComplexity: "O(n!*n)",
+                spaceComplexity: "O(n)"
+            }
+        ]
     },
     {
         id: 47,
@@ -1780,9 +2018,43 @@ func abs(x int) int {
         difficulty: "medium",
         description: "给定一个可包含重复数字的序列 nums ，按任意顺序 返回所有不重复的全排列。",
         example: "示例 1：\n输入：nums = [1,1,2]\n输出：\n[[1,1,2],\n [1,2,1],\n [2,1,1]]\n示例 2：\n输入：nums = [1,2,3]\n输出：[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]",
-        solutions: [],
-        timeComplexity: "O(n!*n)",
-        spaceComplexity: "O(n)"
+        solutions: [
+            {
+                code: `func permuteUnique(nums []int) (res [][]int) {
+    sort.Ints(nums)
+    path := make([]int, len(nums))
+    st := make([]bool, len(nums))
+
+    var dfs func(int)
+    dfs = func(u int) {
+        if u == len(nums) {
+            t := make([]int, len(path))
+            copy(t, path)
+            res = append(res, t)
+            return
+        }
+
+        for i := range nums {
+            if st[i] == false {
+                if i != 0 && nums[i - 1] == nums[i] && st[i - 1] == false {
+                    continue
+                }
+                st[i] = true
+                path[u] = nums[i]
+                dfs(nums, u + 1)
+                st[i] = false
+            }
+        }
+    }
+
+    dfs(nums, 0)
+
+    return
+}`,
+                timeComplexity: "O(n!*n)",
+                spaceComplexity: "O(n)"
+            }
+        ]
     },
     {
         id: 48,
@@ -1791,9 +2063,25 @@ func abs(x int) int {
         difficulty: "medium",
         description: "给定一个 n × n 的二维矩阵 matrix 表示一个图像。请你将图像顺时针旋转 90 度。\n你必须在 原地 旋转图像，这意味着你需要直接修改输入的二维矩阵。请不要 使用另一个矩阵来旋转图像。",
         example: "示例 1：\n输入：matrix = [[1,2,3],[4,5,6],[7,8,9]]\n输出：[[7,4,1],[8,5,2],[9,6,3]]\n示例 2：\n输入：matrix = [[5,1,9,11],[2,4,8,10],[13,3,6,7],[15,14,12,16]]\n输出：[[15,13,2,5],[14,3,4,1],[12,6,8,9],[16,7,10,11]]",
-        solutions: [],
-        timeComplexity: "O(n²)",
-        spaceComplexity: "O(1)"
+        solutions: [
+            {
+                code: `func rotate(m [][]int)  {
+    for i := range m {
+        for j := 0; j < i; j++ {
+            m[i][j], m[j][i] = m[j][i], m[i][j]
+        }
+    }
+
+    for i := range m {
+        for j, k := 0, len(m) - 1; j < k; j, k = j + 1, k - 1 {
+            m[i][j], m[i][k] = m[i][k], m[i][j]
+        }
+    }
+}`,
+                timeComplexity: "O(n²)",
+                spaceComplexity: "O(1)"
+            }
+        ]
     },
     {
         id: 49,
@@ -1802,9 +2090,30 @@ func abs(x int) int {
         difficulty: "medium",
         description: "给你一个字符串数组，请你将 字母异位词 组合在一起。可以按任意顺序返回结果列表。\n字母异位词 是由重新排列源单词的字母得到的一个新单词，所有源单词中的字母通常恰好只用一次。",
         example: "示例 1：\n输入: strs = [\"eat\", \"tea\", \"tan\", \"ate\", \"nat\", \"bat\"]\n输出: [[\"bat\"],[\"nat\",\"tan\"],[\"ate\",\"eat\",\"tea\"]]\n示例 2：\n输入: strs = [\"\"]\n输出: [[\"\"]]\n示例 3：\n输入: strs = [\"a\"]\n输出: [[\"a\"]]",
-        solutions: [],
-        timeComplexity: "O(n*k*log(k))",
-        spaceComplexity: "O(n*k)"
+        solutions: [
+            {
+                code: `func groupAnagrams(strs []string) (res [][]string) {
+    m := map[string][]string{}
+    for _, str := range strs {
+        s := str
+        bytes := []byte(s)
+        sort.Slice(bytes, func(i, j int) bool {
+            return bytes[i] < bytes[j]
+        })
+        s = string(bytes)
+        m[s] = append(m[s], str)
+    }
+
+    for _, v := range m {
+        res = append(res, v)
+    }
+
+    return
+}`,
+                timeComplexity: "O(n*k*log(k))",
+                spaceComplexity: "O(n*k)"
+            }
+        ]
     },
     {
         id: 50,
@@ -1813,9 +2122,33 @@ func abs(x int) int {
         difficulty: "medium",
         description: "实现 pow(x, n) ，即计算 x 的整数 n 次幂函数（即，xⁿ）。",
         example: "示例 1：\n输入：x = 2.00000, n = 10\n输出：1024.00000\n示例 2：\n输入：x = 2.10000, n = 3\n输出：9.26100\n示例 3：\n输入：x = 2.00000, n = -2\n输出：0.25000\n解释：2⁻² = 1/2² = 1/4 = 0.25",
-        solutions: [],
-        timeComplexity: "O(log n)",
-        spaceComplexity: "O(log n)"
+        solutions: [
+            {
+                code: `func myPow(x float64, n int) float64 {
+    is_minus := n < 0
+    res := 1.0
+    for k := abs(n); k > 0; k >>= 1 {
+        if k & 1 == 1 {
+            res *= x
+        }
+        x *= x
+    }
+    if is_minus {
+        res = 1 / res
+    }
+    return res
+}
+
+func abs(x int) int {
+    if x < 0 {
+        return -x
+    }
+    return x
+}`,
+                timeComplexity: "O(log n)",
+                spaceComplexity: "O(log n)"
+            }
+        ]
     },
     {
         id: 51,
@@ -2755,4 +3088,3 @@ document.addEventListener('keydown', function(e) {
         }
     }
 });
-
