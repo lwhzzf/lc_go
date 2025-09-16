@@ -4202,18 +4202,23 @@ func inorderTraversal(root *TreeNode) (res []int) {
  * }
  */
 func inorderTraversal(root *TreeNode) (res []int) {
-    stk := []*TreeNode{}
-
-    for root != nil || len(stk) != 0 {
-        for root != nil {
-            stk = append(stk, root)
-            root = root.Left
+    for root != nil {
+        if root.Left == nil {
+            res = append(res, root.Val)
+            root = root.Right
+        } else {
+            p := root.Left
+            for p.Right != nil && p.Right != root {
+                p = p.Right
+            }
+            if p.Right == nil {
+                p.Right, root = root, root.Left
+            } else {
+                p.Right = nil
+                res = append(res, root.Val)
+                root = root.Right
+            }
         }
-        
-        root = stk[len(stk) - 1]
-        stk = stk[:len(stk) - 1]
-        res = append(res, root.Val)
-        root = root.Right
     }
 
     return
