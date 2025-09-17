@@ -5164,7 +5164,7 @@ function showWelcomeMessage() {
     
     problemContent.innerHTML = `
         <div class="welcome-message">
-            <p>👋 欢迎来到小衡的Go力扣题解网站！</p>
+            <p>👋欢迎来到小衡的Go力扣题解网站！</p>
             <p>从左侧选择一道题目开始查看题解。</p>
         </div>
     `;
