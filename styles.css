@@ -47,6 +47,7 @@ body.no-scroll {
 }
 
 .topbar-left { justify-content: flex-start; padding-left: 20px; }
+.topbar-center { justify-content: center; width: 100%; }
 
 .logo-text,
 .home-link {
@@ -66,6 +67,7 @@ body.no-scroll {
     font-size: 22px;
     cursor: pointer;
     color: #2c3e50;
+    display: none;
 }
 
 /* 覆盖层（仅移动端侧栏时使用） */
@@ -93,6 +95,7 @@ body.no-scroll {
     top: 56px;
     z-index: 1000;
     transition: transform 0.3s ease;
+    left: 0; /* 默认显示侧边栏 */
 }
 
 .sidebar-header {
@@ -313,6 +316,8 @@ body.no-scroll {
     overflow: hidden;
     margin-bottom: 20px;
     border: none;
+    max-width: 100%;
+    overflow-x: auto;
 }
 
 
@@ -356,7 +361,6 @@ body.no-scroll {
     background-color: #f8f9fa;
     color: #2c3e50;
     padding: 0;
-    overflow-x: auto;
     border-radius: 0 0 8px 8px;
     margin: 0;
     max-width: 100%;
@@ -364,15 +368,27 @@ body.no-scroll {
     box-sizing: border-box;
 }
 
-.code-content pre {
-    margin: 0;
-    padding: 20px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 14px;
-    line-height: 1.5;
-    background-color: #fff;
-    white-space: pre-wrap;
-    word-break: anywhere;
+/* 覆盖Prism.js的默认样式 */
+.code-content pre,
+pre[class*="language-"],
+code[class*="language-"] {
+    margin: 0 !important;
+    padding: 20px !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    background-color: #fff !important;
+    white-space: pre-wrap !important;
+    word-break: break-all !important;
+    overflow-wrap: break-word !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.token {
+    white-space: pre-wrap !important;
+    word-break: break-all !important;
 }
 
 /* 复杂度信息 */
@@ -405,24 +421,64 @@ body.no-scroll {
 }
 
 /* 响应式设计 */
-/* 桌面端顶部栏布局：左LOGO 中首页 右空，隐藏菜单按钮 */
+/* 桌面端顶部栏布局：左LOGO 中首页 右空，隐藏菜单按钮，始终显示侧边栏 */
 @media (min-width: 769px) {
     .menu-btn { display: none; }
+    .sidebar {
+        width: 300px;
+        left: 0;
+        transform: translateX(0) !important;
+    }
+    .main-content {
+        margin-left: 300px;
+    }
 }
 
-/* 移动端：顶部中间居中显示“首页”，隐藏左侧LOGO；侧栏改为抽屉且不挤压内容 */
-@media (max-width: 1024px) {
-    .sidebar {
-        width: 280px;
-        position: fixed;
-        left: -280px;
-        top: 56px;
-    }
+/* 移动端：顶部中间居中显示"首页"，隐藏左侧LOGO；侧栏改为抽屉且不挤压内容 */
+@media (max-width: 768px) {
+    /* 固定字号，布局无限制变窄依靠容器自适应与断行 */
+    html { font-size: 16px; }
 
-    .main-content {
-        margin-left: 0;
-        width: 100%;
+    /* 保持合理的紧凑内边距但不限制内容收缩 */
+    .problem-header { padding: 16px; }
+    .problem-content { padding: 16px; }
+    .problem-description, .example { padding: 12px; }
+    .solution-tab { padding: 12px; }
+    .copy-btn { height: 32px; }
+    .logo-text { display: none; }
+    .topbar { 
+        grid-template-columns: 56px 1fr 56px; 
     }
+    .topbar-left { 
+        display: flex; 
+        justify-content: center; 
+    }
+    .topbar-right { display: none; }
+    .topbar-center { 
+        justify-content: center; 
+        width: 100%; 
+        text-align: center;
+        position: absolute;
+        left: 0;
+        right: 0;
+    }
+    .menu-btn { display: block; }
+    .main-content { 
+        margin-left: 0; 
+        width: 100%; 
+        max-width: 100%; 
+        overflow-x: hidden; 
+    }
+    .container { width: 100%; max-width: 100%; overflow-x: hidden; }
+    .sidebar {
+        left: -280px; /* 移动端默认隐藏侧边栏 */
+        width: 280px;
+        transform: translateX(0);
+    }
+    .sidebar.open { 
+        left: 0; 
+    }
+    .overlay.show { display: block; }
 }
 
 @media (max-width: 768px) {
@@ -436,8 +492,14 @@ body.no-scroll {
     .solution-tab { padding: 12px; }
     .copy-btn { height: 32px; }
     .logo-text { display: none; }
-    .topbar { grid-template-columns: auto 1fr auto; }
-    .topbar-left, .topbar-right { display: none; }
+    .topbar { grid-template-columns: 56px 1fr 56px; }
+    .topbar-left { display: flex; justify-content: center; }
+    .topbar-right { display: none; }
+    .topbar-center { 
+        justify-content: center; 
+        width: 100%; 
+        text-align: center;
+    }
     .menu-btn { display: block; }
     .main-content { margin-left: 0; width: 100%; max-width: 100%; overflow-x: hidden; }
     .container { width: 100%; max-width: 100%; overflow-x: hidden; }
@@ -448,6 +510,7 @@ body.no-scroll {
         border-right: 1px solid #e1e5e9;
         max-height: calc(100vh - 56px);
         overflow-y: auto;
+        transform: translateX(0);
     }
     .sidebar.open { left: 0; }
     .overlay.show { display: block; }
@@ -891,5 +954,25 @@ code[class*="language-"] {
     .solution-tab {
         min-width: auto;
         width: 100%;
+    }
+    
+    .sidebar {
+        transform: translateX(-100%);
+    }
+    
+    .sidebar.open {
+        transform: translateX(0);
+    }
+    
+    .main-content {
+        margin-left: 0;
+    }
+    
+    .menu-btn {
+        display: block;
+    }
+    
+    .overlay.show {
+        display: block;
     }
 }
