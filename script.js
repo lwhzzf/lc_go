@@ -52,12 +52,12 @@ const problems = [
             {
                 code: `func twoSum(nums []int, target int) []int {
 	m := make(map[int]int)
-	for i := 0; i < len(nums); i++ {
-		x := target - nums[i]
-		if _, ok := m[x]; ok {
-			return []int{m[x], i}
+	for i, x := range nums {
+		y := target - x
+		if _, ok := m[y]; ok {
+			return []int{m[y], i}
 		}
-		m[nums[i]] = i
+		m[x] = i
 	}
 	return nil
 }`,
