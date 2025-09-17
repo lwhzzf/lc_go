@@ -68,6 +68,9 @@ body.no-scroll {
     cursor: pointer;
     color: #2c3e50;
     display: none;
+    padding: 0;
+    z-index: 100;
+    position: relative;
 }
 
 /* 覆盖层（仅移动端侧栏时使用） */
@@ -906,7 +909,8 @@ code[class*="language-"] {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    min-width: 0; /* 取消固定最小宽 */
+    min-width: 250px; /* 设置最小宽度，使图标变长 */
+    width: auto; /* 允许根据内容自动调整宽度 */
     text-align: left;
 }
 
@@ -954,6 +958,12 @@ code[class*="language-"] {
     .solution-tab {
         min-width: auto;
         width: 100%;
+        padding: 15px 20px; /* 增加内边距使按钮更大 */
+        margin-bottom: 8px; /* 增加按钮间距 */
+    }
+    
+    .solution-name {
+        font-size: 16px; /* 增大字体 */
     }
     
     .sidebar {
