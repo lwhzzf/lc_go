@@ -197,7 +197,7 @@ func find(nums1, nums2 []int, i, j, k int) int {
         solutions: [
             {
                 name: "解法一",
-                code: `func longestPalindrome(s string) (a string) {
+                code: `func longestPalindrome(s string) (res string) {
     n := len(s)
     for i := 0; i < n; i++ {
         l, r := i - 1, i + 1
@@ -205,16 +205,16 @@ func find(nums1, nums2 []int, i, j, k int) int {
             l--
             r++
         }
-        if len(a) < r - l - 1 {
-            a = s[l + 1 : r]
+        if len(res) < r - l - 1 {
+            res = s[l + 1 : r]
         }
         l, r = i, i + 1
         for l >= 0 && r < n && s[l] == s[r] {
             l--
             r++
         }
-        if len(a) < r - l - 1 {
-            a = s[l + 1 : r]
+        if len(res) < r - l - 1 {
+            res = s[l + 1 : r]
         }
     }
     return
@@ -309,8 +309,7 @@ func find(nums1, nums2 []int, i, j, k int) int {
         example: "示例 1：\n输入：x = 123\n输出：321\n示例 2：\n输入：x = -123\n输出：-321\n示例 3：\n输入：x = 120\n输出：21",
         solutions: [
             {
-                code: `func reverse(x int) int {
-    r := 0
+                code: `func reverse(x int) (r int) {
     for x != 0 {
         if r > 0 && r > ((1 << 31 - 1) - x % 10) / 10 {
             return 0
@@ -321,7 +320,7 @@ func find(nums1, nums2 []int, i, j, k int) int {
         r = r * 10 + x % 10
         x /= 10
     }
-    return r
+    return
 }`,
         timeComplexity: "O(log|x|)",
         spaceComplexity: "O(1)"
@@ -5211,3 +5210,4 @@ document.addEventListener('keydown', function(e) {
         }
     }
 });
+
