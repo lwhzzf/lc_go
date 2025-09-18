@@ -958,13 +958,9 @@ func mergeTwoLists(list1 *ListNode, list2 *ListNode) *ListNode {
     tail := dummy
     for list1 != nil && list2 != nil {
         if list1.Val < list2.Val {
-            tail.Next = list1
-            tail = list1
-            list1 = list1.Next
+            tail, tail.Next, list1 = list1, list1, list1.Next
         } else {
-            tail.Next = list2
-            tail = list2
-            list2 = list2.Next
+            tail, tail.Next, list2 = list2, list2, list2.Next
         }
     }
     if list1 != nil {
@@ -1030,16 +1026,16 @@ func mergeTwoLists(list1 *ListNode, list2 *ListNode) *ListNode {
  */
 type Heap []*ListNode
 
-func (h *Heap) Len() int {
-	return len(*h)
+func (h Heap) Len() int {
+	return len(h)
 }
 
-func (h *Heap) Less(i, j int) bool {
-	return (*h)[i].Val < (*h)[j].Val
+func (h Heap) Less(i, j int) bool {
+	return h[i].Val < h[j].Val
 }
 
-func (h *Heap) Swap(i, j int) {
-	(*h)[i], (*h)[j] = (*h)[j], (*h)[i]
+func (h Heap) Swap(i, j int) {
+	h[i], h[j] = h[j], h[i]
 }
 
 func (h *Heap) Push(x interface{}) {
@@ -5206,6 +5202,7 @@ document.addEventListener('keydown', function(e) {
         }
     }
 });
+
 
 
 
