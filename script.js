@@ -1003,7 +1003,6 @@ func mergeTwoLists(list1 *ListNode, list2 *ListNode) *ListNode {
             }
         }
     }
-
     dfs(n, 0, 0, "")
 
     return
@@ -1029,49 +1028,48 @@ func mergeTwoLists(list1 *ListNode, list2 *ListNode) *ListNode {
  *     Next *ListNode
  * }
  */
-type minHeap []*ListNode
+type Heap []*ListNode
 
-func (h *minHeap) Len() int {
-    return len(*h)
+func (h *Heap) Len() int {
+	return len(*h)
 }
 
-func (h *minHeap) Less(i, j int) bool {
-    return (*h)[i].Val < (*h)[j].Val
+func (h *Heap) Less(i, j int) bool {
+	return (*h)[i].Val < (*h)[j].Val
 }
 
-func (h *minHeap) Swap(i, j int) {
-    (*h)[i], (*h)[j] = (*h)[j], (*h)[i]
+func (h *Heap) Swap(i, j int) {
+	(*h)[i], (*h)[j] = (*h)[j], (*h)[i]
 }
 
-func (h *minHeap) Push(x interface{}) {
-    *h = append(*h, x.(*ListNode))
+func (h *Heap) Push(x interface{}) {
+	*h = append(*h, x.(*ListNode))
 }
 
-func (h *minHeap) Pop() interface{} {
-    n := len(*h)
-    x := (*h)[n - 1]
-    *h = (*h)[:n - 1]
-    return x
+func (h *Heap) Pop() interface{} {
+	n := len(*h)
+	x := (*h)[n - 1]
+	*h = (*h)[:n - 1]
+	return x
 }
 
 func mergeKLists(lists []*ListNode) *ListNode {
-    h := &minHeap{}
+    h := &Heap{}
     heap.Init(h)
     for _, l := range lists {
-        if l != nil {
-            heap.Push(h, l)
-        }
+    	if l != nil {
+    		heap.Push(h, l)
+    	}
     }
 
     dummy := &ListNode{}
     tail := dummy
     for h.Len() != 0 {
-        t := heap.Pop(h).(*ListNode)
-        tail.Next = t
-        tail = t
-        if t.Next != nil {
-            heap.Push(h, t.Next)
-        }
+    	t := heap.Pop(h).(*ListNode)
+    	tail, tail.Next = t, t
+    	if t.Next != nil {
+    		heap.Push(h, t.Next)
+    	}
     }
 
     return dummy.Next
@@ -5208,5 +5206,6 @@ document.addEventListener('keydown', function(e) {
         }
     }
 });
+
 
 
