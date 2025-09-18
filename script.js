@@ -989,9 +989,7 @@ func mergeTwoLists(list1 *ListNode, list2 *ListNode) *ListNode {
         example: "示例 1：\n输入：n = 3\n输出：[\"((()))\",\"(()())\",\"(())()\",\"()(())\",\"()()()\"]\n示例 2：\n输入：n = 1\n输出：[\"()\"]",
         solutions: [
             {
-                code: `func generateParenthesis(n int) []string {
-    res := []string{}
-
+                code: `func generateParenthesis(n int) (res []string) {
     var dfs func(n, lc, rc int, seq string)
     dfs = func(n, lc, rc int, seq string) {
         if lc == n && rc == n {
@@ -1008,7 +1006,7 @@ func mergeTwoLists(list1 *ListNode, list2 *ListNode) *ListNode {
 
     dfs(n, 0, 0, "")
 
-    return res
+    return
 }`,
                 timeComplexity: "O(4ⁿ/√n)",
                 spaceComplexity: "O(n)"
@@ -5210,4 +5208,5 @@ document.addEventListener('keydown', function(e) {
         }
     }
 });
+
 
